@@ -1,0 +1,73 @@
+<div class="modal fade" id="addMeasurement" tabindex="-1" role="dialog" aria-labelledby="add-measurement"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nowy pomiar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form" class="needs-validation" novalidate autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-7 form-group">
+                            <label for="date">Data</label>
+                            <input class="form-control" type="date" name="date" id="date" autofocus value="" required>
+                        </div>
+                        <div class="col-5 form-group">
+                            <label for="time">Godzina</label>
+                            <input class="form-control" type="time" name="time" id="time" value="" required>
+                        </div>
+                    </div>
+                    <div class="spinner-abs">
+                        <div id="groupsFetching" class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Wczytywanie...</span>
+                        </div>
+                    </div>
+                    <div class="form-group row mr-1">
+                        <label for="examination" class="col-3 col-sm-2 col-form-label">Grupa</label>
+                        <select class="form-control col-9 col-sm-10" id="group" name="group">
+                            <option data-type="emptyList" disabled selected>Brak zdefiniowanych grup</option>
+                            <option data-type="prompt" disabled>Wybierz grupę badań...</option>
+                            <option data-type="prompt" value="" selected>Wszystkie</option>
+                            <option data-type="error" disabled selected>Błąd połączenia</option>
+                        </select>
+                    </div>
+                    <div class="spinner-abs">
+                        <div id="examinationsFetching" class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Wczytywanie...</span>
+                        </div>
+                    </div>
+                    <div class="form-group row mr-1">
+                        <label for="examination" class="col-3 col-sm-2 col-form-label">Badanie</label>
+                        <select class="form-control col-9 col-sm-10" id="examination" name="examination" required>
+                            <option data-type="emptyList" disabled selected>Brak zdefiniowanych badań
+                            </option>
+                            <option data-type="prompt" value="" disabled selected>Wybierz badanie...
+                            </option>
+                            <option data-type="error" disabled selected>Błąd połączenia</option>
+                        </select>
+                        <div class="invalid-feedback offset-3 offset-sm-2 col-9 col-sm-10">
+                            Wybierz badanie z listy
+                        </div>
+                    </div>
+                    <label class="mt-3">Wynik badania</label>
+                    <div id="results" class="py-3 border-top"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-primary rounded-pill">Dodaj</button>
+                </div>
+            </form>
+            <div id="formSend" class="progress bg-secondary custom-progress" role="progressbar">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#cache}}
+    <script src="/app/class-selectFetch.js"></script>
+    <script src="/app/measurements-addNew.js"></script>
+{{/cache}}

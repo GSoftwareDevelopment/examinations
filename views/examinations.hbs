@@ -1,0 +1,219 @@
+<div class="d-flex flex-row justify-content-between align-items-end mb-2">
+	<h4 class="">Lista badań</h4>
+	<nav>
+		<div class="dropdown">
+			<button id="btn-add" class="btn btn-sm btn-secondary rounded-pill" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false">
+				<svg viewBox="0 0 16 16" class="mr-1 bi bi-plus" fill="currentColor">
+					<path fill-rule="evenodd"
+						d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+				</svg>
+				Dodaj...
+			</button>
+			<div class="dropdown-menu dropdown-menu-right">
+				<a class="dropdown-item" href="#add-examination" data-toggle="modal">Nowe badanie</a>
+				<a class="dropdown-item" href="#add-group" data-toggle="modal">Utwórz grupę</a>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<form id="form-list">
+	<div class="table-responsive">
+		<table class="table table-borderless table-hover border-bottom">
+			<thead class="black white-text">
+				<tr>
+					<th class="w-100">Grupa/Nazwa</th>
+					<th class="no-wrap text-right">Ostatnie badanie</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#*inline "list"}}
+					{{zero "cnt"}}
+					{{#each list}}
+						{{#if (eq group.name ../groupName) }}
+							{{inc "cnt"}}
+							<tr class="row-item" data-item="{{_id}}" data-group="{{group._id}}">
+								<td>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" name="selectedItems">
+										<a href="/lists/{{_id}}">{{name}}</a>
+									</div>
+									{{#if description}}
+										<small>{{description}}</small>
+									{{/if}}
+								</td>
+								<td>
+									<div class="d-flex flex-row justify-content-end align-items-center">
+										<nav class="mr-auto">
+											<button id="btn-editEntry" class="btn btn-light btn-inrow">
+												<svg viewBox="0 0 16 16" class="bi bi-pencil-square"
+													fill="currentColor">
+													<path
+														d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+													<path fill-rule="evenodd"
+														d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+												</svg>
+											</button>
+											<button id="btn-deleteEntry" class="btn btn-light btn-inrow">
+												<svg viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor">
+													<path
+														d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+													<path fill-rule="evenodd"
+														d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+												</svg>
+											</button>
+										</nav>
+										<span class="no-wrap">{{formatDate createdAt 'DD MMMM YYYY @ H:mm'}}</span>
+									</div>
+								</td>
+							</tr>
+						{{/if}}
+					{{/each}}
+					{{#if groupName}}
+						{{#if (eq (get "cnt") 0)}}
+							<tr data-group="{{groupID}}">
+								<td colspan=2 class="py-2">
+									<small>Ta grupa nie zawiera żadnych badań.</small>
+								</td>
+							</tr>
+						{{/if}}
+					{{/if}}
+				{{/inline}}
+
+				{{!--  --}}
+
+				{{> list list=lists}}
+				{{#if groups}}
+					{{#each groups}}
+						<tr data-group="{{_id}}" class="row-group">
+							<td colspan=2>
+								<div class="d-flex flex-row justify-content-between align-items-center">
+									<div><strong>{{name}}</strong></div>
+									<nav>
+										<button id="btn-editGroup" class="btn btn-light btn-inrow">
+											<svg viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor">
+												<path
+													d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+												<path fill-rule="evenodd"
+													d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+											</svg>
+										</button>
+										<button id="btn-deleteGroup" class="btn btn-light btn-inrow">
+											<svg viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor">
+												<path
+													d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+												<path fill-rule="evenodd"
+													d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+											</svg>
+										</button>
+									</nav>
+								</div>
+								{{#if description}}
+									<small>{{description}}</small>
+								{{/if}}
+							</td>
+						</tr>
+						{{>list list=../lists groupName=name groupID=_id}}
+					{{/each}}
+				{{else}}
+				{{/if}}
+
+				{{#unless lists}}
+					<tr>
+						<td colspan="3">
+							<div class="alert alert-info my-0">
+								<svg viewBox="0 0 16 16" class="float-left mr-3 bi bi-info-circle" fill="currentColor">
+									<path fill-rule="evenodd"
+										d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+									<path
+										d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
+									<circle cx="8" cy="4.5" r="1" />
+								</svg>
+								<div class="">
+									Nie posiadasz jeszcze zdefiniowanych badań.
+								</div>
+							</div>
+						</td>
+					</tr>
+				{{/unless}}
+			</tbody>
+		</table>
+	</div>
+	<nav>
+		<button id="btn-deleteSelection" class="btn btn-sm btn-danger rounded-pill">
+			<svg viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor">
+				<path
+					d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+				<path fill-rule="evenodd"
+					d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+			</svg>
+			Usuń zaznaczone
+		</button>
+	</nav>
+</form>
+
+<div class="modal fade" id="modal-noSelection" tabindex="-1" role="dialog" aria-labelledby="noSelection"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg viewBox="0 0 16 16" class="mr-1 bi bi-info-circle" fill="currentColor">
+						<path fill-rule="evenodd"
+							d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+						<path
+							d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
+						<circle cx="8" cy="4.5" r="1" />
+					</svg>
+					<strong>Nie ma wybranych elementów</strong>
+				</h5>
+			</div>
+			<div class="modal-body text-center">
+				<p>Aby wykonać operację, konieczne jest wybranie przynajmniej jednego elementu z listy.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red rounded-pill" data-dismiss="modal">Rozumiem</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-confirmGroupDelete" tabindex="-1" role="dialog" aria-labelledby="deleteGroup"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg viewBox="0 0 17 16" class="bi bi-exclamation-triangle" fill="currentColor">
+						<path fill-rule="evenodd"
+							d="M7.938 2.016a.146.146 0 0 0-.054.057L1.027 13.74a.176.176 0 0 0-.002.183c.016.03.037.05.054.06.015.01.034.017.066.017h13.713a.12.12 0 0 0 .066-.017.163.163 0 0 0 .055-.06.176.176 0 0 0-.003-.183L8.12 2.073a.146.146 0 0 0-.054-.057A.13.13 0 0 0 8.002 2a.13.13 0 0 0-.064.016zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z" />
+						<path
+							d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z" />
+					</svg>
+					<strong>Usunięcie grupy</strong>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body text-center">
+				<p>Usuwając grupę usuniesz również badania do niej należące.</p>
+				<p><strong>Czy napewno chcesz wykonać tą operację?</strong></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-dark rounded-pill" data-dismiss="modal">Zrezygnuj</button>
+				<button id="btn-confirmGroupDelete" type="button" class="btn btn-red rounded-pill"
+					data-dismiss="modal">Usuń</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{#cache}}
+	<script src="/external/mousetrap.min.js"></script>
+	<script src="/app/examinations.js"></script>
+{{/cache}}
+
+{{> _examinations-addNew}}
+{{> _examinations-createGroup}}

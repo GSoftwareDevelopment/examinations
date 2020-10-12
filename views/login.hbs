@@ -1,0 +1,78 @@
+<div class="card-body">
+    <section class="form-elegant">
+
+        <div class="row">
+
+            <div class="col col-md-6 offset-md-3">
+
+                <form action="/auth/login" method="POST" autocomplete="off">
+
+                    <div class="text-center">
+                        <h3 class="dark-grey-text"><strong>Logowanie</strong></h3>
+                    </div>
+
+                    <div class="md-form mt-0">
+                        <input type="text" id="Form-email1" class="form-control">
+                        <label for="Form-email1">Adres e-mail</label>
+                    </div>
+
+                    <div class="md-form mb-0">
+                        <input type="password" id="Form-pass3" class="form-control">
+                        <label for="Form-pass3">Twoje hasło</label>
+                        <p class="font-small grey-text d-flex justify-content-end">
+                            <a href="/forgot" class="dark-grey-text ml-1 font-weight-bold">Zapomnialeś/aś hasła?</a>
+                        </p>
+                    </div>
+
+                    <div class="row d-flex mb-1">
+
+                        <!--Grid column-->
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <div class="text-center">
+                                <button data-href="/auth/login" type="submit"
+                                    class="btn btn-green rounded-pill z-depth-1a">Loguj</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div class="col">
+                    <p class="font-small text-center mb-2 pt-3">lub zaloguj się używając konta:</p>
+                </div>
+
+                <div class="text-center">
+                    <button data-href="/auth/google" class="btn btn-sm btn-secondary rounded-pill">
+                        <svg viewBox="0 0 210 210" class="bi mr-1" fill="currentColor">
+                            <path fill-rule="evenodd" d="M0,105C0,47.103,47.103,0,105,0c23.383,0,45.515,7.523,64.004,21.756l-24.4,31.696C133.172,44.652,119.477,40,105,40
+                                            	c-35.841,0-65,29.159-65,65s29.159,65,65,65c28.867,0,53.398-18.913,61.852-45H105V85h105v20c0,57.897-47.103,105-105,105
+                                            	S0,162.897,0,105z" />
+                        </svg>
+                        Google
+                    </button>
+
+                    <button data-href="/auth/facebook" class="btn btn-sm btn-secondary rounded-pill">
+                        <svg viewBox="-269 366 60.8 60.9" class="bi mr-1" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M-242.7,412.8h6.7v-16.3h4.5l0.6-5.6h-5.1v-2.8c0-1.5,0.1-2.3,2.2-2.3h2.8v-5.6h-4.5c-5.4,0-7.3,2.7-7.3,7.3
+                                        	v3.4h-3.4v5.6h3.4v16.3H-242.7z M-238.5,426.5c-16.6,0-30-13.4-30-30s13.4-30,30-30s30,13.4,30,30S-221.9,426.5-238.5,426.5z" />
+                        </svg>
+                        Facebook
+                    </button>
+                </div>
+
+                <!--Grid column-->
+
+                <div class="footer">
+                    <p class="font-small grey-text d-flex justify-content-end mt-3 mb-0">Nie masz konta?
+                        <a href="/register" class="dark-grey-text ml-1 font-weight-bold"> Zarejestruj się</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+
+</div>

@@ -1,0 +1,41 @@
+<div class="modal fade" id="add-group" tabindex="-1" role="dialog" aria-labelledby="add-group" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Utwórz grupę badań</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="createGroup" class="needs-validation" novalidate autocomplete="off">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Nazwa grupy</label>
+                        <input class="form-control" type="text" name="name" id="name" autofocus required>
+                        <div class="invalid-feedback">
+                            Nazwa grupy jest wymaganym polem.
+                        </div>
+                        <div class="unique-feedback">
+                            Niestety, ale podana nazwa jest już w użyciu.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Krótki opis</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-primary">Utwórz</button>
+                </div>
+            </form>
+            <div id="formSend" class="progress bg-secondary custom-progress" role="progressbar">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#cache}}
+    <script src="/app/examinations-createGroup.js"></script>
+{{/cache}}

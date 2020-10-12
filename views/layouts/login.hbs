@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html class="h-100" lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="/favicon.png" />
+		<title>Health Diary Login</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+		<link href="/css/bootstrap.css" rel="stylesheet">
+		<link href="/css/mdb.css" rel="stylesheet">
+
+		<link href="/css/progressbar.css" rel="stylesheet">
+		<link href="/css/style.css" rel="stylesheet">
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+
+	<body class="d-flex flex-column h-100 bg-light">
+
+		<div class="my-auto">
+			<div class="px-0 col-12 col-sm-10 offset-sm-1 col-lg-6 offset-lg-3">
+
+				<div class="card">
+					<div class="card card-image" style="background-image: url(/images/sidebar-bg.jpg);">
+						<div class="text-white text-center py-5 px-4">
+							<div>
+								<h2 class="card-title h1-responsive pt-3 mb-1 border-bottom font-bold">
+									<strong>Health Diary</strong>
+								</h2>
+								<p class="mx-5">
+									Keep your healt on hand.
+								</p>
+								{{!-- <a class="btn btn-outline-white btn-md"><i class="fas fa-clone left"></i> View project</a> --}}
+							</div>
+						</div>
+					</div>
+					<div class="progress bg-secondary custom-progress">
+						<div class="indeterminate"></div>
+					</div>
+
+					{{{body}}}
+
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+			integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+			crossorigin="anonymous"></script>
+		<script type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+		<script>
+			$( 'button' ).click( e => {
+				$( 'button' ).addClass( 'disabled' );
+				let target = $( e.currentTarget ),
+					href = target.data( 'href' );
+
+				$( '.progress' ).show();
+
+				if ( href ) window.location = href;
+			} )
+		</script>
+	</body>
+
+</html>
