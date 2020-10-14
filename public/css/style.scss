@@ -215,3 +215,16 @@ tr.row-group {
     transition: .2s;
   }
 }
+
+.result-item {
+  border-bottom:#999 solid 1px;
+  margin-bottom: .5em;
+  // margin-left:-1em;
+  // margin-right:-1em;
+  // padding-left:1em;
+  // padding-right:1em;
+
+  &:nth-child(even) {
+    background:rgba(0,0,0,.05);
+  }
+}

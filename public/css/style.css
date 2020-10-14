@@ -62,3 +62,7 @@ tr.row-group:hover nav { display: flex; position: absolute; right: 1em; transfor
 .item-value { padding-top: .3em; padding-bottom: .3em; }
 
 .item-value:hover { background-color: rgba(0, 0, 0, 0.15); transition: .2s; }
+
+.result-item { border-bottom: #999 solid 1px; margin-bottom: .5em; }
+
+.result-item:nth-child(even) { background: rgba(0, 0, 0, 0.05); }
