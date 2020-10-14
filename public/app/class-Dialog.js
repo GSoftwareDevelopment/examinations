@@ -23,6 +23,9 @@ class Dialog {
     showDialog () {
         this.resetAllForms();
         this.autoFocus();
+        for ( let key in this.progress ) {
+            $( this.progress[ key ] ).hide();
+        }
     }
 
     autoFocus () {
