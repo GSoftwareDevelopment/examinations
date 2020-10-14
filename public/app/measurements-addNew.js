@@ -164,21 +164,21 @@ class AddMeasurement extends Dialog {
             switch ( value.type ) {
                 case 'numeric':
                     pre.addClass( 'col-6' );
-                    input = $( `<input type="number" class="form-control col-3"/>` );
-                    input.attr( 'id', value._id ).attr( 'name', value._id );
+                    input = $( `<input type="text" class="form-control col-3"/>` );
+                    input.attr( 'id', value._id ).attr( 'name', 'value-' + value._id );
                     input.prop( 'required', value.required );
 
                     post = $( `<label class="pl-1 col-2 col-form-label">${value.unit}</label>` );
                     break;
                 case 'text':
                     input = $( `<textarea class="form-control col-12"/>` );
-                    input.attr( 'id', value._id ).attr( 'name', value._id );
+                    input.attr( 'id', value._id ).attr( 'name', 'value-' + value._id );
                     input.prop( 'required', value.required );
                     break;
                 case 'enum':
                     pre.addClass( 'col-6' );
                     input = $( `<select class="custom-select col-6"/>` );
-                    input.attr( 'id', value._id ).attr( 'name', value._id );
+                    input.attr( 'id', value._id ).attr( 'name', 'value-' + value._id );
                     input.prop( 'required', value.required );
 
                     input.append( $( `<option value="" selected disabled>Wybierz...</option>` ) )
@@ -229,7 +229,8 @@ class AddMeasurement extends Dialog {
                     value.list.split( ',' ).forEach( ( item ) => {
                         let ctr2 = $( `<div class="custom-control custom-checkbox" />` );
                         let id = `checkbox-${count}`;
-                        let inp = $( `<input type="checkbox" class="custom-control-input" value="${item}" id=${id} name="${value._id}" />` );
+                        let inp = $( `<input type="checkbox" class="custom-control-input" value="${item}" />` );
+                        inp.attr( 'id', id ).attr( 'name', 'value-' + value._id );
                         inp.prop( 'required', value.required );
                         let lab = $( `<label for="${id}" class="custom-control-label">${item}</label>` );
                         ctr2.append( inp, lab );
