@@ -96,11 +96,8 @@ router.post( '/', ensureAuth, ( req, res ) => {
             res.json( { OK: 1 } );
         } )
         .catch( ( err ) => {
-            if ( err ) {
-                console.log( err );
-                return res.json( { error: err.errors.name } );
-            }
-
+            console.log( err );
+            return res.json( { error: err.errors.name } );
         } );
 } );
 
