@@ -17,12 +17,12 @@ class AddMeasurement extends Dialog {
             .on( 'change', ( e ) => { this.changeExamination( e ); } );
 
         this.groups = new SelectFetch( {
-            url: '/groups',
+            url: '/groups?data',
             select: this.groupSelect,
             spinner: this.progress[ 'groupsFetching' ]
         } );
         this.examinations = new SelectFetch( {
-            url: '/examinations?noHTML',
+            url: '/examinations?data',
             select: this.examinationSelect,
             spinner: this.progress[ 'examinationsFetching' ]
         } );
@@ -46,8 +46,7 @@ class AddMeasurement extends Dialog {
     }
 
     clearResultsFields () {
-        this.resultsFields.find( 'fieldset.form-group' ).detach();
-        this.resultsFields.find( 'div.form-group' ).detach();
+        this.resultsFields.empty();
     }
 
     changeGroup ( e ) {
@@ -116,11 +115,11 @@ class AddMeasurement extends Dialog {
                 this.createResultsFields( values );
             } )
             .catch( ( error ) => {
-                console.log( 'Error:', error );
+                console.error( 'Error:', error );
             } );
     }
 
-    makePattern ( values ) {
+    makePattern ( values ) { // TODO: Usuń to
         const symbolize = ( value ) => {
             switch ( value.type ) {
                 case 'numeric':
@@ -154,30 +153,34 @@ class AddMeasurement extends Dialog {
 
         let count = 0; // counter for unique checkbox id
         values.forEach( ( value ) => {
-            let input, post;
-            //div class="form-group row mr-1">
-            let ctr = $( `<div class="form-group d-flex flex-row flex-wrap"/>` );
-            let pre = $( `<label for="${value._id}" class="col-form-label">${value.name}</label>` )
+
+            let input;
+            let ctr = $( `<div class="value-row" />` );
+            let label = $( `<label for="${value._id}" class="m-0 p-0 pt-1 pl-1">${value.name}</label>` )
+
+            let inpctr = $( `<div class="d-flex flex-row align-items-center justify-content-end" />` );
 
             if ( typeof value.required === 'undefined' ) value.required = true;
 
             switch ( value.type ) {
                 case 'numeric':
-                    pre.addClass( 'col-6' );
-                    input = $( `<input type="text" class="form-control col-3"/>` );
+                    input = $( `<input type="text" class="form-control field-number"/>` );
                     input.attr( 'id', value._id ).attr( 'name', 'value-' + value._id );
                     input.prop( 'required', value.required );
 
-                    post = $( `<label class="pl-1 col-2 col-form-label">${value.unit}</label>` );
+                    let unit = $( `<label for="${value._id}" class="number-unit p-0 m-0 pl-1">${value.unit}</label>` );
+
+                    inpctr.append( input, unit );
                     break;
                 case 'text':
-                    input = $( `<textarea class="form-control col-12"/>` );
+                    input = $( `<textarea class="form-control"/>` );
                     input.attr( 'id', value._id ).attr( 'name', 'value-' + value._id );
                     input.prop( 'required', value.required );
+
+                    inpctr.append( input );
                     break;
                 case 'enum':
-                    pre.addClass( 'col-6' );
-                    input = $( `<select class="custom-select col-6"/>` );
+                    input = $( `<select class="custom-select field-enum"/>` );
                     input.attr( 'id', value._id ).attr( 'name', 'value-' + value._id );
                     input.prop( 'required', value.required );
 
@@ -191,17 +194,18 @@ class AddMeasurement extends Dialog {
                         input.append( $( `<option disabled>---</option>` ) )
                         input.append( $( `<option value="">* nie dotyczy</option>` ) )
                     }
+
+                    inpctr.append( input );
                     break;
                 case 'sets':
-                    pre = null;
-                    ctr = $( `<fieldset class="form-group ml-3" />` )
-                        // to zdarzenie sprawdza, czy grupa oznaczona jako Wymagana
-                        // spełnia warunek: Przynajmniej jeden wybrany.
-                        // Jeżeli element (zdarzenia jest Checkbox'em) jest zaznaczony,
-                        // wszystkie elementy oznaczane są jako Niewymagane
-                        // ( poza elementem zaznaczonym )
-                        // W przeciwnym wypadku, wszystkie element są oznaczane jako Wymgane.
+                    let fieldset = $( `<fieldset class="form-group ml-3" />` )
                         .on( 'click', ( e ) => {
+                            // to zdarzenie sprawdza, czy grupa oznaczona jako Wymagana
+                            // spełnia warunek: Przynajmniej jeden wybrany.
+                            // Jeżeli element (zdarzenia jest Checkbox'em) jest zaznaczony,
+                            // wszystkie elementy oznaczane są jako Niewymagane
+                            // ( poza elementem zaznaczonym )
+                            // W przeciwnym wypadku, wszystkie element są oznaczane jako Wymgane.
                             const selected = e.target; // wybrany element
                             if ( selected.tagName !== "INPUT" || selected.type !== "checkbox" )
                                 return;
@@ -223,30 +227,45 @@ class AddMeasurement extends Dialog {
                             }
 
                         } );
-                    let leg = $( `<legend class="col-form-label col-6 pt-0">${value.name}</legend>` );
-                    input = $( `<div class="row"/>` )
-                    let div = $( `<div class="col-6 pl-0" />` )
+
                     value.list.split( ',' ).forEach( ( item ) => {
-                        let ctr2 = $( `<div class="custom-control custom-checkbox" />` );
+                        let ctr2 = $( `<div class="custom-control custom-checkbox field-sets" />` );
                         let id = `checkbox-${count}`;
                         let inp = $( `<input type="checkbox" class="custom-control-input" value="${item}" />` );
                         inp.attr( 'id', id ).attr( 'name', 'value-' + value._id );
                         inp.prop( 'required', value.required );
                         let lab = $( `<label for="${id}" class="custom-control-label">${item}</label>` );
                         ctr2.append( inp, lab );
-                        div.append( ctr2 );
+                        fieldset.append( ctr2 );
                         count++;
                     } );
-                    input.append( leg );
-                    input.append( div );
+
+                    inpctr.append( fieldset );
                     break;
             }
 
+            const commentBtn = $( `
+<button type="button" class="m-0 mx-1 px-2 py-1 btn btn-flat shadow-none waves-effect" data-descid="${value._id}">
+    <svg viewBox="0 0 16 16" class="bi bi-chat-left-text" fill="currentColor">
+        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+        <path fill-rule="evenodd" d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+    </svg>
+</button>`);
+            commentBtn.on( 'click', ( e ) => {
+                const descID = $( e.currentTarget ).data( 'descid' );
+                $( `textarea[name='description-${descID}']` ).toggleClass( 'd-none' );
+            } );
 
-            ctr.append( pre );
-            ctr.append( input );
-            ctr.append( post );
+            inpctr.append( commentBtn );
+
+
+            ctr.append( label );
+            ctr.append( inpctr );
+
             this.resultsFields.append( ctr );
+
+            const commentField = $( `<textarea class="d-none form-control mb-3" name="description-${value._id}" />` );
+            this.resultsFields.append( commentField );
         } )
     }
 
