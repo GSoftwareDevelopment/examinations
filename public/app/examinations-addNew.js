@@ -17,7 +17,7 @@ class AddNewExamination extends Dialog {
         this.groupSelect = $( this.forms[ 'form' ] ).find( '#group' );
 
         this.groups = new SelectFetch( {
-            url: '/groups',
+            url: '/groups?data',
             select: this.groupSelect,
             spinner: this.progress[ 'groupsFetching' ]
         } );
@@ -77,7 +77,7 @@ class AddNewExamination extends Dialog {
         } else {
 
             this.disableForm( 'form' );
-            this.progress[ 'formSend' ].show();
+            $( this.progress[ 'formSend' ] ).show();
 
             let fields = $( this.forms[ 'form' ] ).serialize();
 
@@ -108,7 +108,7 @@ class AddNewExamination extends Dialog {
                                     .show();
                         }
                         this.enableForm( 'form' );
-                        this.progress[ 'formSend' ].hide();
+                        $( this.progress[ 'formSend' ] ).hide();
                     }
                 }
 
