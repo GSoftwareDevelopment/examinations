@@ -66,3 +66,13 @@ tr.row-group:hover nav { display: flex; position: absolute; right: 1em; transfor
 .result-item { border-bottom: #999 solid 1px; margin-bottom: .5em; }
 
 .result-item:nth-child(even) { background: rgba(0, 0, 0, 0.05); }
+
+.result-item:hover { background: rgba(0, 0, 0, 0.15); transition: .2s; }
+
+.value-row { margin: .25em 0; display: flex; flex-direction: row; justify-content: space-between; }
+
+.field-number { width: 5em; }
+
+.number-unit { width: 4em; }
+
+.field-enum, .field-sets { width: 9em; }

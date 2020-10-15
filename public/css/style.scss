@@ -227,4 +227,21 @@ tr.row-group {
   &:nth-child(even) {
     background:rgba(0,0,0,.05);
   }
+
+  &:hover {
+    background: rgba(0,0,0,.15);
+    transition: .2s;
+  }
 }
+
+.value-row {
+  margin: .25em 0;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.field-number { width:5em; }
+.number-unit { width:4em; }
+.field-enum,
+.field-sets { width:9em; }
