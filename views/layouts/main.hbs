@@ -17,6 +17,7 @@
         <link href="/css/style.css" rel="stylesheet">
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     </head>
 
     <body class="d-flex flex-column h-100 bg-light">
@@ -29,7 +30,7 @@
                         {{> _sidebar}}
                     </div>
                 </div>
-                <main class="col-md-8 ml-sm-auto col-lg-9 mt-3" role="main">
+                <main class="col-md-8 ml-sm-auto col-lg-9" style="margin-top:3.5em" role="main">
                     {{{body}}}
                 </main>
             </div>
