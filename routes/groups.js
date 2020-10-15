@@ -9,15 +9,18 @@ const Value = require( '../models/value' );
 // @desc    Examinations groups list
 // @route   GET /groups
 // @return  JSON data
-router.get( '/', ensureAuth, async ( req, res ) => {
+router.get( '/', ensureAuth, async ( req, res, next ) => {
     try {
-        const groups = await Group
-            .find( { user: req.user.id } )
-            .sort( {
-                "name": 1,
-            } )
-            .lean();
-        res.json( groups );
+        if ( typeof req.query.data !== 'undefine' ) {
+            const groups = await Group
+                .find( { user: req.user.id } )
+                .sort( {
+                    "name": 1,
+                } )
+                .lean();
+            return res.json( groups );
+        }
+        return next();
     } catch ( error ) {
         console.error( error );
         res.json( { error } );

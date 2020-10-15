@@ -10,20 +10,22 @@ const { Measurement, Result } = require( '../models/measurement' );
 // @route   GET /measurements
 router.get( '/', ensureAuth, async ( req, res ) => {
     try {
-        const lists = await Measurement
+        const measurements = await Measurement
             .find( { user: req.user.id } )
             .sort( {
-                "createdAt": 1,
+                "createdAt": -1,
             } )
             .populate( 'examination' )
             .populate( 'values' )
             .populate( 'values.value' )
             .lean();
 
-        console.log( lists[ 0 ] );
-        res.render( 'measurements', {
-            lists
-        } );
+        if ( typeof req.query.data === "undefined" ) {
+            res.render( 'measurements' );
+        } else {
+            res.json( measurements )
+        }
+
     } catch ( error ) {
         console.error( error );
         res.render( 'error/500' );
@@ -45,9 +47,11 @@ router.post( '/', ensureAuth, async ( req, res ) => {
     for ( let key in req.body ) {
         if ( key.slice( 0, 6 ).toLowerCase() === 'value-' ) {
             let valueID = key.slice( 6 );
+            let valueDesc = req.body[ `description-${valueID}` ] || '';
             values.push( {
                 value: new mongoose.Types.ObjectId( valueID ),
-                result: req.body[ key ]
+                result: req.body[ key ],
+                description: valueDesc,
             } )
         }
     }

@@ -9,8 +9,7 @@ const Value = require( '../models/value' );
 // @desc    Examinations list
 // @route   GET /examinations
 router.get( '/', ensureAuth, async ( req, res ) => {
-    const query = req.query;
-    console.log( query );
+    console.log( req.query );
 
     try {
         const lists = await Examination
@@ -22,14 +21,12 @@ router.get( '/', ensureAuth, async ( req, res ) => {
             .populate( 'group' )
             .lean();
 
-        if ( typeof query.noHTML === 'undefined' ) {
-            // console.log( lists );
+        if ( typeof req.query.data === 'undefined' ) {
             const groups = await Group
                 .find( { user: req.user.id } )
                 .sort( { name: 1 } )
                 .lean();
 
-            // console.log( groups );
             res.render( 'examinations', {
                 lists,
                 groups
