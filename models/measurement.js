@@ -8,6 +8,10 @@ const ResultSchema = new mongoose.Schema( {
     result: {
         type: String,
     },
+    description: {
+        type: String,
+        trim: true,
+    },
 } );
 
 const MeasurementSchema = new mongoose.Schema( {
@@ -21,6 +25,10 @@ const MeasurementSchema = new mongoose.Schema( {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    description: {
+        type: String,
+        trim: true,
     },
     createdAt: {
         type: Date,
