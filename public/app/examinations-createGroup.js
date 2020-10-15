@@ -1,7 +1,6 @@
 class AddNewGroup extends Dialog {
     constructor() {
         super( 'add-group' );
-        // this.dialog.on( 'show.bs.modal', ( e ) => { this.showDialog() } );
 
         $( this.forms[ 'createGroup' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
 
@@ -10,9 +9,6 @@ class AddNewGroup extends Dialog {
                 $( this.forms[ 'createGroup' ] ).find( `[name='name'] ~ .unique-feedback` )
                     .hide();
             } )
-
-        // this.progress = [];
-        // this.progress[ 'formSend' ] = $( this.dialog ).find( '#progress-formSend' );
     }
 
     async submit ( e ) {
