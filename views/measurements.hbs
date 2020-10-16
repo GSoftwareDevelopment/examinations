@@ -33,39 +33,17 @@
 </div>
 <!-- /Header of measurement table -->
 
-<div id="results">
-    {{set date 0}}
-    {{#each lists}}
-        <div class="result-item">
-            {{#if (neq (get date) (formatDate createdAt 'DD-MM-YYYY'))}}
-                {{set date (formatDate createdAt 'DD-MM-YYYY')}}
-                <div class="row px-2">
-                    <div class="col">
-                        <strong>{{get date}}</strong>
-                    </div>
-                </div>
-            {{/if}}
-            <div class="row px-2">
-                <div class="col-6 col-sm-4">
-                    {{formatDate createdAt '@ H:mm'}}
-                </div>
-                <div class="col-6 col-sm-8">
-                    {{examination.name}}
-                </div>
-            </div>
-            {{#each values}}
-                <div class="row px-2">
-                    <div class="col-6">
-                        {{value.name}}
-                    </div>
-                    <div class="col-6 text-right">
-                        {{result}}{{value.unit}}
-                    </div>
-                </div>
-            {{/each}}
-        </div>
-    {{/each}}
+
+<div id="measurements-results">
+    <div class="text-center my-3" data-status="fetchData">
+        <span class="spinner-border mr-2" role="status"></span>
+        Wczytywanie...
+    </div>
 </div>
+
+{{#cache}}
+    <script src="/measurements.bundle.js"></script>
+{{/cache}}
 
 {{> _measurements/_pagination }}
 {{> _measurements/_add }}

@@ -16,7 +16,11 @@
 		<link href="/css/progressbar.css" rel="stylesheet">
 		<link href="/css/style.css" rel="stylesheet">
 
+		<script src="/vendor/jquery/jquery.min.js"></script>
+
+		{{!-- old
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ --}}
 	</head>
 
 	<body class="d-flex flex-column h-100 bg-light">
@@ -25,7 +29,7 @@
 			<div class="px-0 col-12 col-sm-10 offset-sm-1 col-lg-6 offset-lg-3">
 
 				<div class="card">
-					<div class="card card-image" style="background-image: url(/images/sidebar-bg.jpg);">
+					<div class="card card-image" style="background-image: url(/assets/sidebar-bg.jpg);">
 						<div class="text-white text-center py-5 px-4">
 							<div>
 								<h2 class="card-title h1-responsive pt-3 mb-1 border-bottom font-bold">
@@ -48,6 +52,11 @@
 			</div>
 		</div>
 
+		<script src="/vendor/popper/popper.min.js"></script>
+		<script src="/vendor/bootstrap/bootstrap.min.js"></script>
+		<script src="/vendor/mdbootstrap/mdb.min.js"></script>
+
+		{{!-- old
 		<script type="text/javascript"
 			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
@@ -55,7 +64,7 @@
 			crossorigin="anonymous"></script>
 		<script type="text/javascript"
 			src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-
+ --}}
 		<script>
 			$( 'button' ).click( e => {
 				$( 'button' ).addClass( 'disabled' );
