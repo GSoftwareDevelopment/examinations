@@ -9,9 +9,6 @@ module.exports = {
     entry: {
         app: path.resolve( __dirname, entryPath, 'app.js' ),
         login: path.resolve( __dirname, entryPath, 'login.js' ),
-        dashboard: path.resolve( __dirname, entryPath, 'dashboard.js' ),
-        examinations: path.resolve( __dirname, entryPath, 'examinations.js' ),
-        measurements: path.resolve( __dirname, entryPath, 'measurements.js' ),
     },
     output: {
         path: __dirname + '/dist',
@@ -32,7 +29,7 @@ module.exports = {
                 test: /\.hbs$/,
                 loader: 'handlebars-loader',
                 options: {
-                    runtime: path.resolve( __dirname, './src/js/helpers/handlebars-helpers.js' )
+                    runtime: path.resolve( __dirname, 'src/js/helpers/handlebars-helpers.js' )
                 }
             }
         ],
