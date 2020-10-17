@@ -16,7 +16,7 @@ const formatTime = ( date ) => {
     return `${hours}:${mins}`;
 }
 
-export {
+module.exports = {
     getTwoDigits,
     formatDate,
     formatTime
