@@ -1,11 +1,8 @@
-import moment from 'moment';
+import './../scss/progressbar.scss';
+import './../scss/style.scss';
 
 class Application {
     constructor() {
-        Handlebars.registerHelper( 'formatDate', function ( date, format ) {
-            return moment( date ).format( format );
-        } );
-
         this.page = {};
         this.modal = {};
     }
