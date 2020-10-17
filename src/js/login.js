@@ -1,4 +1,3 @@
-// import $ from "jquery";
 import './../scss/progressbar.scss';
 import './../scss/style.scss';
 
