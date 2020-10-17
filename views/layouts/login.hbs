@@ -4,23 +4,15 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="shortcut icon" href="/favicon.png" />
+		<link rel="shortcut icon" href="/assets/favicon.png" />
 		<title>Health Diary Login</title>
 
 		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-		<link href="/css/bootstrap.css" rel="stylesheet">
-		<link href="/css/mdb.css" rel="stylesheet">
+		<link href="/css/main.css" rel="stylesheet">
 
-		<link href="/css/progressbar.css" rel="stylesheet">
-		<link href="/css/style.css" rel="stylesheet">
-
-		<script src="/vendor/jquery/jquery.min.js"></script>
-
-		{{!-- old
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- --}}
+		<script src="/vendor/jquery/jquery.js"></script>
 	</head>
 
 	<body class="d-flex flex-column h-100 bg-light">
@@ -52,30 +44,11 @@
 			</div>
 		</div>
 
-		<script src="/vendor/popper/popper.min.js"></script>
-		<script src="/vendor/bootstrap/bootstrap.min.js"></script>
-		<script src="/vendor/mdbootstrap/mdb.min.js"></script>
+		<script src="/vendor/popper/popper.js"></script>
+		<script src="/vendor/bootstrap/bootstrap.js"></script>
+		<script src="/vendor/mdbootstrap/mdb.js"></script>
 
-		{{!-- old
-		<script type="text/javascript"
-			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-			integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-			crossorigin="anonymous"></script>
-		<script type="text/javascript"
-			src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
- --}}
-		<script>
-			$( 'button' ).click( e => {
-				$( 'button' ).addClass( 'disabled' );
-				let target = $( e.currentTarget ),
-					href = target.data( 'href' );
-
-				$( '.progress' ).show();
-
-				if ( href ) window.location = href;
-			} )
-		</script>
+		<script src="/login.bundle.js"></script>
 	</body>
 
 </html>
