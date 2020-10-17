@@ -1,11 +1,10 @@
-// import $ from "jquery";
 import { Dialog } from "./../../class/Dialog";
 
 class CreateNewValue extends Dialog {
-    constructor( parentModal ) {
+    constructor( _page ) {
         super( 'addValue' );
 
-        this.parentModal = parentModal;
+        this._page = _page;
 
         $( this.forms[ 'form-addValue' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -65,7 +64,7 @@ class CreateNewValue extends Dialog {
                 required: fields.find( '#required' ).prop( 'checked' ),
             }
 
-            this.parentModal.addValue( newValue );
+            this._page.modal.addNewExamination.addValue( newValue );
             this.dialog.modal( 'hide' );
         }
     }

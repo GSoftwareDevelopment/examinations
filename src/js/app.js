@@ -1,11 +1,16 @@
 import './../scss/progressbar.scss';
 import './../scss/style.scss';
 
-class Application {
-    constructor() {
-        this.page = {};
-        this.modal = {};
-    }
+import { Dashboard } from './dashboard';
+import { Examinations } from './examinations';
+import { Measurements } from './measurements';
+
+const app = {
+    pages: [
+        new Dashboard( '/dashboard' ),
+        new Examinations( '/examinations' ),
+        new Measurements( '/measurements' ),
+    ]
 }
 
-const app = new Application();
+console.log( app );

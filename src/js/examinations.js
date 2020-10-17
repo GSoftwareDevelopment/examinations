@@ -1,12 +1,17 @@
+import { Pages } from './class/Pages';
 import { AddNewExamination } from "./modals/examinations/addNewExamination";
 import { CreateNewValue } from "./modals/examinations/createNewValue";
 import { CreateGroup } from "./modals/examinations/createGroup";
 
-class Examinations {
-    constructor() {
-        this.modal_addNewExamination = new AddNewExamination();
-        this.modal_createValue = new CreateNewValue( this.modal_addNewExamination );
-        this.modal_createGroup = new CreateGroup();
+export class Examinations extends Pages {
+    constructor( _path ) {
+        super( _path );
+
+        this.modal = {
+            addNewExamination: new AddNewExamination(),
+            createValue: new CreateNewValue( this ),
+            createGroup: new CreateGroup()
+        }
 
         this.form = $( '#form-list' ).on( 'submit', ( e ) => { e.preventDefault(); } );
         $( '#btn-deleteSelection' ).on( 'click', ( e ) => { this.deleteSelection( e ) } );
@@ -119,4 +124,5 @@ class Examinations {
     }
 }
 
-const examinations = new Examinations();
+// var examinations = new Examinations( '/examinations' );
+

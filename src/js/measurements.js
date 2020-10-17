@@ -1,13 +1,18 @@
+import { Pages } from './class/Pages';
 import { Fetcher } from './class/Fetcher';
 import { AddMeasurement } from './modals/measurements/addMeasurement';
 import { FilterMeasurements } from './modals/measurements/filterMeasurements';
 
-import listTemplate from './measurementList.hbs';
+import listTemplate from './templates/measurementList.hbs';
 
-class Measurements {
-    constructor() {
-        this.modal_AddMeasurement = new AddMeasurement( this );
-        this.modal_FilterMeasurements = new FilterMeasurements();
+export class Measurements extends Pages {
+    constructor( _path ) {
+        super( _path );
+
+        this.modal = {
+            AddMeasurement: new AddMeasurement( this ),
+            FilterMeasurements: new FilterMeasurements(),
+        };
 
         this.measurements = new Fetcher( "/measurements/?data", { method: "GET" } );
 
@@ -27,4 +32,4 @@ class Measurements {
             } );
     }
 }
-const measurements = new Measurements();
+// const measurements = new Measurements();
