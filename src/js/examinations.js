@@ -1,5 +1,3 @@
-import $ from "jquery";
-import 'bootstrap';
 import { AddNewExamination } from "./modals/examinations/addNewExamination";
 import { CreateNewValue } from "./modals/examinations/createNewValue";
 import { CreateGroup } from "./modals/examinations/createGroup";

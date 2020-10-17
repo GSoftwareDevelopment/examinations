@@ -1,4 +1,4 @@
-import $ from "jquery";
+// import $ from "jquery";
 import { Dialog } from "./../../class/Dialog";
 
 class CreateGroup extends Dialog {

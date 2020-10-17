@@ -1,11 +1,13 @@
-import $ from 'jquery';
+// import $ from 'jquery';
 import { Dialog } from '../../class/Dialog';
 import { SelectFetch } from '../../class/SelectFetch';
 import { formatDate, formatTime } from '../../class/misc';
 
 class AddMeasurement extends Dialog {
-    constructor() {
+    constructor( _page ) {
         super( 'addMeasurement' );
+
+        this._page = _page;
 
         $( this.forms[ 'form' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -300,7 +302,9 @@ class AddMeasurement extends Dialog {
                 console.log( result );
                 if ( !result.error ) {
                     // window.location = "/measurements";
-                    app.page.measurements.getData();
+                    // app.page.measurements.getData();
+                    this._page.getData();
+                    this.dialog.modal( 'hide' );
                     return;
                 } else {
                     this.enableForm( 'form' );

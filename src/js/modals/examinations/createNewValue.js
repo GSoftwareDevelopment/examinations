@@ -1,5 +1,4 @@
-// const Dialog = require( './../../class/Dialog' );
-import $ from "jquery";
+// import $ from "jquery";
 import { Dialog } from "./../../class/Dialog";
 
 class CreateNewValue extends Dialog {
