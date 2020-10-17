@@ -301,8 +301,6 @@ class AddMeasurement extends Dialog {
                 const result = await response.json()
                 console.log( result );
                 if ( !result.error ) {
-                    // window.location = "/measurements";
-                    // app.page.measurements.getData();
                     this._page.getData();
                     this.dialog.modal( 'hide' );
                     return;
