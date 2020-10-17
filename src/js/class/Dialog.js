@@ -1,5 +1,3 @@
-// import $ from "jquery";
-
 class Dialog {
     constructor( id ) {
         this.dialog = $( `div#${id}.modal` );
