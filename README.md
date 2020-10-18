@@ -1,5 +1,7 @@
 This document has been translated by Google Translate
 
+[Polish version](README-PL.md)
+
 # Introduction
 
 The original purpose of the application was to store the results of medical tests, such as weight, temperature and sugar measurements.
