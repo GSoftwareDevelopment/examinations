@@ -34,13 +34,12 @@
 <!-- /Header of measurement table -->
 
 
-<div id="measurements-results">
-    <div class="text-center my-3" data-status="fetchData">
-        <span class="spinner-border mr-2" role="status"></span>
-        Wczytywanie...
-    </div>
+<div id="resultsFetch" class="text-center my-3" role="status">
+    <span class="spinner-border mr-2"></span>
+    Wczytywanie...
 </div>
+<div id="measurements-results"></div>
+<div id="pagination"></div>
 
-{{> _measurements/_pagination }}
 {{> _measurements/_add }}
 {{> _measurements/_filter }}
