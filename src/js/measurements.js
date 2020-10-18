@@ -3,7 +3,8 @@ import { Fetcher } from './class/Fetcher';
 import { AddMeasurement } from './modals/measurements/addMeasurement';
 import { FilterMeasurements } from './modals/measurements/filterMeasurements';
 
-import listTemplate from './templates/measurementList.hbs';
+import listTemplate from '../templates/measurementList.hbs';
+import Pagination from '../templates/pagination.hbs';
 
 export class Measurements extends Pages {
     constructor( _path ) {
@@ -14,22 +15,23 @@ export class Measurements extends Pages {
             FilterMeasurements: new FilterMeasurements(),
         };
 
-        this.measurements = new Fetcher( "/measurements/?data", { method: "GET" } );
+        this.results = this.page.find( 'div#measurements-results' );
+        this.pagination = this.page.find( 'div#pagination' );
 
-        // this.tplList = new TemplateFetch( {
-        //     template: "_measurements._list",
-        //     appendTo: $( 'div#measurements-results' )
-        // } );
+        this.measurements = new Fetcher( "/measurements/?data", { method: "GET" } );
 
         this.getData();
     }
 
     getData () {
+        $( this.progress[ 'resultsFetch' ] ).show();
+
         this.measurements.getJSON()
             .then( ( data ) => {
-                $( 'div#measurements-results' ).html( listTemplate( { lists: data } ) )
-                // this.tplList.make( { lists: data } );
+                this.results.html( listTemplate( { lists: data } ) );
+                this.pagination.html( Pagination() );
+
+                $( this.progress[ 'resultsFetch' ] ).hide();
             } );
     }
 }
-// const measurements = new Measurements();
