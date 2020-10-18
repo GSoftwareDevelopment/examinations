@@ -8,8 +8,8 @@ Aplikacja jest "sprawdzaniem" umiejętności związanych z technologiami:
 - Docker
 - Node.JS
 - WebPack
-- Google APIs i Facebook for Developers
 - MongoDB
+- Passport do logowania przez Google i Facebook
 - Express.js
 - Handlebars
   

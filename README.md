@@ -10,8 +10,8 @@ The application is a "test" of skills related to technologies:
 - Docker
 - Node.JS
 - WebPack
-- Google APIs and Facebook for Developers
 - MongoDB
+- Passport for Google and Facebook Login
 - Express.js
 - Handlebars
   
