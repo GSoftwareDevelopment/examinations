@@ -12,5 +12,3 @@ const app = {
         new Measurements( '/measurements' ),
     ]
 }
-
-console.log( app );

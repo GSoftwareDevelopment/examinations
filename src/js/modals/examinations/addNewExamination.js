@@ -1,4 +1,3 @@
-// import $ from "jquery";
 import { Dialog } from "./../../class/Dialog";
 import { SelectFetch } from "./../../class/SelectFetch";
 
