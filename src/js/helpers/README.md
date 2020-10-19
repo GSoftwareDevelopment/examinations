@@ -1,3 +1,7 @@
+This document has been translated by Google Translate
+
+[Polish version](README-PL.md)
+
 # Handlebars helpers by GSD
 
 Handlebars is one of the most interesting template creation tools, thanks to the ability to create your own "helpers".
@@ -18,7 +22,7 @@ It will return `true` if the given arguments (`arg1` and `arg2`) are equal. Othe
 ```hbs
 {{#if (eq page 0)}}
     <div> This is the beginning of the article </div>
-{{/ if}}
+{{/if}}
 ```
 
 ### `neq {arg1} {arg2}`
@@ -30,7 +34,7 @@ This is the opposite of the `eq` function.
 ```hbs
 {{#if (neq page 0)}}
     <div> This is not the beginning of the article </div>
-{{/ if}}
+{{/if}}
 ```
 
 A similar result can be obtained by using the logical operation `not`, e.g.
@@ -38,7 +42,7 @@ A similar result can be obtained by using the logical operation `not`, e.g.
 ```hbs
 {{#if (not (eq page 0))}}
     <div> This is not the beginning of the article </div>
-{{/ if}}
+{{/if}}
 ```
 
 ### `lt {arg1} {arg2}`
@@ -130,7 +134,7 @@ if ((count> 0) and (count <10)) {
 ```hbs
 {{#if (and (gt count 0) (lt count 10))}}
 The value of the variable is in the range 1 to 9
-{{/ if}}
+{{/if}}
 ```
 
 A little practice and you can build complicated conditions.
@@ -141,7 +145,7 @@ A little practice and you can build complicated conditions.
 
 Counters are a kind of equivalent of variables. They have a global scope, more precisely, they are not dependent on the calling context.
 
-### `set" name "{value}`
+### `set "name" {value}`
 
 Sets a numeric named `name` to value `value`.
 
@@ -160,7 +164,7 @@ Set the counter named "count" to zero (0)
 This sets a counter named "count" to the value indicated in the `pages` variable passed to the template.
 
 
-### `get" name "`
+### `get "name"`
 
 Returns the state of the counter named `name`
 
@@ -175,7 +179,7 @@ It will take the value of the counter named "count" and pass it to the template 
 ```hbs
 {{#if (eq (get "count") 0)}}
 Counter is zero
-{{/ if}}
+{{/if}}
 ```
 
 An example of using a numerator in a condition. The condition will be met when the numerator is equal to zero (0).
@@ -193,7 +197,7 @@ Returns `true` if the numerator `name` is zero (0).
 ```hbs
 {{#if (isZero "count")}}
 Counter is zero
-{{/ if}}
+{{/if}}
 ```
 
 As in the example of the `get` function, the condition will be met when the numerator is zero (0).
@@ -212,7 +216,7 @@ This information is provided by the variables `@first` and `@last`.
 ```hbs
 {{#loop 1 10}}
     <div> Step {{@index}} </div>
-{{/ loop}}
+{{/loop}}
 ```
 
 The loop will result in nine `<div>` block elements containing the numbers 1 through 9, in sequence.
