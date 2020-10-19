@@ -1,5 +1,6 @@
-<nav aria-label="Page navigation">
-    <ul class="pagination pg-blue justify-content-center">
+<div class="col-md-4 col-lg-3"></div>
+<nav aria-label="Page navigation" class="col-md-8 col-lg-9 shadow-lg bg-light m-0">
+    <ul class="pagination pg-blue justify-content-center align-items-center my-1">
         <li class="page-item {{#if (eq currentPage 0)}}disabled{{/if}}">
             <a id="page-changer" data-page="0" class="page-link">
                 <svg viewBox="0 0 16 16" class="bi bi-chevron-bar-left" fill="currentColor">
@@ -48,6 +49,26 @@
                         d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
                 </svg>
             </a>
+        </li>
+        <li class="page-item">
+            <div class="btn-group dropup">
+                <button id="limit-changer" class="btn btn-sm btn-primary rounded-pill dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{#if (eq limit 0)}}
+                        Wszystkie
+                    {{else}}
+                        {{limit}}
+                    {{/if}}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a id="limit-changer" data-limit="0" class="dropdown-item" href="#">Wszystkie wyniki</a>
+                    <a id="limit-changer" data-limit="5" class="dropdown-item" href="#">5 wyników</a>
+                    <a id="limit-changer" data-limit="10" class="dropdown-item" href="#">10 wyników</a>
+                    <a id="limit-changer" data-limit="20" class="dropdown-item" href="#">20 wyników</a>
+                    <a id="limit-changer" data-limit="50" class="dropdown-item" href="#">50 wyników</a>
+                    <a id="limit-changer" data-limit="100" class="dropdown-item" href="#">100 wyników</a>
+                </div>
+            </div>
         </li>
     </ul>
 </nav>
