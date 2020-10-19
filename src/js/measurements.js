@@ -18,7 +18,12 @@ export class Measurements extends Pages {
         this.results = this.page.find( 'div#measurements-results' );
         this.pagination = this.page.find( 'div#pagination' );
 
-        this.measurements = new Fetcher( "/measurements/?data", { method: "GET" } );
+        this.measurements = new Fetcher( "/measurements", { method: "GET" } );
+
+        this.paginator = {
+            limit: 50,
+            page: 0
+        };
 
         this.getData();
     }
@@ -26,11 +31,19 @@ export class Measurements extends Pages {
     getData () {
         $( this.progress[ 'resultsFetch' ] ).show();
 
-        this.measurements.getJSON()
+        this.measurements.getJSON( { queryParams: { data: true, ...this.paginator } } )
             .then( ( data ) => {
-                this.results.html( listTemplate( { lists: data } ) );
-                this.pagination.html( Pagination() );
+                this.results.html( listTemplate( { lists: data.measurements } ) );
+                this.pagination.html( Pagination( {
+                    currentPage: this.paginator.page,
+                    totalPages: ( this.paginator.limit > 0 ) ? Math.ceil( data.totalResults / this.paginator.limit ) - 1 : 0,
+                } ) );
 
+                this.page.find( 'a#page-changer' ).one( 'click', ( e ) => {
+                    const page = $( e.currentTarget ).data( 'page' );
+                    this.paginator.page = page;
+                    this.getData();
+                } )
                 $( this.progress[ 'resultsFetch' ] ).hide();
             } );
     }

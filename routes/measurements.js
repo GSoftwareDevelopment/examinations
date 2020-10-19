@@ -10,20 +10,27 @@ const { Measurement, Result } = require( '../models/measurement' );
 // @route   GET /measurements
 router.get( '/', ensureAuth, async ( req, res ) => {
     try {
+        const limit = parseInt( req.query.limit ) || 0;
+        const page = parseInt( req.query.page ) || 0;
+
         const measurements = await Measurement
             .find( { user: req.user.id } )
             .sort( {
                 "createdAt": -1,
             } )
+            .limit( limit )
+            .skip( page * limit )
             .populate( 'examination' )
             .populate( 'values' )
             .populate( 'values.value' )
             .lean();
 
+        const count = await Measurement.countDocuments();
+
         if ( typeof req.query.data === "undefined" ) {
             res.render( 'measurements' );
         } else {
-            res.json( measurements )
+            res.json( { totalResults: count, currentPage: page, measurements } )
         }
 
     } catch ( error ) {

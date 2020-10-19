@@ -9,6 +9,17 @@
                 </button>
             </div>
             <form id="createGroup" class="needs-validation" novalidate autocomplete="off">
+                <div class="col-6 form-group">
+                    <label for="date">Wyników na stronę: </label>
+                    <select class="form-control col-9 col-sm-10" id="limit" name="limit">
+                        <option value="0">wszystkie wyniki</option>
+                        <option value="10">10 wyników</option>
+                        <option value="20" selected>20 wyników</option>
+                        <option value="50">50 wyników</option>
+                        <option value="100">100 wyników</option>
+                    </select>
+
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-6 form-group">
