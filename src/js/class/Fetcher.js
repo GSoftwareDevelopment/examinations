@@ -7,9 +7,9 @@ class Fetcher {
     }
 
     async getJSON ( extraOptions ) {
-        let query;
+        let query = {};
 
-        if ( extraOptions.queryParams ) {
+        if ( extraOptions && extraOptions.queryParams ) {
             query = extraOptions.queryParams;
             delete extraOptions.queryParams;
         }
