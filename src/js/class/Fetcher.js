@@ -1,19 +1,29 @@
+import withQuery from 'with-query';
+
 class Fetcher {
     constructor( url, options ) {
         this.url = url;
         this.options = options;
     }
 
-    async getJSON () {
-        this.options = {
+    async getJSON ( extraOptions ) {
+        let query;
+
+        if ( extraOptions.queryParams ) {
+            query = extraOptions.queryParams;
+            delete extraOptions.queryParams;
+        }
+
+        const options = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            ...this.options
+            ...this.options,
+            ...extraOptions
         }
 
         try {
-            const response = await fetch( this.url, this.option );
+            const response = await fetch( withQuery( this.url, query ), options );
 
             if ( !response.ok ) {
                 const message = `An error has occured: ${response.status}`;
@@ -37,7 +47,7 @@ class Fetcher {
         }
 
         try {
-            const response = await fetch( this.url, this.option );
+            const response = await fetch( this.url, this.options );
 
             if ( !response.ok ) {
                 const message = `An error has occured: ${response.status}`;
