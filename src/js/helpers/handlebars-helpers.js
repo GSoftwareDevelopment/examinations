@@ -1,6 +1,19 @@
 const Handlebars = require( 'handlebars/runtime' );
 const { formatTime, formatDate } = require( './../class/misc' );
 
+var counters = {};
+
+//
+
+function getOp ( op, errMsg ) {
+    if ( typeof op === 'string' )
+        return counters[ op ]
+    else if ( typeof op === 'number' )
+        return op
+    else
+        throw new Error( errMsg );
+}
+
 // Date & Time
 
 Handlebars.registerHelper( 'formatDate', function ( date ) {
@@ -36,8 +49,6 @@ Handlebars.registerHelper( 'isObject', function ( a ) { return ( typeof a === "o
 
 // Counters
 
-var counters = {};
-
 Handlebars.registerHelper( 'set', function ( name, value ) { counters[ name ] = value; } );
 Handlebars.registerHelper( 'get', function ( name ) { return counters[ name ]; } );
 Handlebars.registerHelper( 'zero', function ( name ) { counter[ name ] = 0; } );
@@ -64,15 +75,6 @@ Handlebars.registerHelper( 'loop', function ( from, to, opt ) {
 } );
 
 // Math
-
-function getOp ( op, errMsg ) {
-    if ( typeof op === 'string' )
-        return counters[ op ]
-    else if ( typeof op === 'number' )
-        return op
-    else
-        return 0
-}
 
 Handlebars.registerHelper( 'add', function ( a, b ) {
     let opA = getOp( a, 'Invalid left operand' );
