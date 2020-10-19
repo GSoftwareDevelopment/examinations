@@ -4,7 +4,7 @@ import { AddMeasurement } from './modals/measurements/addMeasurement';
 import { FilterMeasurements } from './modals/measurements/filterMeasurements';
 
 import listTemplate from '../templates/measurementList.hbs';
-import Pagination from '../templates/pagination.hbs';
+import Paginator from './components/paginator/paginator';
 
 export class Measurements extends Pages {
     constructor( _path ) {
@@ -16,12 +16,15 @@ export class Measurements extends Pages {
         };
 
         this.results = this.page.find( 'div#measurements-results' );
-        this.paginator = this.page.find( 'div#paginator' );
-
-        this.paginatorOpt = {
+        this.paginator = new Paginator( this.page.find( 'div#paginator' ), {
             limit: 10,
-            page: 0
-        };
+            page: 0,
+            totalPages: 0,
+        } );
+        this.paginator.onPageChange =
+            this.paginator.onLimitChange = ( e ) => {
+                this.getData();
+            };
 
         this.measurements = new Fetcher( "/measurements", { method: "GET" } );
 
@@ -31,27 +34,18 @@ export class Measurements extends Pages {
     getData () {
         $( this.progress[ 'resultsFetch' ] ).show();
         this.results.empty();
-        this.paginator.find( 'a#page-changer' ).off( 'click' );
 
-        this.measurements.getJSON( { queryParams: { data: true, ...this.paginatorOpt } } )
+        this.measurements.getJSON( {
+            queryParams: {
+                data: true,
+                limit: this.paginator.limit,
+                page: this.paginator.currentPage,
+            }
+        } )
             .then( ( data ) => {
                 this.results.html( listTemplate( { lists: data.measurements } ) );
-                this.paginator.html( Pagination( {
-                    limit: this.paginatorOpt.limit,
-                    currentPage: this.paginatorOpt.page,
-                    totalPages: ( this.paginatorOpt.limit > 0 ) ? Math.ceil( data.totalResults / this.paginatorOpt.limit ) - 1 : 0,
-                } ) );
-
-                this.paginator.find( 'a#page-changer' ).one( 'click', ( e ) => {
-                    const page = $( e.currentTarget ).data( 'page' );
-                    this.paginatorOpt.page = page;
-                    this.getData();
-                } );
-                this.paginator.find( 'a#limit-changer' ).one( 'click', ( e ) => {
-                    const newLimit = parseInt( $( e.currentTarget ).data( 'limit' ) );
-                    this.paginatorOpt.limit = newLimit;
-                    this.getData();
-                } );
+                this.paginator.totalPages = ( this.paginator.limit > 0 ) ? Math.ceil( data.totalResults / this.paginator.limit ) - 1 : 0
+                this.paginator.refresh();
 
                 $( this.progress[ 'resultsFetch' ] ).hide();
             } );
