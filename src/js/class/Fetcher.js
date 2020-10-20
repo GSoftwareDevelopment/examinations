@@ -1,11 +1,32 @@
+/**
+ * Fetcher Class - extends basic Fetch API
+ * @module class/Fetcher
+ */
 import withQuery from 'with-query';
 
-class Fetcher {
+export class Fetcher {
+    /**
+     * Init fetcher
+     * @param {string} url - URL address
+     * @param {Object<RequestInit>} options - Request options
+     */
     constructor( url, options ) {
+        /**
+         * @property {string} url - URL address
+         */
         this.url = url;
+
+        /**
+         * @property {Object<RequestInit>} options - Request options
+         */
         this.options = options;
     }
 
+    /**
+     * Call fetch with JSON content type
+     * @param {Object<RequestInit>} extraOptions - Extends request option
+     * @returns {Object<Promise>} - Promise from fetch
+     */
     async getJSON ( extraOptions ) {
         let query = {};
 
@@ -38,6 +59,10 @@ class Fetcher {
         }
     }
 
+    /**
+     * Call fetch with HTML content type
+     * @returns {Object<Promise>} - Promise from fetch
+     */
     async getHTML () {
         this.options = {
             headers: {
@@ -62,5 +87,3 @@ class Fetcher {
         }
     }
 }
-
-export { Fetcher }

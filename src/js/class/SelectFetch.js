@@ -1,4 +1,3 @@
-// import $ from "jquery";
 import { Fetcher } from "./Fetcher";
 
 class SelectFetch extends Fetcher {

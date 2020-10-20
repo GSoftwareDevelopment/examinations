@@ -21,10 +21,9 @@ export class Measurements extends Pages {
             page: 0,
             totalPages: 0,
         } );
-        this.paginator.onPageChange =
-            this.paginator.onLimitChange = ( e ) => {
-                this.getData();
-            };
+        this.paginator.onChange = ( e ) => {
+            this.getData();
+        };
 
         this.measurements = new Fetcher( "/measurements", { method: "GET" } );
 
