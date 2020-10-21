@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: class/misc.js</title>
+    <title>JSDoc: Module: component/Dialog</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,58 +17,139 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: class/misc.js</h1>
+    <h1 class="page-title">Module: component/Dialog</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Misc function
- * @module misc
- */
+        
+            
+        
+    
+</header>
 
-/**
- * Function which returns a minimum of two digits in case the value is less than 10
- * @param {number} value 
- */
-const getTwoDigits = ( value ) => value &lt; 10 ? `0${value}` : value;
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Dialog class component</p></div>
+        
 
-/**
- * Return formated date YYYY-MM-DD
- * @param {Object&lt;Date>} date 
- * @returns {String} - Formated date
- */
-const formatDate = ( date ) => {
-    const day = getTwoDigits( date.getDate() );
-    const month = getTwoDigits( date.getMonth() + 1 ); // add 1 since getMonth returns 0-11 for the months
-    const year = date.getFullYear();
+        
+            
 
-    return `${year}-${month}-${day}`;
-}
 
-/**
- * Return formate time HH:MM (24 hours)
- * @param {Object&lt;Date>} date 
- * @returns {String} - Formated time
- */
-const formatTime = ( date ) => {
-    const hours = getTwoDigits( date.getHours() );
-    const mins = getTwoDigits( date.getMinutes() );
 
-    return `${hours}:${mins}`;
-}
 
-module.exports = {
-    getTwoDigits,
-    formatDate,
-    formatTime
-}</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_dialog_Dialog.js.html">components/dialog/Dialog.js</a>, <a href="components_dialog_Dialog.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-component_Dialog.Dialog.html">Dialog</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

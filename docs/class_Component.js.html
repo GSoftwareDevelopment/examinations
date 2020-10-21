@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: class/misc.js</title>
+    <title>JSDoc: Source: class/Component.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: class/misc.js</h1>
+    <h1 class="page-title">Source: class/Component.js</h1>
 
     
 
@@ -26,46 +26,44 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Misc function
- * @module misc
- */
+            <pre class="prettyprint source linenums"><code>export default class Component {
+    constructor() {
 
-/**
- * Function which returns a minimum of two digits in case the value is less than 10
- * @param {number} value 
- */
-const getTwoDigits = ( value ) => value &lt; 10 ? `0${value}` : value;
+    }
 
-/**
- * Return formated date YYYY-MM-DD
- * @param {Object&lt;Date>} date 
- * @returns {String} - Formated date
- */
-const formatDate = ( date ) => {
-    const day = getTwoDigits( date.getDate() );
-    const month = getTwoDigits( date.getMonth() + 1 ); // add 1 since getMonth returns 0-11 for the months
-    const year = date.getFullYear();
+    /**
+     * Initial parameters for findElement function
+     * @typedef {Object} findElementParams
+     * @property {JQuery&lt;HTMLElement>} [findIn] - jQuery element
+     * @property {string} selector - selector
+     */
 
-    return `${year}-${month}-${day}`;
-}
+    /**
+     * The function searches for selector (param.selector) in the DOM tree, and by setting where to look (parm.findIn), it allows you to search in a specific element.
+     * @param {findElementParams} params
+     * @returns {jQuery&lt;HTMLElement>} jQuery element
+     */
+    findElement ( params ) {
 
-/**
- * Return formate time HH:MM (24 hours)
- * @param {Object&lt;Date>} date 
- * @returns {String} - Formated time
- */
-const formatTime = ( date ) => {
-    const hours = getTwoDigits( date.getHours() );
-    const mins = getTwoDigits( date.getMinutes() );
+        if ( typeof params !== 'object' ) return undefined;
 
-    return `${hours}:${mins}`;
-}
+        if ( params.selector ) {
+            let selector;
 
-module.exports = {
-    getTwoDigits,
-    formatDate,
-    formatTime
+            if ( params.findIn ) {
+                selector = $( params.findIn ).find( params.selector );
+            } else {
+                selector = $( params.selector );
+            }
+            if ( selector.length == 0 )
+                return null
+            else
+                return selector;
+        } else {
+            return undefined;
+        }
+    }
+
 }</code></pre>
         </article>
     </section>

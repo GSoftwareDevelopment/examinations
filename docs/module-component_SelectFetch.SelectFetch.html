@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: module:Component/Paginator</title>
+    <title>JSDoc: Class: SelectFetch</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: module:Component/Paginator</h1>
+    <h1 class="page-title">Class: SelectFetch</h1>
 
     
 
@@ -28,9 +28,8 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>module:Component/Paginator<span class="signature">(HTMLElement, opt)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>Paginator component Class</p></div>
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-component_SelectFetch.html">component/SelectFetch</a>.</span>SelectFetch<span class="signature">(HTMLElement, &hellip;opt<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,11 +40,9 @@
         
 
     
-    <h2>Constructor</h2>
-    
 
     
-    <h4 class="name" id="module:Component/Paginator"><span class="type-signature"></span>new module:Component/Paginator<span class="signature">(HTMLElement, opt)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SelectFetch"><span class="type-signature"></span>new SelectFetch<span class="signature">(HTMLElement, &hellip;opt<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +50,7 @@
 
 
 <div class="description">
-    <p>Create new Paginator component</p>
+    <p>Init component</p>
 </div>
 
 
@@ -77,6 +74,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -95,17 +94,25 @@
             <td class="type">
             
                 
-<span class="param-type">jQuery.&lt;HTMLElement></span>
+<span class="param-type">HTMLElement</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>DOM Element</p></td>
+            <td class="description last"><p>A DOM element pointing to a Select element</p></td>
         </tr>
 
     
@@ -118,17 +125,29 @@
             <td class="type">
             
                 
-<span class="param-type">PaginatorOptions</span>
+<span class="param-type">SelectFetchOption</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>initial parameters for Paginator</p></td>
+            <td class="description last"><p>Component options <code>SelectFetchOption</code></p></td>
         </tr>
 
     
@@ -169,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line11">line 11</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -219,7 +238,7 @@
 
         
             
-<h4 class="name" id="currentPage"><span class="type-signature"></span>currentPage<span class="type-signature"></span></h4>
+<h4 class="name" id="autoInit"><span class="type-signature"></span>autoInit<span class="type-signature"></span></h4>
 
 
 
@@ -256,13 +275,13 @@
 
         <tr>
             
-                <td class="name"><code>currentPage</code></td>
+                <td class="name"><code>autoInit</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -272,7 +291,7 @@
 
             
 
-            <td class="description last"><p>Current page number</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -311,7 +330,117 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line45">line 45</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="dataMap"><span class="type-signature"></span>dataMap<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dataMap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -372,7 +501,7 @@
             <td class="type">
             
                 
-<span class="param-type">jQuery.&lt;HTMLElement></span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -382,7 +511,7 @@
 
             
 
-            <td class="description last"><p>DOM Element Wrapper</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -421,7 +550,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line35">line 35</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -439,7 +568,7 @@
 
         
             
-<h4 class="name" id="limit"><span class="type-signature"></span>limit<span class="type-signature"></span></h4>
+<h4 class="name" id="HTMLSpinner"><span class="type-signature"></span>HTMLSpinner<span class="type-signature"></span></h4>
 
 
 
@@ -476,13 +605,13 @@
 
         <tr>
             
-                <td class="name"><code>limit</code></td>
+                <td class="name"><code>HTMLSpinner</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -492,7 +621,7 @@
 
             
 
-            <td class="description last"><p>Results limit on the page</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -531,7 +660,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line40">line 40</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -602,7 +731,7 @@
 
             
 
-            <td class="description last"><p>Callback for any change in component</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -641,7 +770,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line56">line 56</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -659,7 +788,7 @@
 
         
             
-<h4 class="name" id="onLimitChange"><span class="type-signature"></span>onLimitChange<span class="type-signature"></span></h4>
+<h4 class="name" id="option"><span class="type-signature"></span>option<span class="type-signature"></span></h4>
 
 
 
@@ -696,13 +825,13 @@
 
         <tr>
             
-                <td class="name"><code>onLimitChange</code></td>
+                <td class="name"><code>option</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">array</span>
 
 
             
@@ -712,7 +841,7 @@
 
             
 
-            <td class="description last"><p>Callback for limit change</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -751,7 +880,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line64">line 64</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -769,7 +898,7 @@
 
         
             
-<h4 class="name" id="onPageChange"><span class="type-signature"></span>onPageChange<span class="type-signature"></span></h4>
+<h4 class="name" id="selectedItem"><span class="type-signature">(readonly) </span>selectedItem<span class="type-signature"></span></h4>
 
 
 
@@ -806,13 +935,13 @@
 
         <tr>
             
-                <td class="name"><code>onPageChange</code></td>
+                <td class="name"><code>selectedItem</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -822,7 +951,7 @@
 
             
 
-            <td class="description last"><p>Callback for page change</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -861,7 +990,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line60">line 60</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -879,7 +1008,7 @@
 
         
             
-<h4 class="name" id="totalPages"><span class="type-signature"></span>totalPages<span class="type-signature"></span></h4>
+<h4 class="name" id="url"><span class="type-signature"></span>url<span class="type-signature"></span></h4>
 
 
 
@@ -916,13 +1045,13 @@
 
         <tr>
             
-                <td class="name"><code>totalPages</code></td>
+                <td class="name"><code>url</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -932,7 +1061,7 @@
 
             
 
-            <td class="description last"><p>Total pages</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -971,7 +1100,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line50">line 50</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -1051,7 +1180,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line72">line 72</a>
+        <a href="components_select-fetch_select-fetch.js.html">components/select-fetch/select-fetch.js</a>, <a href="components_select-fetch_select-fetch.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1084,249 +1213,6 @@
         
     
 
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="~PaginatorOptions">PaginatorOptions</h4>
-
-
-
-
-<div class="description">
-    <p>Initial parameters for Paginator component</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>limit</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Results limit on the page</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>page</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current page number</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>totalPages</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Total pages</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for any change in component</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onPageChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for page change</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onLimitChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for limit change</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_paginator.js.html">components/paginator/paginator.js</a>, <a href="components_paginator_paginator.js.html#line13">line 13</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
     
 
     

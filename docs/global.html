@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: misc</title>
+    <title>JSDoc: Global</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: misc</h1>
+    <h1 class="page-title">Global</h1>
 
     
 
@@ -28,8 +28,7 @@
 
 <header>
     
-        
-            
+        <h2></h2>
         
     
 </header>
@@ -38,24 +37,8 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Misc function</p></div>
-        
 
         
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <dl class="details">
@@ -85,11 +68,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="class_misc.js.html">class/misc.js</a>, <a href="class_misc.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
 
     
 
@@ -97,24 +75,6 @@
 
     
 </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         
@@ -144,7 +104,7 @@
     
 
     
-    <h4 class="name" id="~formatDate"><span class="type-signature">(inner) </span>formatDate<span class="signature">(date)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="findElement"><span class="type-signature"></span>findElement<span class="signature">(params)</span><span class="type-signature"> &rarr; {jQuery.&lt;HTMLElement>}</span></h4>
     
 
     
@@ -152,7 +112,7 @@
 
 
 <div class="description">
-    <p>Return formated date YYYY-MM-DD</p>
+    <p>The function searches for selector (param.selector) in the DOM tree, and by setting where to look (parm.findIn), it allows you to search in a specific element.</p>
 </div>
 
 
@@ -188,13 +148,13 @@
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;Date></span>
+<span class="param-type"><a href="global.html#findElementParams">findElementParams</a></span>
 
 
             
@@ -245,7 +205,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="class_misc.js.html">class/misc.js</a>, <a href="class_misc.js.html#line17">line 17</a>
+        <a href="class_Component.js.html">class/Component.js</a>, <a href="class_Component.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -274,9 +234,7 @@
 
         
 <div class="param-desc">
-    <ul>
-<li>Formated date</li>
-</ul>
+    <p>jQuery element</p>
 </div>
 
 
@@ -287,7 +245,7 @@
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">jQuery.&lt;HTMLElement></span>
 
 
     </dd>
@@ -300,34 +258,43 @@
 
 
         
-            
-
     
 
     
-    <h4 class="name" id="~formatTime"><span class="type-signature">(inner) </span>formatTime<span class="signature">(date)</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
+        <h3 class="subsection-title">Type Definitions</h3>
 
-    
+        
+                
+<h4 class="name" id="findElementParams">findElementParams</h4>
+
 
 
 
 <div class="description">
-    <p>Return formate time HH:MM (24 hours)</p>
+    <p>Initial parameters for findElement function</p>
 </div>
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
 
 
 
 
 
+    <h5 class="subsection-title">Properties:</h5>
 
-    <h5>Parameters:</h5>
     
 
-<table class="params">
+<table class="props">
     <thead>
     <tr>
         
@@ -336,6 +303,8 @@
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -349,30 +318,65 @@
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>findIn</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;Date></span>
+<span class="param-type">JQuery.&lt;HTMLElement></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>jQuery element</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>selector</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>selector</p></td>
         </tr>
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -406,7 +410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="class_misc.js.html">class/misc.js</a>, <a href="class_misc.js.html#line30">line 30</a>
+        <a href="class_Component.js.html">class/Component.js</a>, <a href="class_Component.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -422,184 +426,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <ul>
-<li>Formated time</li>
-</ul>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
             
-
-    
-
-    
-    <h4 class="name" id="~getTwoDigits"><span class="type-signature">(inner) </span>getTwoDigits<span class="signature">(value)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Function which returns a minimum of two digits in case the value is less than 10</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="class_misc.js.html">class/misc.js</a>, <a href="class_misc.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-
     
 
     
