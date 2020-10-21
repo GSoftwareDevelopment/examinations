@@ -1,7 +1,7 @@
-import { Dialog } from "./../../class/Dialog";
-import { SelectFetch } from "./../../class/SelectFetch";
+import { Dialog } from "../../components/dialog/Dialog";
+import { SelectFetch } from "../../components/select-fetch/select-fetch";
 
-class AddNewExamination extends Dialog {
+export class AddNewExamination extends Dialog {
     constructor() {
         super( 'add-examination' );
 
@@ -16,14 +16,17 @@ class AddNewExamination extends Dialog {
                     .hide();
             } )
 
-        // initialize "general tab" events    
-        this.groupSelect = $( this.forms[ 'form' ] ).find( '#group' );
-
-        this.groups = new SelectFetch( {
-            url: '/groups?data',
-            select: this.groupSelect,
-            spinner: this.progress[ 'groupsFetching' ]
-        } );
+        // initialize "general tab" events
+        this.groupSelect = new SelectFetch(
+            this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
+            {
+                url: '/groups?data',
+                HTMLSpinner: this.progress[ 'groupsFetching' ],
+                dataMap: ( data ) => {
+                    return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
+                }
+            }
+        );
 
         // "values tab"
         this.valuesList = $( this.dialog ).find( 'div#values-list' );
@@ -53,21 +56,7 @@ class AddNewExamination extends Dialog {
             required: true,
         } );
 
-        this.getGroupsList();
-    }
-
-    getGroupsList () {
-        this.groups.getData()
-            .then( ( data ) => {
-                if ( !data ) return;
-
-                data.forEach( ( entry ) => {
-                    let item = $( `<option class="item" value="${entry._id}">${entry.name}</option>` );
-                    this.groupSelect.append( item );
-                } );
-            } );
-
-        this.dialog.find( 'option[data-type="fechingData"' ).attr( 'selected', true );
+        this.groupSelect.refresh();
     }
 
     async submit ( e ) {
@@ -153,6 +142,3 @@ class AddNewExamination extends Dialog {
         }
     }
 }
-
-export { AddNewExamination }
-// module.exports = new AddNewExamination();

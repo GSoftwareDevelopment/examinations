@@ -1,6 +1,5 @@
-// import $ from 'jquery';
-import { Dialog } from '../../class/Dialog';
-import { SelectFetch } from '../../class/SelectFetch';
+import { Dialog } from "../../components/dialog/Dialog";
+import { SelectFetch } from '../../components/select-fetch/select-fetch';
 import { formatDate, formatTime } from '../../class/misc';
 
 class AddMeasurement extends Dialog {
@@ -15,26 +14,29 @@ class AddMeasurement extends Dialog {
         this.date = $( this.forms[ 'form' ] ).find( '#date' );
         this.time = $( this.forms[ 'form' ] ).find( '#time' );
 
-        this.groupSelect = $( this.forms[ 'form' ] )
-            .find( '#group' )
-            .on( 'change', ( e ) => { this.changeGroup( e ); } );
+        this.examinationGroupSelect = new SelectFetch(
+            this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
+            {
+                url: '/groups?data',
+                HTMLSpinner: this.progress[ 'groupsFetching' ],
+                dataMap: ( data ) => {
+                    return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
+                },
+                onChange: ( { value } ) => { this.selectExaminationsByGroupID( value ); }
+            }
+        );
 
-        this.examinationSelect = $( this.forms[ 'form' ] )
-            .find( '#examination' )
-            .on( 'change', ( e ) => { this.changeExamination( e ); } );
-
-        this.groups = new SelectFetch( {
-            url: '/groups?data',
-            select: this.groupSelect,
-            spinner: this.progress[ 'groupsFetching' ]
-        } );
-        this.examinations = new SelectFetch( {
-            url: '/examinations?data',
-            select: this.examinationSelect,
-            spinner: this.progress[ 'examinationsFetching' ]
-        } );
-
-        // this.pattern = $( this.dialog ).find( 'div#pattern' );
+        this.examinationSelect = new SelectFetch(
+            this.findElement( { findIn: this.forms[ 'form' ], selector: "#examination" } ),
+            {
+                url: '/examinations?data',
+                HTMLSpinner: this.progress[ 'examinationsFetching' ],
+                dataMap: ( data ) => {
+                    return data.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
+                },
+                onChange: ( { value } ) => { this.prepareExaminationValues( value ); }
+            }
+        );
 
         this.resultsFields = $( this.dialog ).find( 'div#results' );
     }
@@ -48,19 +50,18 @@ class AddMeasurement extends Dialog {
         this.date[ 0 ].value = formatDate( currentDate );
         this.time[ 0 ].value = formatTime( currentDate );
 
-        this.getGroupsList();
-        this.getExaminationsList();
+        this.examinationGroupSelect.refresh();
+        this.examinationSelect.refresh();
     }
 
     clearResultsFields () {
         this.resultsFields.empty();
     }
 
-    changeGroup ( e ) {
-        const groupID = e.currentTarget.value;
+    selectExaminationsByGroupID ( groupID ) {
         this.clearResultsFields();
 
-        this.examinationSelect
+        this.examinationSelect.HTMLComponent
             .find( 'option, optgroup' )
             .each( ( i, el ) => {
                 const elGroup = $( el ).data( 'group' );
@@ -74,42 +75,10 @@ class AddMeasurement extends Dialog {
                 }
             } );
 
-        this.examinationSelect.find( 'option[data-type="prompt"]' ).attr( 'selected', true );
+        this.examinationSelect.HTMLComponent.find( 'option[data-type="prompt"]' ).attr( 'selected', true );
     }
 
-    changeExamination ( e ) {
-        const examinationID = e.currentTarget.value;
-        console.log( examinationID );
-        this.getExaminationValues( examinationID );
-    }
-
-    getGroupsList () {
-        this.groups.getData()
-            .then( ( data ) => {
-                if ( !data ) return;
-
-                data.forEach( ( entry ) => {
-                    let item = $( `<option class="item" value="${entry._id}">${entry.name}</option>` );
-                    this.groupSelect.append( item );
-                } );
-            } );
-    }
-
-    getExaminationsList () {
-        this.examinations.getData()
-            .then( ( data ) => {
-                if ( !data ) return;
-
-                data.forEach( ( entry ) => {
-                    const name = `${entry.name}`;
-                    let item = $( `<option class="item" ${entry.group ? `data-group="${entry.group._id}"` : `data-group=""`} value="${entry._id}">${name}</option>` );
-                    this.examinationSelect.append( item );
-                } );
-            } );
-
-    }
-
-    getExaminationValues ( examinationID ) {
+    prepareExaminationValues ( examinationID ) {
         fetch( `/values/${examinationID}`, {
             method: 'GET',
             headers: {
