@@ -4,7 +4,7 @@ import { AddMeasurement } from './modals/measurements/addMeasurement';
 import { FilterMeasurements } from './modals/measurements/filterMeasurements';
 
 import listTemplate from '../templates/measurementList.hbs';
-import Paginator from './components/paginator/paginator';
+import Paginator from './components/paginator/';
 
 export class Measurements extends Pages {
     constructor( _path ) {
