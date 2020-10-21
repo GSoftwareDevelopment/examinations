@@ -145,7 +145,6 @@ export class SelectFetch extends Component {
                 this.HTMLComponent.append( this.option[ 'error' ] );
             } )
             .finally( () => {
-                console.log( this.option );
                 if ( this.option[ 'default' ] )
                     this.option[ 'default' ][ 0 ].selected = true
                 else
