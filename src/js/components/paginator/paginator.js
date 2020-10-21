@@ -2,12 +2,13 @@
  * Paginator component
  * @module Component/Paginator
  */
+import Component from '../../class/Component';
 import PaginationTemplate from './pagination.hbs';
 
 /**
  * Paginator component Class
  */
-export default class Paginator {
+export default class Paginator extends Component {
 
     /**
      * Initial parameters for Paginator component
@@ -26,6 +27,7 @@ export default class Paginator {
      * @param {PaginatorOptions} opt - initial parameters for Paginator
      */
     constructor( HTMLElement, opt ) {
+        super();
 
         /** 
          * @property {jQuery<HTMLElement>} HTMLComponent - DOM Element Wrapper
@@ -35,31 +37,31 @@ export default class Paginator {
         /**
          * @property {number} limit - Results limit on the page
          */
-        this.limit = 0;
+        this.limit = ( opt && opt.limit ) ? opt.limit : 0;
 
         /** 
          * @property {number} currentPage - Current page number
          */
-        this.currentPage = 0;
+        this.currentPage = ( opt && opt.page ) ? opt.page : 0;
 
         /**
          * @property {number} totalPages - Total pages 
          */
-        this.totalPages = 0;
+        this.totalPages = ( opt && opt.totalPages ) ? opt.totalPages : 0;
 
 
         /** 
          * @property {function} onChange - Callback for any change in component 
          */
-        this.onChange = null;
+        this.onChange = ( opt && opt.onChange ) ? opt.onChange : null;
         /** 
          * @property {function} onPageChange - Callback for page change 
          */
-        this.onPageChange = null;
+        this.onPageChange = ( opt && opt.onPageChange ) ? opt.onPageChange : null;
         /** 
          * @property {function} onLimitChange - Callback for limit change 
          */
-        this.onLimitChange = null;
+        this.onLimitChange = ( opt && opt.onLimitChange ) ? opt.onLimitChange : null;
 
         this.refresh();
     }
