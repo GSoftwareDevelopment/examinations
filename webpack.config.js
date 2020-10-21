@@ -2,7 +2,7 @@ const { parseTwoDigitYear } = require( 'moment' );
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 
-const entryPath = "./src/js";
+const entryPath = "src/js";
 
 module.exports = {
     mode: 'development',
@@ -29,14 +29,15 @@ module.exports = {
                 test: /\.hbs$/,
                 loader: 'handlebars-loader',
                 options: {
-                    runtime: path.resolve( __dirname, 'src/js/helpers/handlebars-helpers.js' )
-                }
+                    rootRelative: '',
+                    runtime: path.resolve( __dirname, entryPath, 'helpers/handlebars-helpers.js' ),
+                    precompileOptions: {
+                        knownHelpersOnly: false,
+                    },
+                },
             }
         ],
     },
-    // plugins: [
-    //     new webpack.ProvidePlugin( { $: 'jquery', jQuery: 'jquery' } ),
-    // ],
     watch: true,
     watchOptions: {
         ignored: [ 'node_modules/**' ]
