@@ -20,10 +20,10 @@ export class Measurements extends Pages {
             limit: 10,
             page: 0,
             totalPages: 0,
+            onChange: ( e ) => {
+                this.getData();
+            }
         } );
-        this.paginator.onChange = ( e ) => {
-            this.getData();
-        };
 
         this.measurements = new Fetcher( "/measurements", { method: "GET" } );
 
