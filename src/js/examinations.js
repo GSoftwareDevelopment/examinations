@@ -10,7 +10,7 @@ export class Examinations extends Pages {
         this.modal = {
             addNewExamination: new AddNewExamination(),
             createValue: new CreateNewValue( this ),
-            createGroup: new CreateGroup()
+            createGroup: new CreateGroup( this )
         }
 
         this.form = $( '#form-list' ).on( 'submit', ( e ) => { e.preventDefault(); } );

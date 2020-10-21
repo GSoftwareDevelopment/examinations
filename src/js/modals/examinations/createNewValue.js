@@ -1,4 +1,4 @@
-import { Dialog } from "./../../class/Dialog";
+import { Dialog } from "../../components/dialog/Dialog";
 
 class CreateNewValue extends Dialog {
     constructor( _page ) {

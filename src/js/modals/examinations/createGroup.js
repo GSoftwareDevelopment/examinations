@@ -1,9 +1,10 @@
-// import $ from "jquery";
-import { Dialog } from "./../../class/Dialog";
+import { Dialog } from "../../components/dialog/Dialog";
 
 class CreateGroup extends Dialog {
-    constructor() {
+    constructor( _page ) {
         super( 'add-group' );
+
+        this._page = _page;
 
         $( this.forms[ 'createGroup' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
 
@@ -37,17 +38,19 @@ class CreateGroup extends Dialog {
                 } );
                 const result = await response.json()
                 if ( !result.error ) {
-                    window.location = "/examinations";
+                    // window.location = "/examinations";
+
+                    this._page.modal.addNewExamination.groupSelect.refresh();
+                    this.dialog.modal( 'hide' );
                     return;
                 } else {
-                    console.log( result.error );
                     if ( result.error.name == "ValidatorError" ) {
                         switch ( result.error.kind ) {
                             case "unique":
                                 $( this.forms[ 'createGroup' ] ).find( `[name='${result.error.path}'] ~ .unique-feedback` )
                                     .show();
                                 this.enableForm( 'createGroup' );
-                                return
+                                break;
                         }
                     }
                 }
