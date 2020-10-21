@@ -26,12 +26,12 @@
                         </div>
                     </div>
                     <div class="form-group row mr-1">
-                        <label for="examination" class="col-3 col-sm-2 col-form-label">Grupa</label>
+                        <label for="group" class="col-3 col-sm-2 col-form-label">Grupa</label>
                         <select class="form-control col-9 col-sm-10" id="group" name="group">
-                            <option data-type="emptyList" disabled selected>Brak zdefiniowanych grup</option>
+                            <option data-type="emptyList" disabled>Brak zdefiniowanych grup</option>
                             <option data-type="prompt" disabled>Wybierz grupę badań...</option>
-                            <option data-type="prompt" value="" selected>Wszystkie</option>
-                            <option data-type="error" disabled selected>Błąd połączenia</option>
+                            <option data-type="default" value="">Wszystkie</option>
+                            <option data-type="error" disabled>Błąd połączenia</option>
                         </select>
                     </div>
                     <div class="spinner-abs">
@@ -42,11 +42,9 @@
                     <div class="form-group row mr-1">
                         <label for="examination" class="col-3 col-sm-2 col-form-label">Badanie</label>
                         <select class="form-control col-9 col-sm-10" id="examination" name="examination" required>
-                            <option data-type="emptyList" disabled selected>Brak zdefiniowanych badań
-                            </option>
-                            <option data-type="prompt" value="" disabled selected>Wybierz badanie...
-                            </option>
-                            <option data-type="error" disabled selected>Błąd połączenia</option>
+                            <option data-type="emptyList" disabled>Brak zdefiniowanych badań</option>
+                            <option data-type="prompt" value="" disabled>Wybierz badanie...</option>
+                            <option data-type="error" disabled>Błąd połączenia</option>
                         </select>
                         <div class="invalid-feedback offset-3 offset-sm-2 col-9 col-sm-10">
                             Wybierz badanie z listy
