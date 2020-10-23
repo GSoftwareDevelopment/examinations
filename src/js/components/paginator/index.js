@@ -2,6 +2,7 @@
  * Paginator component
  * @module Component/Paginator
  */
+import './style.scss';
 import Component from '../../class/Component';
 import PaginationTemplate from './pagination.hbs';
 
