@@ -4,9 +4,7 @@ import { formatDate, formatTime } from '../../class/misc';
 
 class AddMeasurement extends Dialog {
     constructor( _page ) {
-        super( 'addMeasurement' );
-
-        this._page = _page;
+        super( 'addMeasurement', _page );
 
         $( this.forms[ 'form' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -32,7 +30,7 @@ class AddMeasurement extends Dialog {
                 url: '/examinations?data',
                 HTMLSpinner: this.progress[ 'examinationsFetching' ],
                 dataMap: ( data ) => {
-                    return data.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
+                    return data.lists.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
                 },
                 onChange: ( { value } ) => { this.prepareExaminationValues( value ); }
             }
@@ -41,8 +39,8 @@ class AddMeasurement extends Dialog {
         this.resultsFields = $( this.dialog ).find( 'div#results' );
     }
 
-    showDialog ( e ) {
-        super.showDialog();
+    onShowDialog ( e ) {
+        super.onShowDialog();
         this.clearResultsFields();
 
         const currentDate = new Date();

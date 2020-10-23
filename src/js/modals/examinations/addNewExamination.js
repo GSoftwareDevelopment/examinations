@@ -2,8 +2,8 @@ import { Dialog } from "../../components/dialog";
 import { SelectFetch } from "../../components/select-fetch";
 
 export class AddNewExamination extends Dialog {
-    constructor() {
-        super( 'add-examination' );
+    constructor( _page ) {
+        super( 'add-examination', _page );
 
         $( this.forms[ 'form' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -35,8 +35,8 @@ export class AddNewExamination extends Dialog {
         this._tplNewValue = this.dialog.find( '#template-newValueEntry' ).detach();
     }
 
-    showDialog ( e ) {
-        super.showDialog();
+    onShowDialog ( e ) {
+        super.onShowDialog();
 
         this.dialog
             .find( `.custom-feedback` )

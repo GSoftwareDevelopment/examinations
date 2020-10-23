@@ -10,8 +10,11 @@ export class Dialog extends Component {
      * Init Dialog component
      * @param {string} id - Bootstrap modal component identificator
      */
-    constructor( id ) {
+    constructor( id, page ) {
         super();
+
+        this._page = page;
+
         /**
          * @property {JQuery<HTMLElement>} dialog - DOM Element
          */
@@ -40,13 +43,13 @@ export class Dialog extends Component {
             $( el ).hide();
         }
 
-        this.dialog.on( 'show.bs.modal', ( e ) => { this.showDialog() } );
+        this.dialog.on( 'show.bs.modal', ( e ) => { this.onShowDialog() } );
     }
 
     /**
      * Method fired when dialog is show
      */
-    showDialog () {
+    onShowDialog () {
         this.resetAllForms();
         this.autoFocus();
         for ( let key in this.progress ) {

@@ -2,9 +2,7 @@ import { Dialog } from "../../components/dialog";
 
 class CreateGroup extends Dialog {
     constructor( _page ) {
-        super( 'add-group' );
-
-        this._page = _page;
+        super( 'add-group', _page );
 
         $( this.forms[ 'createGroup' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
 

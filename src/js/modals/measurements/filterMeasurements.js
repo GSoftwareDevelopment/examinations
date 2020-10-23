@@ -1,8 +1,8 @@
 import { Dialog } from "../../components/dialog";
 
 class FilterMeasurements extends Dialog {
-    constructor() {
-        super( 'filterMeasurements' );
+    constructor( _page ) {
+        super( 'filterMeasurements', _page );
     }
 }
 

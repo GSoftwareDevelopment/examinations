@@ -2,9 +2,7 @@ import { Dialog } from "../../components/dialog";
 
 class CreateNewValue extends Dialog {
     constructor( _page ) {
-        super( 'addValue' );
-
-        this._page = _page;
+        super( 'addValue', _page );
 
         $( this.forms[ 'form-addValue' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -20,8 +18,8 @@ class CreateNewValue extends Dialog {
             } );
     }
 
-    showDialog ( e ) {
-        super.showDialog( e );
+    onShowDialog ( e ) {
+        super.onShowDialog( e );
         this.setVisibleFields( 'unit' );
     }
 
