@@ -6,9 +6,21 @@ import { Examinations } from './examinations';
 import { Measurements } from './measurements';
 
 const app = {
-    pages: [
-        new Dashboard( '/dashboard' ),
-        new Examinations( '/examinations' ),
-        new Measurements( '/measurements' ),
-    ]
+    routes: {
+        '/dashboard': Dashboard,
+        '/examinations': Examinations,
+        '/measurements': Measurements,
+    },
+    pages: []
 }
+
+
+const currentPath = window.location.pathname
+
+for ( let path in app.routes ) {
+    if ( path === currentPath ) {
+        app.pages.push( new app.routes[ path ]( path ) );
+    }
+}
+
+console.log( app );
