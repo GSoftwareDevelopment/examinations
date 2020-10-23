@@ -33,26 +33,38 @@ export class ListViewOptions extends Dialog {
         this.setConf();
     }
 
-    loadConfigData () {
-        this.optionsFetch.getJSON()
-            .then( ( userConfig ) => {
-                if ( userConfig.error ) throw new Error( `Can't get configuration!`, error )
-                this.options = { ...this.options, ...userConfig.data };
-            } );
+    async loadConfigData () {
+        console.log( `Loading list view config...` );
+        try {
+            const userConfig = await this.optionsFetch.getJSON()
+            if ( userConfig.error )
+                throw new Error( `Can't get configuration!`, userConfig.error );
+
+            if ( !userConfig[ 'OK' ] ) {
+                console.log( 'Configuration is not defined. Using defaults.' );
+                return;
+            }
+
+            console.log( 'Using stored configuration: ', userConfig );
+            if ( userConfig.data )
+                this.options = userConfig.data;
+        } catch ( error ) {
+            console.log( error );
+        }
     }
 
-    saveConfigData () {
+    async saveConfigData () {
+        console.log( 'Storing config...' );
         const newUserConfig = this.getConf();
-        console.log( newUserConfig );
 
-        this.optionsFetch.getJSON( { method: 'POST', body: JSON.stringify( newUserConfig ) } )
-            .then( ( data ) => {
-                if ( data.error ) throw new Error( `Can't save configuration!`, error )
-                // TODO: show notification
-
-                this.dialog.modal( 'hide' );
-                this._page.refreshList();
-            } )
+        try {
+            const data = await this.optionsFetch.getJSON( { method: 'POST', body: JSON.stringify( newUserConfig ) } )
+            if ( data.error ) throw new Error( `Can't save configuration!`, error )
+            return true;
+        } catch ( error ) {
+            console.log( error );
+            return false;
+        }
     }
 
     setConf () {
@@ -69,8 +81,15 @@ export class ListViewOptions extends Dialog {
         return newOptions;
     }
 
-    submit ( e ) {
+    async submit ( e ) {
         e.preventDefault();
-        this.saveConfigData();
+        $( this.progress[ 'formSend' ] ).show();
+        if ( await this.saveConfigData() ) {
+            // TODO: show notification
+        }
+        $( this.progress[ 'formSend' ] ).hide();
+
+        this.dialog.modal( 'hide' );
+        this._page.refreshList();
     }
 }
