@@ -35,7 +35,5 @@ export class Pages {
             $( el ).hide();
         }
 
-        const isPath = path === window.location.pathname
-        return isPath;
     }
 }
