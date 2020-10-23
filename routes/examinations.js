@@ -1,16 +1,18 @@
 const express = require( 'express' );
 const router = express.Router();
 const { ensureAuth } = require( '../middleware/auth' );
+const mongoose = require( 'mongoose' );
 
 const Examination = require( '../models/examination' );
+const { Measurement } = require( '../models/measurement' );
+const Configure = require( '../models/configure' );
+
 const Group = require( '../models/group' );
 const Value = require( '../models/value' );
 
 // @desc    Examinations list
 // @route   GET /examinations
 router.get( '/', ensureAuth, async ( req, res ) => {
-    console.log( req.query );
-
     try {
         const lists = await Examination
             .find( { user: req.user.id } )
@@ -21,18 +23,16 @@ router.get( '/', ensureAuth, async ( req, res ) => {
             .populate( 'group' )
             .lean();
 
-        if ( typeof req.query.data === 'undefined' ) {
-            const groups = await Group
-                .find( { user: req.user.id } )
-                .sort( { name: 1 } )
-                .lean();
+        const groups = await Group
+            .find( { user: req.user.id } )
+            .sort( { name: 1 } )
+            .lean();
 
-            res.render( 'examinations', {
-                lists,
-                groups
-            } );
+        if ( typeof req.query.data === 'undefined' ) {
+
+            res.render( 'examinations' );
         } else {
-            res.json( lists );
+            res.json( { lists, groups } );
         }
     } catch ( error ) {
         console.error( error );
@@ -130,6 +130,41 @@ router.delete( '/', ensureAuth, async ( req, res ) => {
         res.json( { result1, result2 } );
     } catch ( error ) {
         console.error( error );
+        res.json( { error } );
+    }
+} );
+
+// @desc    Get configuration for Examination List View
+// @route   GET /configuration
+// @return  JSON data
+router.get( '/configuration', ensureAuth, async ( req, res ) => {
+    try {
+        const resource = await Configure
+            .find( { resource: 'examination-list-view' } )
+            .lean();
+        res.json( resource );
+    } catch ( error ) {
+        res.json( { error } )
+    }
+} );
+
+// @desc    Store configuration for Examination List View
+// @route   POST /configuration
+// @return  JSON data
+router.post( '/configuration', ensureAuth, async ( req, res ) => {
+    console.log( req.body );
+
+    try {
+        const conf = await Configure.updateOne(
+            { user: req.user.id, resource: 'examination-list-view' },
+            { data: req.body },
+            { upsert: true }
+        );
+        console.log( conf );
+
+        res.json( { 'OK': 1 } );
+    } catch ( error ) {
+        console.log( error );
         res.json( { error } );
     }
 } );
