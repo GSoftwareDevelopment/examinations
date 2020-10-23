@@ -51,10 +51,10 @@ Handlebars.registerHelper( 'isObject', function ( a ) { return ( typeof a === "o
 
 Handlebars.registerHelper( 'set', function ( name, value ) { counters[ name ] = value; } );
 Handlebars.registerHelper( 'get', function ( name ) { return counters[ name ]; } );
-Handlebars.registerHelper( 'zero', function ( name ) { counter[ name ] = 0; } );
-Handlebars.registerHelper( 'inc', function ( name ) { counter[ name ]++; } );
-Handlebars.registerHelper( 'dec', function ( name ) { counter[ name ]--; } );
-Handlebars.registerHelper( 'isZero', function ( name ) { return counter[ name ] === 0; } );
+Handlebars.registerHelper( 'zero', function ( name ) { counters[ name ] = 0; } );
+Handlebars.registerHelper( 'inc', function ( name ) { counters[ name ]++; } );
+Handlebars.registerHelper( 'dec', function ( name ) { counters[ name ]--; } );
+Handlebars.registerHelper( 'isZero', function ( name ) { return counters[ name ] === 0; } );
 
 // Iterations
 
