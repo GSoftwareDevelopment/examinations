@@ -39,6 +39,37 @@ router.get( '/', ensureAuth, async ( req, res ) => {
     }
 } );
 
+// @desc    Get latest measurement
+// @route   GET /measurements/latest?{examinationId=}
+router.get( '/latest', ensureAuth, async ( req, res ) => {
+    try {
+        dbquery = {};
+        if ( req.query.examinationId ) {
+            dbquery = {
+                examination: new mongoose.Types.ObjectId( req.query.examinationId )
+            };
+        }
+
+        const latest = await Measurement
+            .find( {
+                user: req.user.id,
+                ...dbquery
+            } )
+            .sort( { createdAt: -1 } )
+            .limit( 1 )
+            .populate( 'examination' )
+            .populate( 'values' )
+            .populate( 'values.value' )
+            .lean();
+
+
+        res.json( latest );
+    } catch ( error ) {
+        console.error( error );
+        res.json( { error } )
+    }
+} );
+
 // @desc    Process add new measurement
 // @route   POST /measurements
 // @return  JSON data
