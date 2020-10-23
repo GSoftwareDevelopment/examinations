@@ -1,6 +1,6 @@
 {{#each lists}}
-    <div class="result-item">
-        <div class="row px-2">
+    <div class="result-item d-flex flex-column">
+        <div class="d-flex flex-row">
             <div class="col-6 col-sm-4">
                 {{!-- {{createdAt}} --}}
                 {{formatDate createdAt}} @ {{formatTime createdAt}}
@@ -10,7 +10,7 @@
             </div>
         </div>
         {{#each values}}
-            <div class="row px-2">
+            <div class="d-flex flex-row">
                 <div class="col-6">
                     {{value.name}}
                 </div>
