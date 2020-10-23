@@ -8,7 +8,7 @@ export class Fetcher {
     /**
      * Init fetcher
      * @param {string} url - URL address
-     * @param {Object<RequestInit>} options - Request options
+     * @param {RequestInit} options - Initialize request options.
      */
     constructor( url, options ) {
         /**
@@ -17,15 +17,17 @@ export class Fetcher {
         this.url = url;
 
         /**
-         * @property {Object<RequestInit>} options - Request options
+         * @property {RequestInit} options - Request options
          */
         this.options = options;
     }
 
     /**
      * Call fetch with JSON content type
-     * @param {Object<RequestInit>} extraOptions - Extends request option
-     * @returns {Object<Promise>} - Promise from fetch
+     * @param {RequestInit} extraOptions - Extends request option.
+     * Have a dedicated property 'queryParams" to resolve query parameters.
+     * This options overwrite initate options!
+     * @returns {Promise} - Promise from fetch
      */
     async getJSON ( extraOptions ) {
         let query = {};
@@ -61,7 +63,7 @@ export class Fetcher {
 
     /**
      * Call fetch with HTML content type
-     * @returns {Object<Promise>} - Promise from fetch
+     * @returns {Promise} - Promise from fetch
      */
     async getHTML () {
         this.options = {
