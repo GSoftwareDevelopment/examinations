@@ -1,45 +1,74 @@
 import { Pages } from './class/Pages';
-import { AddNewExamination } from "./modals/examinations/addNewExamination";
-import { CreateNewValue } from "./modals/examinations/createNewValue";
-import { CreateGroup } from "./modals/examinations/createGroup";
+import { AddNewExamination } from './modals/examinations/addNewExamination';
+import { CreateNewValue } from './modals/examinations/createNewValue';
+import { CreateGroup } from './modals/examinations/createGroup';
+import { ListViewOptions } from './modals/examinations/listViewOptions';
+
+import { Fetcher } from './class/Fetcher';
+import ExaminationsListTemplate from '../templates/examinationsList.hbs';
+import { formatDate, formatTime } from './class/misc';
 
 export class Examinations extends Pages {
     constructor( _path ) {
         super( _path );
 
         this.modal = {
-            addNewExamination: new AddNewExamination(),
+            listViewOptions: new ListViewOptions( this ),
+            addNewExamination: new AddNewExamination( this ),
             createValue: new CreateNewValue( this ),
             createGroup: new CreateGroup( this )
         }
 
         this.form = $( '#form-list' ).on( 'submit', ( e ) => { e.preventDefault(); } );
-        $( '#btn-deleteSelection' ).on( 'click', ( e ) => { this.deleteSelection( e ) } );
-        $( 'button#btn-deleteEntry' ).on( 'click', ( e ) => { this.deleteEntry( e ); } )
-        $( 'button#btn-deleteGroup' ).on( 'click', ( e ) => { this.deleteGroup( e ); } )
 
-        // #btn-editEntry
-        // #btn-editGroup
+        // $( 'button#btn-deleteEntry' ).on( 'click', ( e ) => { this.deleteEntry( e ); } )
+        // $( 'button#btn-deleteGroup' ).on( 'click', ( e ) => { this.deleteGroup( e ); } )
 
-        // Mousetrap.bind( 'ins', () => {
-        //     $( 'button#btn-add' ).trigger( 'click' );
-        // } );
+        this.page.find( 'div#listOptionMenu > a' ).on( 'click', ( e ) => {
+            this.listOptionsMenu( e );
+        } );
 
-        // this.examinations = new Fetcher( "/examinations/?data", { method: "GET" } );
+        this.examinationBody = this.page.find( 'div#examinationTable' );
 
-        // this.tplList = new TemplateFetch( {
-        //     template: "_examinations._list",
-        //     appendTo: $( 'div#examintions-list' )
-        // } );
+        this.examinations = new Fetcher( "/examinations/?data", { method: "GET" } );
 
+        this.refreshList();
     }
 
-    // getData () {
-    //     this.examinations.getJSON()
-    //         .then( ( data ) => {
-    //             this.tplList.make( { lists: data } );
-    //         } );
-    // }
+    refreshList () {
+        $( this.progress[ 'examinationFetch' ] ).show();
+        this.examinationBody.empty();
+
+        this.examinations.getJSON()
+            .then( ( data ) => {
+                this.examinationBody.html( ExaminationsListTemplate( { lists: data.lists, groups: data.groups } ) );
+                this.examinationBody.find( `div.row-item` ).each( ( index, el ) => {
+                    const id = $( el ).data( 'item' );
+                    const html = $( el ).find( '> div' ).eq( 1 );
+
+                    let latestFetch = new Fetcher( `/measurements/latest?examinationId=${id}`, { method: 'GET' } );
+                    latestFetch.getJSON()
+                        .then( ( data ) => {
+                            if ( data.length ) {
+                                const latestDate = new Date( data[ 0 ].createdAt );
+                                html.text( formatDate( latestDate ) + ' @ ' + formatTime( latestDate ) )
+                            } else
+                                html.text( '-' )
+                        } )
+                } )
+            } )
+            .finally( () => {
+                $( this.progress[ 'examinationFetch' ] ).hide();
+            } );
+    }
+
+    listOptionsMenu ( e ) {
+        let optionID = e.currentTarget.id;
+        switch ( optionID ) {
+            case "listOption-refresh": this.refreshList(); break;
+            case "listOption-deleteSelected": this.deleteSelected( e ); break;
+        }
+    }
 
     deleteEntry ( e ) {
         const el = $( e.currentTarget ).parents( 'tr' );
@@ -50,9 +79,7 @@ export class Examinations extends Pages {
         this.fetchDeleteEntry( [ entryID ] );
     }
 
-    deleteSelection ( e ) {
-        e.preventDefault();
-
+    deleteSelected ( e ) {
         const selected = this.form.find( 'input[type="checkbox"]:checked' );
         const ids = selected.map( ( i, el ) => {
             let id = $( el ).parents( 'tr' ).data( 'item' );
@@ -123,6 +150,3 @@ export class Examinations extends Pages {
         }
     }
 }
-
-// var examinations = new Examinations( '/examinations' );
-
