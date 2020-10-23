@@ -142,8 +142,16 @@ router.get( '/configuration', ensureAuth, async ( req, res ) => {
         const resource = await Configure
             .find( { resource: 'examination-list-view' } )
             .lean();
-        res.json( resource );
+
+        if ( resource.length ) {
+            res.json( { 'OK': 1, data: resource[ 0 ].data } )
+        } else {
+            console.info( `Resource 'examination-list-view' not found.` );
+            res.json( { 'OK': 0 } );
+        }
+
     } catch ( error ) {
+        console.error( error );
         res.json( { error } )
     }
 } );
