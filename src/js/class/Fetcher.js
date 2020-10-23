@@ -56,7 +56,8 @@ export class Fetcher {
             const data = await response.json();
             return data;
         } catch ( error ) {
-            console.error( error );
+            if ( this.options.reportError )
+                console.error( error );
             return { error }
         }
     }
@@ -84,7 +85,8 @@ export class Fetcher {
             const data = await response.text();
             return data;
         } catch ( error ) {
-            console.error( error );
+            if ( this.options.reportError )
+                console.error( error );
             return { error }
         }
     }
