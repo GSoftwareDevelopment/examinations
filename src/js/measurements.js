@@ -12,7 +12,7 @@ export class Measurements extends Pages {
 
         this.modal = {
             AddMeasurement: new AddMeasurement( this ),
-            FilterMeasurements: new FilterMeasurements(),
+            FilterMeasurements: new FilterMeasurements( this ),
         };
 
         this.results = this.page.find( 'div#measurements-results' );
@@ -31,7 +31,7 @@ export class Measurements extends Pages {
     }
 
     getData () {
-        $( this.progress[ 'resultsFetch' ] ).show();
+        $( this.progress[ 'measurements-fetch' ] ).show();
         this.results.empty();
 
         this.measurements.getJSON( {
@@ -46,7 +46,7 @@ export class Measurements extends Pages {
                 this.paginator.totalPages = ( this.paginator.limit > 0 ) ? Math.ceil( data.totalResults / this.paginator.limit ) - 1 : 0
                 this.paginator.refresh();
 
-                $( this.progress[ 'resultsFetch' ] ).hide();
+                $( this.progress[ 'measurements-fetch' ] ).hide();
             } );
     }
 }
