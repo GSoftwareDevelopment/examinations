@@ -1,4 +1,5 @@
 // Your variable overrides
+$enable-gradients: true;
 $border-color: rgba(0,0,0,.20);
 $nav-tabs-border-color: rgba(0,0,0,.20);
 
@@ -17,11 +18,6 @@ $nav-tabs-border-color: rgba(0,0,0,.20);
 .container-fluid {
     padding-left:unset;
     padding-right:unset;
-}
-
-.row {
-  padding-left:unset;
-  padding-right:unset;
 }
 
 nav.fixed-bottom {

@@ -1,13 +1,3 @@
-.container-fluid {
-    padding-left:unset;
-    padding-right:unset;
-}
-
-.row {
-    padding-left:unset;
-    padding-right:unset;
-}
-
 .navbar-brand {
     font-weight: 700;
 }
@@ -153,24 +143,29 @@
   // box-shadow: none;
 }
 
-tr.row-item {
+div.row-item {
+  > div {
+    padding-top:.5em !important;
+    padding-bottom:.5em !important;
+  }
+
   nav {
     display:none;
   }
 
   &:hover{
+    background-color: rgba(0,0,0,.1);
     nav {
       display:flex;
       position:absolute;
       right:1em;
-      transform: translateY(+2.5em);
+      // transform: translateY(+2.5em);
     }
   }
 } 
 
-tr.row-group {
-  > td {
-    border-top:var(--dark) solid 1px !important;
+div.row-group {
+  > div {
     padding-top:.5em !important;
     padding-bottom:.5em !important;
   }
@@ -183,7 +178,7 @@ tr.row-group {
       display:flex;
       position:absolute;
       right:1em;
-      transform: translateY(+1.8em);
+      // transform: translateY(+1.8em);
     }
   }
 }
@@ -245,7 +240,3 @@ tr.row-group {
 .number-unit { width:4em; }
 .field-enum,
 .field-sets { width:9em; }
-
-div#measurements-results {
-  margin-bottom:4em;
-}
