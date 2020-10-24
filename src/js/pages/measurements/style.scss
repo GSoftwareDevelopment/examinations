@@ -1,0 +1,32 @@
+// measurements list -> result
+.result-item {
+  border-bottom:#999 solid 1px;
+  margin-bottom: .5em;
+  // margin-left:-1em;
+  // margin-right:-1em;
+  // padding-left:1em;
+  // padding-right:1em;
+
+  &:nth-child(even) {
+    background:rgba(0,0,0,.05);
+  }
+
+  &:hover {
+    background: rgba(0,0,0,.15);
+    transition: .2s;
+  }
+}
+
+// measurements list -> results items
+.value-row {
+  margin: .25em 0;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+// add new measurement -> results fields
+.field-number { width:5em; }
+.number-unit { width:4em; }
+.field-enum,
+.field-sets { width:9em; }

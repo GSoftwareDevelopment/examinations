@@ -1,5 +1,4 @@
-import './../scss/progressbar.scss';
-import './../scss/style.scss';
+import './components/progressbar.scss';
 
 $( 'button' ).click( e => {
     $( 'button' ).addClass( 'disabled' );

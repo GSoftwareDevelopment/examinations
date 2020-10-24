@@ -1,4 +1,5 @@
 import { Pages } from '../../class/Pages';
+import './style.scss';
 
 import { AddNewExamination } from './modals/addNewExamination';
 import { CreateNewValue } from './modals/createNewValue';

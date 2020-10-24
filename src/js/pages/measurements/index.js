@@ -1,3 +1,5 @@
+import './style.scss';
+
 import { Pages } from '../../class/Pages';
 import { Fetcher } from '../../class/Fetcher';
 

@@ -1,4 +1,19 @@
 /*
+ * Custom progressbar - slim line preset
+ */
+
+.progress {
+  &.custom-progress {
+    display:none;
+    position:absolute;
+    bottom:0;
+    height:.3em;
+    margin:0;
+    padding:0;
+  }
+}
+
+/*
   This component has separated from Materialize (http://materializecss.com)
 */
 $progress-bar-color: var(--light) !default;
