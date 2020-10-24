@@ -1,4 +1,4 @@
-import { Fetcher } from './class/Fetcher';
+import { Fetcher } from '../class/Fetcher';
 
 export class Configuration {
     constructor( resourceName, defaults ) {

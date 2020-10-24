@@ -1,10 +1,11 @@
-import { Pages } from './class/Pages';
-import { Fetcher } from './class/Fetcher';
-import { AddMeasurement } from './modals/measurements/addMeasurement';
-import { FilterMeasurements } from './modals/measurements/filterMeasurements';
+import { Pages } from '../../class/Pages';
+import { Fetcher } from '../../class/Fetcher';
 
-import listTemplate from '../templates/measurementList.hbs';
-import Paginator from './components/paginator/';
+import { AddMeasurement } from './modals/addMeasurement';
+import { FilterMeasurements } from './modals/filterMeasurements';
+
+import listTemplate from './templates/measurementList.hbs';
+import Paginator from '../../components/paginator';
 
 export class Measurements extends Pages {
     constructor( _path ) {

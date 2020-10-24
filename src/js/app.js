@@ -1,11 +1,11 @@
 import './../scss/progressbar.scss';
 import './../scss/style.scss';
 
-import { Configuration } from './configuration';
+import { Configuration } from './utils/configuration';
 
-import { Dashboard } from './dashboard';
-import { Examinations } from './examinations';
-import { Measurements } from './measurements';
+import { Dashboard } from './pages/dashboard';
+import { Examinations } from './pages/examinations';
+import { Measurements } from './pages/measurements';
 
 export const App = {
     routes: {

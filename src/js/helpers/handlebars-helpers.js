@@ -1,5 +1,5 @@
 const Handlebars = require( 'handlebars/runtime' );
-const { formatTime, formatDate } = require( './../class/misc' );
+const { formatTime, formatDate } = require( './../utils/misc' );
 
 var counters = {};
 

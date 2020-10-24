@@ -1,12 +1,13 @@
-import { Pages } from './class/Pages';
-import { AddNewExamination } from './modals/examinations/addNewExamination';
-import { CreateNewValue } from './modals/examinations/createNewValue';
-import { CreateGroup } from './modals/examinations/createGroup';
-import { ListViewOptions } from './modals/examinations/listViewOptions';
+import { Pages } from '../../class/Pages';
 
-import { Fetcher } from './class/Fetcher';
-import ExaminationsListTemplate from '../templates/examinationsList.hbs';
-import { formatDate, formatTime } from './class/misc';
+import { AddNewExamination } from './modals/addNewExamination';
+import { CreateNewValue } from './modals/createNewValue';
+import { CreateGroup } from './modals/createGroup';
+import { ListViewOptions } from './modals/listViewOptions';
+
+import { Fetcher } from '../../class/Fetcher';
+import { formatDate, formatTime } from '../../utils/misc';
+import ExaminationsListTemplate from './templates/examinationsList.hbs';
 
 export class Examinations extends Pages {
     constructor( _path ) {
@@ -51,7 +52,7 @@ export class Examinations extends Pages {
 
                     this.examinationBody.find( `div.row-item` ).each( ( index, el ) => {
                         const id = $( el ).data( 'item' );
-                        const html = $( el ).find( '> div' ).eq( 1 );
+                        const html = $( el ).find( 'div.latest-date' );
 
                         let latestFetch = new Fetcher( `/measurements/latest?examinationId=${id}`, { method: 'GET' } );
                         latestFetch.getJSON()
@@ -93,18 +94,24 @@ export class Examinations extends Pages {
     deleteSelected ( e ) {
         const selected = this.form.find( 'input[type="checkbox"]:checked' );
         const ids = selected.map( ( i, el ) => {
-            let id = $( el ).parents( 'tr' ).data( 'item' );
+            let id = $( el ).parents( 'div.row' ).data( 'item' );
             return id;
         } ).get();
 
         if ( !ids.length ) {
+            // TODO: zmień to na referencje (this.modal[...]) związaną ze stroną.
             $( '#modal-noSelection' ).modal( 'show' );
             return;
         }
 
         selected
             .each( ( i, el ) => {
-                $( el ).parents( 'tr' ).detach()
+                const obj = $( el ).parents( 'div.row' )[ 0 ];
+                obj.style.backgroundColor = "yellow";
+                $( obj )
+                    .animate( { opacity: 0 }, 500, () => {
+                        $( obj ).detach();
+                    } )
             } );
 
         this.fetchDeleteEntry( ids );
@@ -119,7 +126,6 @@ export class Examinations extends Pages {
                 },
                 body: JSON.stringify( itemsList ),
             } );
-            console.log( await response.json() );
             // TODO: Add notification about deleting entry(s)
         } catch ( error ) {
             console.log( error );
@@ -129,7 +135,7 @@ export class Examinations extends Pages {
     // Groups
 
     deleteGroup ( e ) {
-        const el = $( e.currentTarget ).parents( 'tr' );
+        const el = $( e.currentTarget ).parents( 'div.row' );
         const groupID = el.data( 'group' );
 
         $( '#modal-confirmGroupDelete' ).modal( 'show' );

@@ -1,5 +1,5 @@
-import { Dialog } from '../../components/dialog';
-import { App } from '../../app';
+import { Dialog } from '../../../components/dialog';
+import { App } from '../../../app';
 
 export class ListViewOptions extends Dialog {
     constructor( _page ) {
