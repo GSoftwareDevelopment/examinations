@@ -1,21 +1,13 @@
 import { Dialog } from '../../components/dialog';
-
-import { Fetcher } from '../../class/Fetcher';
+import { App } from '../../app';
 
 export class ListViewOptions extends Dialog {
     constructor( _page ) {
         super( 'view-options', _page );
 
         $( this.forms[ 'form-options' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
-
-        this.optionsFetch = new Fetcher( '/examinations/configuration', { method: 'GET' } );
-        this.options = {
-            'list-pagination': false,
-            'fetch-latest': true,
-            'group-view': true,
-            'group-description': true,
-            'examination-description': true,
-        };
+        // console.log( App );
+        this.options = App.config.examinationsListView.current;
 
         this._HTMLOptions = {}
 
@@ -25,46 +17,10 @@ export class ListViewOptions extends Dialog {
                 selector: `input#setting_${keyOption}`
             } );
         }
-
-        this.loadConfigData();
     }
 
     onShowDialog () {
         this.setConf();
-    }
-
-    async loadConfigData () {
-        console.log( `Loading list view config...` );
-        try {
-            const userConfig = await this.optionsFetch.getJSON()
-            if ( userConfig.error )
-                throw new Error( `Can't get configuration!`, userConfig.error );
-
-            if ( !userConfig[ 'OK' ] ) {
-                console.log( 'Configuration is not defined. Using defaults.' );
-                return;
-            }
-
-            console.log( 'Using stored configuration: ', userConfig );
-            if ( userConfig.data )
-                this.options = userConfig.data;
-        } catch ( error ) {
-            console.log( error );
-        }
-    }
-
-    async saveConfigData () {
-        console.log( 'Storing config...' );
-        const newUserConfig = this.getConf();
-
-        try {
-            const data = await this.optionsFetch.getJSON( { method: 'POST', body: JSON.stringify( newUserConfig ) } )
-            if ( data.error ) throw new Error( `Can't save configuration!`, error )
-            return true;
-        } catch ( error ) {
-            console.log( error );
-            return false;
-        }
     }
 
     setConf () {
@@ -84,7 +40,11 @@ export class ListViewOptions extends Dialog {
     async submit ( e ) {
         e.preventDefault();
         $( this.progress[ 'formSend' ] ).show();
-        if ( await this.saveConfigData() ) {
+
+        const newConfig = this.getConf();
+        this.options = newConfig;
+
+        if ( await App.config.examinationsListView.saveConfigData( newConfig ) ) {
             // TODO: show notification
         }
         $( this.progress[ 'formSend' ] ).hide();
