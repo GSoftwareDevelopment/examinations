@@ -1,26 +1,40 @@
 import './../scss/progressbar.scss';
 import './../scss/style.scss';
 
+import { Configuration } from './configuration';
+
 import { Dashboard } from './dashboard';
 import { Examinations } from './examinations';
 import { Measurements } from './measurements';
 
-const app = {
+export const App = {
     routes: {
         '/dashboard': Dashboard,
         '/examinations': Examinations,
         '/measurements': Measurements,
     },
-    pages: []
+    pages: [],
+    config: [],
 }
+async function Init () {
 
+    App.config.examinationsListView = await new Configuration( '/examinations/configuration', {
+        'list-pagination': false,
+        'fetch-latest': true,
+        'group-view': true,
+        'group-description': true,
+        'examination-description': true,
+    } );
 
-const currentPath = window.location.pathname
+    const currentPath = window.location.pathname
 
-for ( let path in app.routes ) {
-    if ( path === currentPath ) {
-        app.pages.push( new app.routes[ path ]( path ) );
+    for ( let path in App.routes ) {
+        if ( path === currentPath ) {
+            App.pages.push( new App.routes[ path ]( path ) );
+        }
     }
+
+    console.log( App );
 }
 
-console.log( app );
+Init();
