@@ -19,26 +19,42 @@
     </nav>
 {{/inline}}
 
-{{#*inline "list"}}
+{{#*inline "groupHeader"}}
+    <div data-group="{{_id}}" class="row row-group bg-gradient-dark text-white">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <div class="px-2">
+                <strong>{{name}}</strong>
+                {{#if description}}
+                    <div class="small">{{description}}</div>
+                {{/if}}
+            </div>
+            {{>toolbox}}
+        </div>
+    </div>
+{{/inline}}
+
+{{#*inline "item"}}
+    <div class="row my-1 px-3 row-item d-flex flex-row justify-content-between align-items-center" data-item="{{_id}}"
+        data-group="{{group._id}}">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="selectedItems">
+            <div class="ml-3">
+                {{name}}
+                {{#if description}}
+                    <div class="small">{{description}}</div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="no-wrap"></div>
+    </div>
+{{/inline}}
+
+{{#*inline "itemsInGroup"}}
     {{zero "cnt"}}
     {{#each list}}
         {{#if (eq group.name ../groupName) }}
             {{inc "cnt"}}
-            <div class="row my-1 px-3 row-item d-flex flex-row justify-content-between align-items-center"
-                data-item="{{_id}}" data-group="{{group._id}}">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedItems">
-                    <div class="ml-3">
-                        {{name}}
-                        {{#if description}}
-                            <div class="small">{{description}}</div>
-                        {{/if}}
-                    </div>
-                </div>
-                <div class="no-wrap">
-
-                </div>
-            </div>
+            {{>item}}
         {{/if}}
     {{/each}}
     {{#if groupName}}
@@ -54,23 +70,19 @@
 
 {{!--  --}}
 
-{{> list list=lists}}
-{{#if groups}}
-    {{#each groups}}
-        <div data-group="{{_id}}" class="row row-group bg-gradient-dark text-white">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <div class="px-2">
-                    <strong>{{name}}</strong>
-                    {{#if description}}
-                        <div class="small">{{description}}</div>
-                    {{/if}}
-                </div>
-                {{>toolbox}}
-            </div>
-        </div>
-        {{>list list=../lists groupName=name groupID=_id}}
-    {{/each}}
+{{#if conf.group-view}}
+    {{> itemsInGroup list=lists}}
+    {{#if groups}}
+        {{#each groups}}
+            {{>groupHeader}}
+            {{>itemsInGroup list=../lists groupName=name groupID=_id}}
+        {{/each}}
+    {{else}}
+    {{/if}}
 {{else}}
+    {{#each lists}}
+        {{>item}}
+    {{/each}}
 {{/if}}
 
 {{#unless lists}}
