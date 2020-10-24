@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: class/Pages.js</title>
+    <title>JSDoc: Source: utils/misc.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: class/Pages.js</h1>
+    <h1 class="page-title">Source: utils/misc.js</h1>
 
     
 
@@ -27,43 +27,45 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Pages class
- * @module class/Pages
+ * Misc function
+ * @module misc
  */
-export class Pages {
-    /**
-     * Init page component
-     * @param {string} path - Page route path
-     */
-    constructor( path ) {
-        /**
-         * @property {JQuery&lt;HTMLElement>} - DOM element access point
-         */
-        this.page = $( `main[role='main']` );
 
-        /**
-         * @property {string} path - Page route path
-         */
-        this.path = path;
+/**
+ * Function which returns a minimum of two digits in case the value is less than 10
+ * @param {number} value 
+ */
+const getTwoDigits = ( value ) => value &lt; 10 ? `0${value}` : value;
 
-        /**
-         * @property {Array} modal - Dialogs array
-         */
-        this.modal = {};
+/**
+ * Return formated date YYYY-MM-DD
+ * @param {Object&lt;Date>} date 
+ * @returns {String} - Formated date
+ */
+const formatDate = ( date ) => {
+    const day = getTwoDigits( date.getDate() );
+    const month = getTwoDigits( date.getMonth() + 1 ); // add 1 since getMonth returns 0-11 for the months
+    const year = date.getFullYear();
 
-        let _progress = $( this.page ).find( '[role="progressbar"], [role="status"]' ).get();
+    return `${year}-${month}-${day}`;
+}
 
-        /**
-         * @property {Array} progress - All progressbars &amp; spinner
-         */
-        this.progress = new Array();
+/**
+ * Return formate time HH:MM (24 hours)
+ * @param {Object&lt;Date>} date 
+ * @returns {String} - Formated time
+ */
+const formatTime = ( date ) => {
+    const hours = getTwoDigits( date.getHours() );
+    const mins = getTwoDigits( date.getMinutes() );
 
-        for ( let el of _progress ) {
-            this.progress[ el.id ] = el;
-            $( el ).hide();
-        }
+    return `${hours}:${mins}`;
+}
 
-    }
+module.exports = {
+    getTwoDigits,
+    formatDate,
+    formatTime
 }</code></pre>
         </article>
     </section>
