@@ -39,23 +39,34 @@ export class Examinations extends Pages {
         $( this.progress[ 'examinationFetch' ] ).show();
         this.examinationBody.empty();
 
+        const conf = this.modal[ 'listViewOptions' ].options;
+
         this.examinations.getJSON()
             .then( ( data ) => {
-                this.examinationBody.html( ExaminationsListTemplate( { lists: data.lists, groups: data.groups } ) );
-                this.examinationBody.find( `div.row-item` ).each( ( index, el ) => {
-                    const id = $( el ).data( 'item' );
-                    const html = $( el ).find( '> div' ).eq( 1 );
+                this.examinationBody.html( ExaminationsListTemplate( {
+                    conf, lists: data.lists, groups: data.groups
+                } ) );
 
-                    let latestFetch = new Fetcher( `/measurements/latest?examinationId=${id}`, { method: 'GET' } );
-                    latestFetch.getJSON()
-                        .then( ( data ) => {
-                            if ( data.length ) {
-                                const latestDate = new Date( data[ 0 ].createdAt );
-                                html.text( formatDate( latestDate ) + ' @ ' + formatTime( latestDate ) )
-                            } else
-                                html.text( '-' )
-                        } )
-                } )
+                if ( conf[ 'fetch-latest' ] ) {
+
+                    this.examinationBody.find( `div.row-item` ).each( ( index, el ) => {
+                        const id = $( el ).data( 'item' );
+                        const html = $( el ).find( '> div' ).eq( 1 );
+
+                        let latestFetch = new Fetcher( `/measurements/latest?examinationId=${id}`, { method: 'GET' } );
+                        latestFetch.getJSON()
+                            .then( ( data ) => {
+                                if ( data.length ) {
+                                    const latestDate = new Date( data[ 0 ].createdAt );
+                                    html.text( formatDate( latestDate ) + ' @ ' + formatTime( latestDate ) )
+                                } else
+                                    html.text( '-' )
+                            } )
+                            .catch( ( error ) => {
+                                console.log( error );
+                            } );
+                    } );
+                }
             } )
             .finally( () => {
                 $( this.progress[ 'examinationFetch' ] ).hide();
