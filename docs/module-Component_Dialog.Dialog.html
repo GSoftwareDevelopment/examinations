@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: module:Component/Paginator</title>
+    <title>JSDoc: Class: Dialog</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: module:Component/Paginator</h1>
+    <h1 class="page-title">Class: Dialog</h1>
 
     
 
@@ -28,9 +28,8 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>module:Component/Paginator<span class="signature">(HTMLElement, opt)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>Paginator component Class</p></div>
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-Component_Dialog.html">Component/Dialog</a>.</span>Dialog<span class="signature">(id, page)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,11 +40,9 @@
         
 
     
-    <h2>Constructor</h2>
-    
 
     
-    <h4 class="name" id="module:Component/Paginator"><span class="type-signature"></span>new module:Component/Paginator<span class="signature">(HTMLElement, opt)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Dialog"><span class="type-signature"></span>new Dialog<span class="signature">(id, page)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +50,7 @@
 
 
 <div class="description">
-    <p>Create new Paginator component</p>
+    <p>Init Dialog component</p>
 </div>
 
 
@@ -89,13 +86,13 @@
 
         <tr>
             
-                <td class="name"><code>HTMLElement</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">string</span>
 
 
             
@@ -105,20 +102,20 @@
 
             
 
-            <td class="description last"><p>DOM Element</p></td>
+            <td class="description last"><p>Bootstrap modal component identificator</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>opt</code></td>
+                <td class="name"><code>page</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">PaginatorOptions</span>
+<span class="param-type">object</span>
 
 
             
@@ -128,7 +125,7 @@
 
             
 
-            <td class="description last"><p>initial parameters for Paginator</p></td>
+            <td class="description last"><p>reference to page</p></td>
         </tr>
 
     
@@ -169,7 +166,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line12">line 12</a>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -219,7 +216,7 @@
 
         
             
-<h4 class="name" id="currentPage"><span class="type-signature"></span>currentPage<span class="type-signature"></span></h4>
+<h4 class="name" id="dialog"><span class="type-signature"></span>dialog<span class="type-signature"></span></h4>
 
 
 
@@ -256,13 +253,13 @@
 
         <tr>
             
-                <td class="name"><code>currentPage</code></td>
+                <td class="name"><code>dialog</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -272,7 +269,7 @@
 
             
 
-            <td class="description last"><p>Current page number</p></td>
+            <td class="description last"><p>DOM Element</p></td>
         </tr>
 
     
@@ -311,7 +308,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line46">line 46</a>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -329,7 +326,7 @@
 
         
             
-<h4 class="name" id="HTMLComponent"><span class="type-signature"></span>HTMLComponent<span class="type-signature"></span></h4>
+<h4 class="name" id="forms"><span class="type-signature"></span>forms<span class="type-signature"></span></h4>
 
 
 
@@ -366,13 +363,13 @@
 
         <tr>
             
-                <td class="name"><code>HTMLComponent</code></td>
+                <td class="name"><code>forms</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">jQuery.&lt;HTMLElement></span>
+<span class="param-type">Array</span>
 
 
             
@@ -382,7 +379,7 @@
 
             
 
-            <td class="description last"><p>DOM Element Wrapper</p></td>
+            <td class="description last"><p>All forms in dialog</p></td>
         </tr>
 
     
@@ -421,7 +418,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line36">line 36</a>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -439,7 +436,7 @@
 
         
             
-<h4 class="name" id="limit"><span class="type-signature"></span>limit<span class="type-signature"></span></h4>
+<h4 class="name" id="progress"><span class="type-signature"></span>progress<span class="type-signature"></span></h4>
 
 
 
@@ -476,13 +473,13 @@
 
         <tr>
             
-                <td class="name"><code>limit</code></td>
+                <td class="name"><code>progress</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Array</span>
 
 
             
@@ -492,7 +489,7 @@
 
             
 
-            <td class="description last"><p>Results limit on the page</p></td>
+            <td class="description last"><p>All progressbars &amp; spinners in dialog</p></td>
         </tr>
 
     
@@ -531,447 +528,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line41">line 41</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="onChange"><span class="type-signature"></span>onChange<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>onChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for any change in component</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line57">line 57</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="onLimitChange"><span class="type-signature"></span>onLimitChange<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>onLimitChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for limit change</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line65">line 65</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="onPageChange"><span class="type-signature"></span>onPageChange<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>onPageChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for page change</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line61">line 61</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="totalPages"><span class="type-signature"></span>totalPages<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>totalPages</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Total pages</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line51">line 51</a>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -999,7 +556,7 @@
     
 
     
-    <h4 class="name" id="refresh"><span class="type-signature"></span>refresh<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="autoFocus"><span class="type-signature"></span>autoFocus<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1007,7 +564,7 @@
 
 
 <div class="description">
-    <p>Refresh component</p>
+    <p>Method for default autofocus dialog element</p>
 </div>
 
 
@@ -1051,7 +608,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line73">line 73</a>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1082,43 +639,34 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="clearFormValidation"><span class="type-signature"></span>clearFormValidation<span class="signature">(formID)</span><span class="type-signature"></span></h4>
     
 
     
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="~PaginatorOptions">PaginatorOptions</h4>
-
 
 
 
 <div class="description">
-    <p>Initial parameters for Paginator component</p>
+    <p>Clear form validation</p>
 </div>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
 
 
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -1140,13 +688,13 @@
 
         <tr>
             
-                <td class="name"><code>limit</code></td>
+                <td class="name"><code>formID</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -1156,127 +704,14 @@
 
             
 
-            <td class="description last"><p>Results limit on the page</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>page</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current page number</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>totalPages</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Total pages</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for any change in component</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onPageChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for page change</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onLimitChange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback for limit change</p></td>
+            <td class="description last"><p>Form identificator</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -1310,7 +745,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_paginator_index.js.html">components/paginator/index.js</a>, <a href="components_paginator_index.js.html#line14">line 14</a>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -1326,7 +761,659 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
             
+
+    
+
+    
+    <h4 class="name" id="disableForm"><span class="type-signature"></span>disableForm<span class="signature">(formID)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Disable form elements</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>formID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Form identificator</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="enableForm"><span class="type-signature"></span>enableForm<span class="signature">(formID)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Enable form elements</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>formID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Form identificator</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line92">line 92</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onShowDialog"><span class="type-signature"></span>onShowDialog<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Method fired when dialog is show</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resetAllForms"><span class="type-signature"></span>resetAllForms<span class="signature">(formID)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Reset all forms</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>formID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Form identificator</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line126">line 126</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resetForm"><span class="type-signature"></span>resetForm<span class="signature">(formID)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Reset form elements</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>formID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Form identificator</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_dialog_index.js.html">components/dialog/index.js</a>, <a href="components_dialog_index.js.html#line116">line 116</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
     
 
     
