@@ -1,3 +1,7 @@
+/**
+ * Interface for Components
+ * @module Component
+ */
 export default class Component {
     constructor() {
 
@@ -6,7 +10,7 @@ export default class Component {
     /**
      * Initial parameters for findElement function
      * @typedef {Object} findElementParams
-     * @property {JQuery<HTMLElement>} [findIn] - jQuery element
+     * @property {HTMLElement} [findIn] - jQuery element
      * @property {string} selector - selector
      */
 

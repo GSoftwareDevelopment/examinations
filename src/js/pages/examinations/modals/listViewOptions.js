@@ -1,4 +1,4 @@
-import { Dialog } from '../../../components/dialog';
+import { Dialog } from '../../../lib/components/dialog';
 import { App } from '../../../app';
 
 export class ListViewOptions extends Dialog {

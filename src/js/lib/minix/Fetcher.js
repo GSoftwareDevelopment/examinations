@@ -1,6 +1,6 @@
 /**
  * Fetcher Class - extends basic Fetch API
- * @module class/Fetcher
+ * @module Fetcher
  */
 import withQuery from 'with-query';
 

@@ -1,11 +1,15 @@
-import Component from '../../class/Component';
-import { Fetcher } from '../../class/Fetcher';
-
 /**
  * Select element extended with fetch function
- * @module component/SelectFetch
+ * @module Component/SelectFetch
  */
 
+import Component from '../../minix/Component';
+import { Fetcher } from '../../minix/Fetcher';
+
+/**
+ * SelectFetch component Class
+ * @extends Component
+ */
 export class SelectFetch extends Component {
     /**
      * Initial parameters for SelectFetch
@@ -20,7 +24,7 @@ export class SelectFetch extends Component {
     /**
      * Init component
      * @param {HTMLElement} HTMLElement - A DOM element pointing to a Select element
-     * @param {...SelectFetchOption} [opt] - Component options {@link SelectFetchOption}
+     * @param {SelectFetchOption} [opt] - Component options {@link SelectFetchOption}
      */
     constructor( HTMLElement, opt ) {
         super();

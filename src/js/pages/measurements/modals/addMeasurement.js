@@ -1,5 +1,5 @@
-import { Dialog } from "../../../components/dialog";
-import { SelectFetch } from '../../../components/select-fetch';
+import { Dialog } from "../../../lib/components/dialog";
+import { SelectFetch } from '../../../lib/components/select-fetch';
 import { formatDate, formatTime } from '../../../utils/misc';
 
 class AddMeasurement extends Dialog {

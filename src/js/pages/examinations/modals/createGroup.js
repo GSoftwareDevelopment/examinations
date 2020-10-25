@@ -1,4 +1,4 @@
-import { Dialog } from "../../../components/dialog";
+import { Dialog } from "../../../lib/components/dialog";
 
 class CreateGroup extends Dialog {
     constructor( _page ) {

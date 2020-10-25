@@ -1,4 +1,4 @@
-import { Pages } from '../../class/Pages';
+import { Pages } from '../../lib/minix/Pages';
 
 export class Dashboard extends Pages {
     constructor( _path ) {

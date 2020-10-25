@@ -1,12 +1,13 @@
-import { Pages } from '../../class/Pages';
 import './style.scss';
+
+import { Pages } from '../../lib/minix/Pages';
 
 import { AddNewExamination } from './modals/addNewExamination';
 import { CreateNewValue } from './modals/createNewValue';
 import { CreateGroup } from './modals/createGroup';
 import { ListViewOptions } from './modals/listViewOptions';
 
-import { Fetcher } from '../../class/Fetcher';
+import { Fetcher } from '../../lib/minix/Fetcher';
 import { formatDate, formatTime } from '../../utils/misc';
 import ExaminationsListTemplate from './templates/examinationsList.hbs';
 

@@ -1,4 +1,4 @@
-import './components/progressbar.scss';
+import './lib/components/progressbar.scss';
 
 import { Configuration } from './utils/configuration';
 

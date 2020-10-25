@@ -1,13 +1,13 @@
 import './style.scss';
 
-import { Pages } from '../../class/Pages';
-import { Fetcher } from '../../class/Fetcher';
+import { Pages } from '../../lib/minix/Pages';
+import { Fetcher } from '../../lib/minix/Fetcher';
 
 import { AddMeasurement } from './modals/addMeasurement';
 import { FilterMeasurements } from './modals/filterMeasurements';
 
 import listTemplate from './templates/measurementList.hbs';
-import Paginator from '../../components/paginator';
+import Paginator from '../../lib/components/paginator';
 
 export class Measurements extends Pages {
     constructor( _path ) {

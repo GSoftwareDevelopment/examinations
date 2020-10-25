@@ -1,4 +1,4 @@
-import { Fetcher } from '../class/Fetcher';
+import { Fetcher } from '../lib/minix/Fetcher';
 
 export class Configuration {
     constructor( resourceName, defaults ) {

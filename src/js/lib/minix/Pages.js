@@ -1,6 +1,6 @@
 /**
  * Pages class
- * @module class/Pages
+ * @module Pages
  */
 export class Pages {
     /**

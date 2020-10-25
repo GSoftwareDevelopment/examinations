@@ -1,5 +1,5 @@
-import { Dialog } from "../../../components/dialog";
-import { SelectFetch } from "../../../components/select-fetch";
+import { Dialog } from "../../../lib/components/dialog";
+import { SelectFetch } from "../../../lib/components/select-fetch";
 
 export class AddNewExamination extends Dialog {
     constructor( _page ) {

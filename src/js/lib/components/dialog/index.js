@@ -1,14 +1,18 @@
-import Component from '../../class/Component';
+/**
+ * Dialog component
+ * @module Components/Dialog
+ */
+
+import Component from '../../minix/Component';
 
 /**
- * Dialog class component
- * @module component/Dialog
- * @exports Dialog
+ * Dialog component Class
  */
 export class Dialog extends Component {
     /**
      * Init Dialog component
      * @param {string} id - Bootstrap modal component identificator
+     * @param {object} page - reference to page
      */
     constructor( id, page ) {
         super();
@@ -16,7 +20,7 @@ export class Dialog extends Component {
         this._page = page;
 
         /**
-         * @property {JQuery<HTMLElement>} dialog - DOM Element
+         * @property {HTMLElement} dialog - DOM Element
          */
         this.dialog = $( `div#${id}.modal` );
         let _forms = $( this.dialog ).find( 'form' ).get();

@@ -1,9 +1,10 @@
 /**
  * Paginator component
- * @module Component/Paginator
+ * @module Components/Paginator
  */
+
 import './style.scss';
-import Component from '../../class/Component';
+import Component from '../../minix/Component';
 import PaginationTemplate from './pagination.hbs';
 
 /**
@@ -13,7 +14,7 @@ export default class Paginator extends Component {
 
     /**
      * Initial parameters for Paginator component
-     * @typedef {Object} PaginatorOptions
+     * @typedef {object} PaginatorOptions
      * @property {number} limit - Results limit on the page
      * @property {number} page - Current page number
      * @property {number} totalPages - Total pages
@@ -24,7 +25,7 @@ export default class Paginator extends Component {
 
     /**
      * Create new Paginator component
-     * @param {jQuery<HTMLElement>} HTMLElement - DOM Element
+     * @param {HTMLElement} HTMLElement - DOM Element
      * @param {PaginatorOptions} opt - initial parameters for Paginator
      */
     constructor( HTMLElement, opt ) {
