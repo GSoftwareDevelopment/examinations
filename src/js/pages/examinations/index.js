@@ -1,13 +1,13 @@
 import './style.scss';
 
-import { Pages } from '../../lib/minix/Pages';
+import { Pages } from 'gsd-minix/class-pages';
 
-import { AddNewExamination } from './modals/addNewExamination';
+import { AddNewExamination } from './modals/newExamination';
 import { CreateNewValue } from './modals/createNewValue';
 import { CreateGroup } from './modals/createGroup';
 import { ListViewOptions } from './modals/listViewOptions';
 
-import { Fetcher } from '../../lib/minix/Fetcher';
+import { Fetcher } from 'gsd-minix/class-fetcher';
 import { formatDate, formatTime } from '../../utils/misc';
 import ExaminationsListTemplate from './templates/examinationsList.hbs';
 

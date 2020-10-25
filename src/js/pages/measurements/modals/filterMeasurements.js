@@ -1,4 +1,4 @@
-import { Dialog } from "../../../lib/components/dialog";
+import { Dialog } from "gsd-minix/components/dialog";
 
 class FilterMeasurements extends Dialog {
     constructor( _page ) {

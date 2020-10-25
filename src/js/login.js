@@ -1,4 +1,4 @@
-import './lib/components/progressbar.scss';
+import 'gsd-minix/components/progressbar.scss';
 
 $( 'button' ).click( e => {
     $( 'button' ).addClass( 'disabled' );

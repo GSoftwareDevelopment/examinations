@@ -1,5 +1,7 @@
-import { Dialog } from "../../../lib/components/dialog";
-import { SelectFetch } from "../../../lib/components/select-fetch";
+import { Dialog } from "gsd-minix/components/dialog";
+import { SelectFetch } from "gsd-minix/components/select-fetch";
+
+import ValueEntryTemplate from './templates/value-item.hbs';
 
 export class AddNewExamination extends Dialog {
     constructor( _page ) {
@@ -32,7 +34,7 @@ export class AddNewExamination extends Dialog {
         this.valuesList = $( this.dialog ).find( 'div#values-list' );
 
         // get template of entry for values list
-        this._tplNewValue = this.dialog.find( '#template-newValueEntry' ).detach();
+        // this._tplNewValue = this.dialog.find( '#template-newValueEntry' ).detach();
     }
 
     onShowDialog ( e ) {
@@ -119,16 +121,16 @@ export class AddNewExamination extends Dialog {
     }
 
     addValue ( value ) {
-        const n = $( this._tplNewValue ).clone();
-        $( n ).addClass( 'item-value' ).removeAttr( 'id' );
+        const n = $( ValueEntryTemplate( {
+            valueDef: this.symbolize( value ),
+            JSONValueDef: JSON.stringify( value )
+        } ) );
 
-        $( n ).find( '#valueDef' ).text( this.symbolize( value ) );
-
-        $( n ).find( '#values' ).val( JSON.stringify( value ) );
         $( n ).find( '#btn-deleteValue' ).on( 'click', ( e ) => {
             this.deleteValue( e );
         } )
         this.valuesList.append( n );
+
         $( this.forms[ 'form' ] ).find( '#values-feedback.custom-feedback' )
             .hide();
     }

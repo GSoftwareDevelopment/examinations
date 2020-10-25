@@ -1,4 +1,4 @@
-import { Fetcher } from '../lib/minix/Fetcher';
+import { Fetcher } from 'gsd-minix/class-fetcher';
 
 export class Configuration {
     constructor( resourceName, defaults ) {

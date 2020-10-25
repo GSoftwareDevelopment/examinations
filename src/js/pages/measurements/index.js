@@ -1,13 +1,13 @@
 import './style.scss';
 
-import { Pages } from '../../lib/minix/Pages';
-import { Fetcher } from '../../lib/minix/Fetcher';
+import { Pages } from 'gsd-minix/class-pages';
+import { Fetcher } from 'gsd-minix/class-fetcher';
+import Paginator from 'gsd-minix/components/paginator';
 
 import { AddMeasurement } from './modals/addMeasurement';
 import { FilterMeasurements } from './modals/filterMeasurements';
 
 import listTemplate from './templates/measurementList.hbs';
-import Paginator from '../../lib/components/paginator';
 
 export class Measurements extends Pages {
     constructor( _path ) {

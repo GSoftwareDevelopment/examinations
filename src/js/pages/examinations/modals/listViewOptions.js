@@ -1,4 +1,4 @@
-import { Dialog } from '../../../lib/components/dialog';
+import { Dialog } from 'gsd-minix/components/dialog';
 import { App } from '../../../app';
 
 export class ListViewOptions extends Dialog {

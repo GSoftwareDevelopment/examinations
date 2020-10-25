@@ -1,0 +1,85 @@
+<div class="tab-pane fade" id="values-tab" role="tabpanel" aria-labelledby="values-tab">
+    <div class="d-flex flex-row align-items-center bg-dark white-text p-2">
+        <div>
+            Definicje
+            <a href="#modal-helpValues" data-toggle="modal">
+                <svg viewBox="0 0 16 16" class="ml-1 bi bi-sm bi-info-circle" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path
+                        d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
+                    <circle cx="8" cy="4.5" r="1" />
+                </svg>
+            </a>
+        </div>
+    </div>
+    <div id="values-feedback" class="alert alert-danger py-2 custom-feedback">Brak definicji wartości określających
+        badanie.</div>
+    <div id="values-list"></div>
+    <div class="form-group d-flex flex-row justify-content-end border-top">
+        <a href="#addValue" class="btn btn-sm btn-primary rounded-pill" data-toggle="modal">
+            <svg viewBox="0 0 16 16" class="mr-1 bi bi-plus-circle" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path fill-rule="evenodd"
+                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+            Dodaj...
+        </a>
+    </div>
+
+</div>
+
+{{#cache}}
+    <div class="modal fade" id="modal-helpValues" tabindex="-1" role="dialog" aria-labelledby="helpValues"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <svg viewBox="0 0 16 16" class="ml-1 bi bi-sm bi-info-circle" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
+                            <circle cx="8" cy="4.5" r="1" />
+                        </svg>
+                        Definicje
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tabela zawiera definicje wartości, jakie cechują tworzone badanie. Każdy wiersz zawiera
+                        następujące
+                        informacje:</p>
+                    <dl>
+                        <dt>Nazwa</dt>
+                        <dd>rozpoczynająca się wykrzyknikiem <strong>!</strong> oznaza, że definiowana wartość jest
+                            wymagana w obrębie
+                            badania</dd>
+                        <dt>Typ</dt>
+                        <dd>określający rodzaj przechowywanej informacji:
+                            <ul>
+                                <li>numeric - Liczbowa</li>
+                                <li>text - tekstowa</li>
+                                <li>enum - lista pojedynczego wyboru</li>
+                                <li>sets - lista wielokrotnego wyboru</li>
+                            </ul>
+                        </dd>
+                        <dt>Jednostka</dt>
+                        <dd>umieszczona w nawiasach kwadratowych <strong>[ ]</strong>, przypisania do typu liczbowego
+                        </dd>
+                        <dt>Lista</dt>
+                        <dd>objęta nawiasami klamrowymi <strong>{ }</strong> ,gdzie każdy element rozdzielony jest
+                            pionową liną <strong>|</strong>
+                            (tzw. pipe). Przypisana jest do typów list wyboru</dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark rounded-pill" data-dismiss="modal">Zamknij</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/cache}}

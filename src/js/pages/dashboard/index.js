@@ -1,4 +1,4 @@
-import { Pages } from '../../lib/minix/Pages';
+import { Pages } from 'gsd-minix/class-pages';
 
 export class Dashboard extends Pages {
     constructor( _path ) {
