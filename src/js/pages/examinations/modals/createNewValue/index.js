@@ -1,8 +1,10 @@
-import { Dialog } from "gsd-minix/components/dialog";
+import { Modal } from "gsd-minix/components/modal";
 
-class CreateNewValue extends Dialog {
+import ModalTemplate from './template/_values-createNew.hbs';
+
+class CreateNewValue extends Modal {
     constructor( _page ) {
-        super( 'addValue', _page );
+        super( ModalTemplate(), _page );
 
         $( this.forms[ 'form-addValue' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -18,8 +20,8 @@ class CreateNewValue extends Dialog {
             } );
     }
 
-    onShowDialog ( e ) {
-        super.onShowDialog( e );
+    onShow ( e ) {
+        super.onShow( e );
         this.setVisibleFields( 'unit' );
     }
 

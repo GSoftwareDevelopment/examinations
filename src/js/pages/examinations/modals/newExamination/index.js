@@ -1,11 +1,13 @@
-import { Dialog } from "gsd-minix/components/dialog";
+import { Modal } from "gsd-minix/components/modal";
 import { SelectFetch } from "gsd-minix/components/select-fetch";
+
+import ModalTemplate from './templates/modal.hbs';
 
 import ValueEntryTemplate from './templates/value-item.hbs';
 
-export class AddNewExamination extends Dialog {
+export class AddNewExamination extends Modal {
     constructor( _page ) {
-        super( 'add-examination', _page );
+        super( ModalTemplate(), _page );
 
         $( this.forms[ 'form' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -22,7 +24,7 @@ export class AddNewExamination extends Dialog {
         this.groupSelect = new SelectFetch(
             this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
             {
-                url: '/groups?data',
+                url: '/api/groups',
                 HTMLSpinner: this.progress[ 'groupsFetching' ],
                 dataMap: ( data ) => {
                     return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
@@ -37,8 +39,8 @@ export class AddNewExamination extends Dialog {
         // this._tplNewValue = this.dialog.find( '#template-newValueEntry' ).detach();
     }
 
-    onShowDialog ( e ) {
-        super.onShowDialog();
+    onShow ( e ) {
+        super.onShow();
 
         this.dialog
             .find( `.custom-feedback` )
@@ -76,7 +78,7 @@ export class AddNewExamination extends Dialog {
             let fields = $( this.forms[ 'form' ] ).serialize();
 
             try {
-                let response = await fetch( '/examinations', {
+                let response = await fetch( '/api/examinations', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -121,15 +123,15 @@ export class AddNewExamination extends Dialog {
     }
 
     addValue ( value ) {
-        const n = $( ValueEntryTemplate( {
+        const newItem = $( ValueEntryTemplate( {
             valueDef: this.symbolize( value ),
             JSONValueDef: JSON.stringify( value )
         } ) );
 
-        $( n ).find( '#btn-deleteValue' ).on( 'click', ( e ) => {
+        newItem.find( '#btn-deleteValue' ).on( 'click', ( e ) => {
             this.deleteValue( e );
         } )
-        this.valuesList.append( n );
+        this.valuesList.append( newItem );
 
         $( this.forms[ 'form' ] ).find( '#values-feedback.custom-feedback' )
             .hide();

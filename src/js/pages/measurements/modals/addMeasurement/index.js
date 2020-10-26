@@ -1,10 +1,12 @@
-import { Dialog } from "gsd-minix/components/dialog";
+import { Modal } from "gsd-minix/components/modal";
 import { SelectFetch } from 'gsd-minix/components/select-fetch';
-import { formatDate, formatTime } from '../../../utils/misc';
+import { formatDate, formatTime } from '../../../../utils/misc';
 
-class AddMeasurement extends Dialog {
+import ModalTemplate from './templates/_modal.hbs';
+
+class AddMeasurement extends Modal {
     constructor( _page ) {
-        super( 'addMeasurement', _page );
+        super( ModalTemplate(), _page );
 
         $( this.forms[ 'form' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -15,7 +17,7 @@ class AddMeasurement extends Dialog {
         this.examinationGroupSelect = new SelectFetch(
             this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
             {
-                url: '/groups?data',
+                url: '/api/groups',
                 HTMLSpinner: this.progress[ 'groupsFetching' ],
                 dataMap: ( data ) => {
                     return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
@@ -27,7 +29,7 @@ class AddMeasurement extends Dialog {
         this.examinationSelect = new SelectFetch(
             this.findElement( { findIn: this.forms[ 'form' ], selector: "#examination" } ),
             {
-                url: '/examinations?data',
+                url: '/api/examinations',
                 HTMLSpinner: this.progress[ 'examinationsFetching' ],
                 dataMap: ( data ) => {
                     return data.lists.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
@@ -39,8 +41,8 @@ class AddMeasurement extends Dialog {
         this.resultsFields = $( this.dialog ).find( 'div#results' );
     }
 
-    onShowDialog ( e ) {
-        super.onShowDialog();
+    onShow ( e ) {
+        super.onShow();
         this.clearResultsFields();
 
         const currentDate = new Date();
@@ -77,7 +79,7 @@ class AddMeasurement extends Dialog {
     }
 
     prepareExaminationValues ( examinationID ) {
-        fetch( `/values/${examinationID}`, {
+        fetch( `/api/values/${examinationID}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -258,7 +260,7 @@ class AddMeasurement extends Dialog {
             console.log( fields );
 
             try {
-                let response = await fetch( '/measurements', {
+                let response = await fetch( '/api/measurements', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'

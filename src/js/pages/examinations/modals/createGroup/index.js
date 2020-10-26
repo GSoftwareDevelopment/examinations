@@ -1,8 +1,10 @@
-import { Dialog } from "gsd-minix/components/dialog";
+import { Modal } from "gsd-minix/components/modal";
 
-class CreateGroup extends Dialog {
+import ModalTemplate from "./templates/_createGroup.hbs";
+
+class CreateGroup extends Modal {
     constructor( _page ) {
-        super( 'add-group', _page );
+        super( ModalTemplate(), _page );
 
         $( this.forms[ 'createGroup' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
 

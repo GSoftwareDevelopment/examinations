@@ -1,16 +1,16 @@
-import { Dialog } from 'gsd-minix/components/dialog';
-import { App } from '../../../app';
+import { Modal } from 'gsd-minix/components/modal';
+import { App } from '../../../../app';
 
-export class ListViewOptions extends Dialog {
+import ModalTemplate from './template/_viewOptions.hbs';
+
+export class ListViewOptions extends Modal {
     constructor( _page ) {
-        super( 'view-options', _page );
+        super( ModalTemplate(), _page );
 
         $( this.forms[ 'form-options' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
-        // console.log( App );
         this.options = App.config.examinationsListView.current;
 
         this._HTMLOptions = {}
-
         for ( let keyOption in this.options ) {
             this._HTMLOptions[ keyOption ] = this.findElement( {
                 findIn: this.dialog,
@@ -19,7 +19,7 @@ export class ListViewOptions extends Dialog {
         }
     }
 
-    onShowDialog () {
+    onShow () {
         this.setConf();
     }
 

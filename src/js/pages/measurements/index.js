@@ -5,7 +5,7 @@ import { Fetcher } from 'gsd-minix/class-fetcher';
 import Paginator from 'gsd-minix/components/paginator';
 
 import { AddMeasurement } from './modals/addMeasurement';
-import { FilterMeasurements } from './modals/filterMeasurements';
+import { FilterMeasurements } from './modals/filterMeasurement';
 
 import listTemplate from './templates/measurementList.hbs';
 
@@ -28,7 +28,7 @@ export class Measurements extends Pages {
             }
         } );
 
-        this.measurements = new Fetcher( "/measurements", { method: "GET" } );
+        this.measurements = new Fetcher( "/api/measurements", { method: "GET" } );
 
         this.getData();
     }

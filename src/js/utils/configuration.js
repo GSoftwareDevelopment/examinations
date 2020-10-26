@@ -6,7 +6,7 @@ export class Configuration {
         this.defaults = defaults;
         this.current = {}
 
-        this.configFetch = new Fetcher( resourceName, { method: 'GET' } );
+        this.configFetch = new Fetcher( `/api${resourceName}`, { method: 'GET' } );
 
         return ( async () => {
             await this.loadConfigData();
@@ -19,7 +19,7 @@ export class Configuration {
         try {
             const loadedConfig = await this.configFetch.getJSON()
             if ( loadedConfig.error )
-                throw new Error( `Can't get configuration!`, loadedConfig.error );
+                throw new Error( `Can't get configuration!` );
 
             if ( !loadedConfig[ 'OK' ] ) {
                 console.log( 'Configuration is not defined. Using defaults.' );
@@ -41,7 +41,7 @@ export class Configuration {
 
         try {
             const data = await this.configFetch.getJSON( { method: 'POST', body: JSON.stringify( newConfig ) } )
-            if ( data.error ) throw new Error( `Can't save configuration!`, error )
+            if ( data.error ) throw new Error( `Can't save configuration!` );
             return true;
         } catch ( error ) {
             console.log( error );

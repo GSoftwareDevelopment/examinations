@@ -33,7 +33,7 @@ export class Examinations extends Pages {
 
         this.examinationBody = this.page.find( 'div#examinationTable' );
 
-        this.examinations = new Fetcher( "/examinations/?data", { method: "GET" } );
+        this.examinations = new Fetcher( "/api/examinations/", { method: "GET" } );
 
         this.refreshList();
     }
@@ -56,7 +56,7 @@ export class Examinations extends Pages {
                         const id = $( el ).data( 'item' );
                         const html = $( el ).find( 'div.latest-date' );
 
-                        let latestFetch = new Fetcher( `/measurements/latest?examinationId=${id}`, { method: 'GET' } );
+                        let latestFetch = new Fetcher( `/api/measurements/latest?examinationId=${id}`, { method: 'GET' } );
                         latestFetch.getJSON()
                             .then( ( data ) => {
                                 if ( data.length ) {

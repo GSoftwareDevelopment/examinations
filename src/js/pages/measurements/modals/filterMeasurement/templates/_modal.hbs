@@ -1,0 +1,42 @@
+<div class="modal fade" id="filterMeasurements" tabindex="-1" role="dialog" aria-labelledby="filterMeasurements"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Filtruj pomiary</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="filter-form" class="needs-validation" novalidate autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="fiter-date-from">Od</label>
+                            <input class="form-control" type="date" name="date-from" id="fiter-date-from" value="">
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="fiter-date-to">Do</label>
+                            <input class="form-control" type="date" name="date-to" id="fiter-date-to" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fiter-examination">Badanie</label>
+                        <input class="form-control" type="text" name="examination" id="fiter-examination">
+                    </div>
+                    <div class="form-group">
+                        <label for="fiter-results">Wyniki</label>
+                        <input class="form-control" type="text" name="results" id="fiter-results">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-primary">Filtruj</button>
+                </div>
+            </form>
+            <div id="formSend" class="progress bg-secondary custom-progress" role="progressbar">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+    </div>
+</div>
