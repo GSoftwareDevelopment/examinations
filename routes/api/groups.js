@@ -1,10 +1,10 @@
 const express = require( 'express' );
 const router = express.Router();
-const { ensureAuth } = require( '../middleware/auth' );
+const { ensureAuth } = require( '../../middleware/auth' );
 
-const Examination = require( '../models/examination' );
-const Group = require( '../models/group' );
-const Value = require( '../models/value' );
+const Examination = require( '../../models/examination' );
+const Group = require( '../../models/group' );
+const Value = require( '../../models/value' );
 
 // @desc    Examinations groups list
 // @route   GET /groups

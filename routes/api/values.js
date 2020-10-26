@@ -1,8 +1,8 @@
 const express = require( 'express' );
 const router = express.Router();
-const { ensureAuth } = require( '../middleware/auth' );
+const { ensureAuth } = require( '../../middleware/auth' );
 
-const Value = require( '../models/value' );
+const Value = require( '../../models/value' );
 
 // @desc    Get values of examinations list
 // @route   GET /values
