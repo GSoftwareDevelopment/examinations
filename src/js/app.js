@@ -6,6 +6,10 @@ import { Dashboard } from './pages/dashboard';
 import { Examinations } from './pages/examinations';
 import { Measurements } from './pages/measurements';
 
+import routes from './routes';
+
+console.log( routes );
+
 export const App = {
     routes: {
         '/dashboard': Dashboard,
@@ -15,6 +19,7 @@ export const App = {
     pages: [],
     config: [],
 }
+
 async function Init () {
 
     App.config.examinationsListView = await new Configuration( '/examinations/configuration', {

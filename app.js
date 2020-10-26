@@ -10,6 +10,8 @@ const session = require( 'express-session' );
 const MongoStore = require( 'connect-mongo' )( session );
 const connectDB = require( './config/db' );
 
+const frontendRoutes = require( './src/js/routes' );
+
 // Load config
 dotenv.config( { path: './config/config.env' } );
 
@@ -104,13 +106,20 @@ app.use( '/vendor/popper', express.static( path.join( __dirname, 'node_modules/p
 app.use( '/vendor/bootstrap', express.static( path.join( __dirname, 'node_modules/bootstrap/dist/js/' ) ) );
 app.use( '/vendor/mdbootstrap', express.static( path.join( __dirname, 'node_modules/mdbootstrap/js/' ) ) );
 
-// Routes
+// Frontend Routes
 app.use( '/', require( './routes/index' ) );
-app.use( '/auth', require( './routes/auth' ) );
+
+
+app.use( '/dashboard', require( './routes/dashboars' ) );
 app.use( '/examinations', require( './routes/examinations' ) );
-app.use( '/groups', require( './routes/groups' ) );
 app.use( '/measurements', require( './routes/measurements' ) );
-app.use( '/values', require( './routes/values' ) );
+
+// API Routes
+app.use( '/auth', require( './routes/auth' ) );
+app.use( '/api/examinations', require( './routes/api/examinations' ) );
+app.use( '/api/groups', require( './routes/api/groups' ) );
+app.use( '/api/values', require( './routes/api/values' ) );
+app.use( '/api/measurements', require( './routes/api/measurements' ) );
 
 //
 const PORT = process.env.PORT || 3000;
