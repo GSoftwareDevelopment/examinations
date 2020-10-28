@@ -8,8 +8,6 @@ import { Measurements } from './pages/measurements';
 
 import routes from './routes';
 
-console.log( routes );
-
 export const App = {
     routes: {
         '/dashboard': Dashboard,
