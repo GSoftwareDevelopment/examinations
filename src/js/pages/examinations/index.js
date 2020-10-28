@@ -1,15 +1,21 @@
 import './style.scss';
 
+import apiRoutes from '../../api-routes';
+
 import { Pages } from 'gsd-minix/class-pages';
+import { Fetcher } from 'gsd-minix/class-fetcher';
 
 import { AddNewExamination } from './modals/newExamination';
 import { CreateNewValue } from './modals/createNewValue';
 import { CreateGroup } from './modals/createGroup';
 import { ListViewOptions } from './modals/listViewOptions';
 
-import { Fetcher } from 'gsd-minix/class-fetcher';
+import { Dropdown } from 'gsd-minix/components';
+
 import { formatDate, formatTime } from '../../utils/misc';
+
 import ExaminationsListTemplate from './templates/examinationsList.hbs';
+import ViewOptionsMenu from './templates/_viewOptionsMenu.hbs';
 
 export class Examinations extends Pages {
     constructor( _path ) {
@@ -22,24 +28,27 @@ export class Examinations extends Pages {
             createGroup: new CreateGroup( this )
         }
 
-        this.form = $( '#form-list' ).on( 'submit', ( e ) => { e.preventDefault(); } );
+        const menuListOption = new Dropdown(
+            $( ViewOptionsMenu() ),
+            {
+                triggerElement: $( this.elements[ 'listOptionButton' ] ),
+                triggerSelectro: 'a',
+                // onSelect: ( e ) => { this.listOptionsMenu( e ) },
+                triggers: {
+                    "listOption-refresh": ( e ) => { this.refreshList( e ); },
+                    "listOption-deleteSelected": ( e ) => { this.deleteSelected( e ); },
+                }
+            }, this );
 
-        // $( 'button#btn-deleteEntry' ).on( 'click', ( e ) => { this.deleteEntry( e ); } )
-        // $( 'button#btn-deleteGroup' ).on( 'click', ( e ) => { this.deleteGroup( e ); } )
+        this.examinationBody = this.body.find( 'div#examinationTable' );
 
-        this.page.find( 'div#listOptionMenu > a' ).on( 'click', ( e ) => {
-            this.listOptionsMenu( e );
-        } );
-
-        this.examinationBody = this.page.find( 'div#examinationTable' );
-
-        this.examinations = new Fetcher( "/api/examinations/", { method: "GET" } );
+        this.examinations = new Fetcher( apiRoutes.examinationList, { method: "GET" } );
 
         this.refreshList();
     }
 
     refreshList () {
-        $( this.progress[ 'examinationFetch' ] ).show();
+        $( this.elements[ 'examinationFetch' ] ).show();
         this.examinationBody.empty();
 
         const conf = this.modal[ 'listViewOptions' ].options;
@@ -56,7 +65,7 @@ export class Examinations extends Pages {
                         const id = $( el ).data( 'item' );
                         const html = $( el ).find( 'div.latest-date' );
 
-                        let latestFetch = new Fetcher( `/api/measurements/latest?examinationId=${id}`, { method: 'GET' } );
+                        let latestFetch = new Fetcher( apiRoutes.measurementLatest + `?examinationId=${id}`, { method: 'GET' } );
                         latestFetch.getJSON()
                             .then( ( data ) => {
                                 if ( data.length ) {
@@ -72,7 +81,7 @@ export class Examinations extends Pages {
                 }
             } )
             .finally( () => {
-                $( this.progress[ 'examinationFetch' ] ).hide();
+                $( this.elements[ 'examinationFetch' ] ).hide();
             } );
     }
 
@@ -94,7 +103,9 @@ export class Examinations extends Pages {
     }
 
     deleteSelected ( e ) {
-        const selected = this.form.find( 'input[type="checkbox"]:checked' );
+        const selected = $( this.elements[ 'form-list' ] )
+            .find( 'input[type="checkbox"]:checked' );
+
         const ids = selected.map( ( i, el ) => {
             let id = $( el ).parents( 'div.row' ).data( 'item' );
             return id;
@@ -121,7 +132,7 @@ export class Examinations extends Pages {
 
     async fetchDeleteEntry ( itemsList ) {
         try {
-            let response = await fetch( '/examinations', {
+            let response = await fetch( apiRoutes.examinationList, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,13 +151,16 @@ export class Examinations extends Pages {
         const el = $( e.currentTarget ).parents( 'div.row' );
         const groupID = el.data( 'group' );
 
+        // TODO: zmień to na referencje (this.modal[...]) związaną ze stroną.
         $( '#modal-confirmGroupDelete' ).modal( 'show' );
 
         $( 'button#btn-confirmGroupDelete' ).off().on( 'click', ( e ) => {
-            this.form.find( `tr` ).each( ( i, el ) => {
-                const id = $( el ).data( 'group' );
-                if ( id === groupID ) $( el ).detach();
-            } );
+            $( this.elements[ 'form-list' ] )
+                // TODO: v-- do zmiany 
+                .find( `tr` ).each( ( i, el ) => {
+                    const id = $( el ).data( 'group' );
+                    if ( id === groupID ) $( el ).detach();
+                } );
 
             this.fetchDeleteGroup( [ groupID ] );
         } )
@@ -155,7 +169,7 @@ export class Examinations extends Pages {
 
     async fetchDeleteGroup ( groupList ) {
         try {
-            let response = await fetch( '/groups', {
+            let response = await fetch( apiRoutes.groupList, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

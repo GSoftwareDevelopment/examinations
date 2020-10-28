@@ -1,10 +1,10 @@
-import { Modal } from "gsd-minix/components/modal";
+import { Modal } from "gsd-minix/components";
 
-import ModalTemplate from './template/_values-createNew.hbs';
+import ModalTemplate from './_modal.hbs';
 
 class CreateNewValue extends Modal {
     constructor( _page ) {
-        super( ModalTemplate(), _page );
+        super( $( ModalTemplate() ), {}, _page );
 
         $( this.forms[ 'form-addValue' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );

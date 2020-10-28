@@ -1,12 +1,13 @@
-import { Modal } from "gsd-minix/components/modal";
-import { SelectFetch } from 'gsd-minix/components/select-fetch';
+import apiRoutes from '../../../../api-routes';
+
+import { Modal, SelectFetch } from "gsd-minix/components";
 import { formatDate, formatTime } from '../../../../utils/misc';
 
-import ModalTemplate from './templates/_modal.hbs';
+import ModalTemplate from './_modal.hbs';
 
 class AddMeasurement extends Modal {
     constructor( _page ) {
-        super( ModalTemplate(), _page );
+        super( $( ModalTemplate() ), {}, _page );
 
         $( this.forms[ 'form' ] )
             .on( 'submit', ( e ) => { this.submit( e ); } );
@@ -17,7 +18,7 @@ class AddMeasurement extends Modal {
         this.examinationGroupSelect = new SelectFetch(
             this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
             {
-                url: '/api/groups',
+                url: apiRoutes.groupsList,
                 HTMLSpinner: this.progress[ 'groupsFetching' ],
                 dataMap: ( data ) => {
                     return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
@@ -29,7 +30,7 @@ class AddMeasurement extends Modal {
         this.examinationSelect = new SelectFetch(
             this.findElement( { findIn: this.forms[ 'form' ], selector: "#examination" } ),
             {
-                url: '/api/examinations',
+                url: apiRoutes.examinationList,
                 HTMLSpinner: this.progress[ 'examinationsFetching' ],
                 dataMap: ( data ) => {
                     return data.lists.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
@@ -38,7 +39,7 @@ class AddMeasurement extends Modal {
             }
         );
 
-        this.resultsFields = $( this.dialog ).find( 'div#results' );
+        this.resultsFields = $( this.HTMLComponent ).find( 'div#results' );
     }
 
     onShow ( e ) {
@@ -79,7 +80,7 @@ class AddMeasurement extends Modal {
     }
 
     prepareExaminationValues ( examinationID ) {
-        fetch( `/api/values/${examinationID}`, {
+        fetch( apiRoutes.valuesList + `/${examinationID}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -260,7 +261,7 @@ class AddMeasurement extends Modal {
             console.log( fields );
 
             try {
-                let response = await fetch( '/api/measurements', {
+                let response = await fetch( apiRoutes.measurementList, {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -271,7 +272,7 @@ class AddMeasurement extends Modal {
                 console.log( result );
                 if ( !result.error ) {
                     this._page.getData();
-                    this.dialog.modal( 'hide' );
+                    this.HTMLComponent.modal( 'hide' );
                     return;
                 } else {
                     this.enableForm( 'form' );

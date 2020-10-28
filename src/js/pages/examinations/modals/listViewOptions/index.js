@@ -1,11 +1,11 @@
-import { Modal } from 'gsd-minix/components/modal';
+import { Modal } from 'gsd-minix/components';
 import { App } from '../../../../app';
 
-import ModalTemplate from './template/_viewOptions.hbs';
+import ModalTemplate from './_modal.hbs';
 
 export class ListViewOptions extends Modal {
     constructor( _page ) {
-        super( ModalTemplate(), _page );
+        super( $( ModalTemplate() ), {}, _page );
 
         $( this.forms[ 'form-options' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
         this.options = App.config.examinationsListView.current;

@@ -1,8 +1,10 @@
 import './style.scss';
+import apiRoutes from '../../api-routes';
 
 import { Pages } from 'gsd-minix/class-pages';
 import { Fetcher } from 'gsd-minix/class-fetcher';
-import Paginator from 'gsd-minix/components/paginator';
+
+import { Paginator } from 'gsd-minix/components';
 
 import { AddMeasurement } from './modals/addMeasurement';
 import { FilterMeasurements } from './modals/filterMeasurement';
@@ -18,8 +20,8 @@ export class Measurements extends Pages {
             FilterMeasurements: new FilterMeasurements( this ),
         };
 
-        this.results = this.page.find( 'div#measurements-results' );
-        this.paginator = new Paginator( this.page.find( 'div#paginator' ), {
+        this.results = this.body.find( 'div#measurements-results' );
+        this.paginator = new Paginator( this.body.find( 'div#paginator' ), {
             limit: 10,
             page: 0,
             totalPages: 0,
@@ -28,13 +30,13 @@ export class Measurements extends Pages {
             }
         } );
 
-        this.measurements = new Fetcher( "/api/measurements", { method: "GET" } );
+        this.measurements = new Fetcher( apiRoutes.measurementList, { method: "GET" } );
 
         this.getData();
     }
 
     getData () {
-        $( this.progress[ 'measurements-fetch' ] ).show();
+        $( this.elements[ 'measurements-fetch' ] ).show();
         this.results.empty();
 
         this.measurements.getJSON( {
@@ -49,7 +51,7 @@ export class Measurements extends Pages {
                 this.paginator.totalPages = ( this.paginator.limit > 0 ) ? Math.ceil( data.totalResults / this.paginator.limit ) - 1 : 0
                 this.paginator.refresh();
 
-                $( this.progress[ 'measurements-fetch' ] ).hide();
+                $( this.elements[ 'measurements-fetch' ] ).hide();
             } );
     }
 }
