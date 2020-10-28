@@ -16,7 +16,13 @@
 	<!-- Header of examination table -->
 	<div class="row d-flex flex-row justify-content-between align-items-center bg-primary white-text p-0">
 		<div>
-			{{> _examinations/_viewOptionsMenu }}
+			<button type="button" class="btn btn-primary px-2 py-1 mr-0 white-text" id="listOptionButton"
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<svg viewBox="0 0 16 16" class="bi bi-three-dots-vertical" fill="currentColor">
+					<path fill-rule="evenodd"
+						d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+				</svg>
+			</button>
 			<button type="button" class="btn btn-flat shadow-none px-1 py-1 ml-0 white-text">
 				Grupa/Nazwa badania
 			</button>
