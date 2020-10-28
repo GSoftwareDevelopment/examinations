@@ -9,17 +9,11 @@ class AddMeasurement extends Modal {
     constructor( _page ) {
         super( $( ModalTemplate() ), {}, _page );
 
-        $( this.forms[ 'form' ] )
-            .on( 'submit', ( e ) => { this.submit( e ); } );
-
-        this.date = $( this.forms[ 'form' ] ).find( '#date' );
-        this.time = $( this.forms[ 'form' ] ).find( '#time' );
-
-        this.examinationGroupSelect = new SelectFetch(
-            this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
+        this.groupSelect = new SelectFetch(
+            this.elements[ 'group' ],
             {
                 url: apiRoutes.groupsList,
-                HTMLSpinner: this.progress[ 'groupsFetching' ],
+                HTMLSpinner: this.elements[ 'groupsFetching' ],
                 dataMap: ( data ) => {
                     return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
                 },
@@ -28,10 +22,10 @@ class AddMeasurement extends Modal {
         );
 
         this.examinationSelect = new SelectFetch(
-            this.findElement( { findIn: this.forms[ 'form' ], selector: "#examination" } ),
+            this.elements[ 'examination' ],
             {
                 url: apiRoutes.examinationList,
-                HTMLSpinner: this.progress[ 'examinationsFetching' ],
+                HTMLSpinner: this.elements[ 'examinationsFetching' ],
                 dataMap: ( data ) => {
                     return data.lists.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
                 },
@@ -39,19 +33,20 @@ class AddMeasurement extends Modal {
             }
         );
 
-        this.resultsFields = $( this.HTMLComponent ).find( 'div#results' );
+        this.resultsFields = $( this.elements[ 'results' ] );
     }
 
     onShow ( e ) {
         super.onShow();
         this.clearResultsFields();
+        $( this.elements[ 'formSend' ] ).hide();
 
         const currentDate = new Date();
 
-        this.date[ 0 ].value = formatDate( currentDate );
-        this.time[ 0 ].value = formatTime( currentDate );
+        this.elements.date.value = formatDate( currentDate );
+        this.elements.time.value = formatTime( currentDate );
 
-        this.examinationGroupSelect.refresh();
+        this.groupSelect.refresh();
         this.examinationSelect.refresh();
     }
 
@@ -246,7 +241,7 @@ class AddMeasurement extends Modal {
         } )
     }
 
-    async submit ( e ) {
+    async onSubmit ( e ) {
         e.preventDefault();
 
         if ( this.forms[ 'form' ].checkValidity() === false ) {
@@ -254,7 +249,7 @@ class AddMeasurement extends Modal {
             this.forms[ 'form' ].classList.add( 'was-validated' );
         } else {
             this.disableForm( 'form' );
-            $( this.progress[ 'formSend' ] ).show();
+            $( this.elements[ 'formSend' ] ).show();
 
             let fields = $( this.forms[ 'form' ] ).serialize();
 
@@ -269,14 +264,15 @@ class AddMeasurement extends Modal {
                     body: fields,
                 } );
                 const result = await response.json()
-                console.log( result );
+
+                $( this.elements[ 'formSend' ] ).hide();
+
                 if ( !result.error ) {
                     this._page.getData();
                     this.HTMLComponent.modal( 'hide' );
                     return;
                 } else {
                     this.enableForm( 'form' );
-                    $( this.progress[ 'formSend' ] ).hide();
                 }
 
             } catch ( error ) {

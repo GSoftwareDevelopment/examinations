@@ -7,16 +7,7 @@ export class ListViewOptions extends Modal {
     constructor( _page ) {
         super( $( ModalTemplate() ), {}, _page );
 
-        $( this.forms[ 'form-options' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
         this.options = App.config.examinationsListView.current;
-
-        this._HTMLOptions = {}
-        for ( let keyOption in this.options ) {
-            this._HTMLOptions[ keyOption ] = this.findElement( {
-                findIn: this.dialog,
-                selector: `input#setting_${keyOption}`
-            } );
-        }
     }
 
     onShow () {
@@ -25,21 +16,25 @@ export class ListViewOptions extends Modal {
 
     setConf () {
         for ( let keyConf in this.options ) {
-            this._HTMLOptions[ keyConf ][ 0 ].checked = this.options[ keyConf ];
+            const elName = `setting_${keyConf}`;
+            if ( this.elements[ elName ] )
+                this.elements[ elName ].checked = this.options[ keyConf ];
         }
     }
 
     getConf () {
         const newOptions = {};
         for ( let keyConf in this.options ) {
-            newOptions[ keyConf ] = this._HTMLOptions[ keyConf ][ 0 ].checked;
+            const elName = `setting_${keyConf}`;
+            if ( this.elements[ elName ] )
+                newOptions[ keyConf ] = this.elements[ elName ].checked;
         }
         return newOptions;
     }
 
-    async submit ( e ) {
+    async onSubmit ( e ) {
         e.preventDefault();
-        $( this.progress[ 'formSend' ] ).show();
+        $( this.elements[ 'formSend' ] ).show();
 
         const newConfig = this.getConf();
         this.options = newConfig;
@@ -47,9 +42,9 @@ export class ListViewOptions extends Modal {
         if ( await App.config.examinationsListView.saveConfigData( newConfig ) ) {
             // TODO: show notification
         }
-        $( this.progress[ 'formSend' ] ).hide();
+        $( this.elements[ 'formSend' ] ).hide();
 
-        this.dialog.modal( 'hide' );
+        this.hideModal();
         this._page.refreshList();
     }
 }

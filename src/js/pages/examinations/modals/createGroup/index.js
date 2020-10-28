@@ -1,3 +1,5 @@
+import apiRoutes from '../../../../api-routes';
+
 import { Modal } from "gsd-minix/components";
 
 import ModalTemplate from "./_modal.hbs";
@@ -6,8 +8,6 @@ class CreateGroup extends Modal {
     constructor( _page ) {
         super( $( ModalTemplate() ), {}, _page );
 
-        $( this.forms[ 'createGroup' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
-
         $( this.forms[ 'createGroup' ] ).find( 'input[name="name"]' )
             .on( 'input', () => {
                 $( this.forms[ 'createGroup' ] ).find( `[name='name'] ~ .unique-feedback` )
@@ -15,21 +15,20 @@ class CreateGroup extends Modal {
             } )
     }
 
-    async submit ( e ) {
+    async onSubmit ( e ) {
         e.preventDefault();
+
         if ( this.forms[ 'createGroup' ].checkValidity() === false ) {
             e.stopPropagation();
             this.forms[ 'createGroup' ].classList.add( 'was-validated' );
         } else {
-
             this.disableForm( 'createGroup' );
-            $( this.progress[ 'formSend' ] ).show();
+            $( this.elements[ 'formSend' ] ).show();
 
             let fields = $( this.forms[ 'createGroup' ] ).serialize();
-
             try {
 
-                let response = await fetch( '/groups', {
+                let response = await fetch( apiRoutes.groupsList, {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -37,11 +36,13 @@ class CreateGroup extends Modal {
                     body: fields,
                 } );
                 const result = await response.json()
-                if ( !result.error ) {
-                    // window.location = "/examinations";
 
+                $( this.elements[ 'formSend' ] ).hide();
+
+                if ( !result.error ) {
+                    this._page.refreshList();
                     this._page.modal.addNewExamination.groupSelect.refresh();
-                    this.dialog.modal( 'hide' );
+                    this.hideModal();
                     return;
                 } else {
                     if ( result.error.name == "ValidatorError" ) {
@@ -54,7 +55,6 @@ class CreateGroup extends Modal {
                         }
                     }
                 }
-                $( this.progress[ 'formSend' ] ).hide();
             } catch ( error ) {
                 console.log( error );
             }

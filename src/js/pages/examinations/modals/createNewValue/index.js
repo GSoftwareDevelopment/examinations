@@ -7,9 +7,6 @@ class CreateNewValue extends Modal {
         super( $( ModalTemplate() ), {}, _page );
 
         $( this.forms[ 'form-addValue' ] )
-            .on( 'submit', ( e ) => { this.submit( e ); } );
-
-        $( this.forms[ 'form-addValue' ] )
             .find( '#type' )
             .on( 'change', ( e ) => {
                 const v = e.currentTarget.value;
@@ -40,7 +37,7 @@ class CreateNewValue extends Modal {
         } );
     }
 
-    async submit ( e ) {
+    async onSubmit ( e ) {
         e.preventDefault();
         if ( this.forms[ 'form-addValue' ].checkValidity() === false ) {
             e.stopPropagation();
@@ -65,7 +62,8 @@ class CreateNewValue extends Modal {
             }
 
             this._page.modal.addNewExamination.addValue( newValue );
-            this.dialog.modal( 'hide' );
+            this.hideModal();
+            // this.HTMlComponent.modal( 'hide' );
         }
     }
 }

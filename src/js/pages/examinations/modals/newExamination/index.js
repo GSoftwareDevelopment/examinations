@@ -9,8 +9,6 @@ export class AddNewExamination extends Modal {
     constructor( _page ) {
         super( $( ModalTemplate() ), {}, _page );
 
-        // $( this.forms[ 'form' ] ).on( 'submit', ( e ) => { this.submit( e ); } );
-
         $( this.elements.form )
             .find( 'input[name="name"]' )
             .on( 'input', () => {
@@ -21,12 +19,10 @@ export class AddNewExamination extends Modal {
 
         // initialize "general tab" events
         this.groupSelect = new SelectFetch(
-            $( this.elements.group ),
-            // this.findElement( { findIn: this.forms[ 'form' ], selector: "#group" } ),
+            $( this.elements[ 'group' ] ),
             {
                 url: apiRoutes.groupsList,
-                // HTMLSpinner: this.progress[ 'groupsFetching' ],
-                HTMLSpinner: this.elements.groupsFetching,
+                HTMLSpinner: this.elements[ 'groupsFetching' ],
                 dataMap: ( data ) => {
                     return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
                 }
@@ -34,7 +30,7 @@ export class AddNewExamination extends Modal {
         );
 
         // "values tab"
-        this.valuesList = $( this.HTMLComponent ).find( 'div#values-list' );
+        // this.values-list = $( this.HTMLComponent ).find( 'div#values-list' );
     }
 
     onShow ( e ) {
@@ -48,7 +44,9 @@ export class AddNewExamination extends Modal {
         $( this.elements[ 'tab-general' ] ).tab( 'show' );
 
         // delete all entrys in values list
-        this.valuesList.find( 'div.item-value' ).detach();
+        $( this.elements[ 'values-list' ] )
+            .find( 'div.item-value' )
+            .detach();
 
         // add default entry to values list
         this.addValue( {
@@ -63,16 +61,15 @@ export class AddNewExamination extends Modal {
 
     async onSubmit ( e ) {
         e.preventDefault();
-        console.log( e );
 
         if ( this.forms[ 'form' ].checkValidity() === false ) {
             e.stopPropagation();
             this.forms[ 'form' ].classList.add( 'was-validated' );
-            this.HTMLComponent.find( 'a#tab-general' ).tab( 'show' );
+            $( this.elements[ 'tab-general' ] ).tab( 'show' );
         } else {
 
             this.disableForm( 'form' );
-            $( this.progress[ 'formSend' ] ).show();
+            $( this.elements[ 'formSend' ] ).show();
 
             let fields = $( this.forms[ 'form' ] ).serialize();
 
@@ -85,25 +82,26 @@ export class AddNewExamination extends Modal {
                     body: fields,
                 } );
                 const result = await response.json()
-                console.log( result );
+                $( this.elements[ 'formSend' ] ).hide();
                 if ( !result.error ) {
-                    window.location = "/examinations";
+                    // window.location = "/examinations";
+                    this._page.refreshList();
+                    this.hideModal();
                     return;
                 } else {
                     if ( result.error.name == "ValidatorError" ) {
                         switch ( result.error.kind ) {
                             case "unique":
-                                this.HTMLComponent.find( 'a#tab-general' ).tab( 'show' );
+                                $( this.elements[ 'tab-general' ] ).tab( 'show' );
                                 $( this.forms[ 'form' ] ).find( `[name='${result.error.path}'] ~ #unique-feedback.custom-feedback` )
                                     .show();
                                 return
                             case "values":
-                                this.HTMLComponent.find( 'a#tab-values' ).tab( 'show' );
+                                $( this.elements[ 'tab-values' ] ).tab( 'show' );
                                 $( this.forms[ 'form' ] ).find( '#values-feedback.custom-feedback' )
                                     .show();
                         }
                         this.enableForm( 'form' );
-                        $( this.progress[ 'formSend' ] ).hide();
                     }
                 }
 
@@ -130,7 +128,7 @@ export class AddNewExamination extends Modal {
         newItem.find( '#btn-deleteValue' ).on( 'click', ( e ) => {
             this.deleteValue( e );
         } )
-        this.valuesList.append( newItem );
+        $( this.elements[ 'values-list' ] ).append( newItem );
 
         $( this.forms[ 'form' ] ).find( '#values-feedback.custom-feedback' )
             .hide();
@@ -138,7 +136,8 @@ export class AddNewExamination extends Modal {
 
     deleteValue ( e ) {
         $( e.currentTarget ).parent().parent().detach();
-        let items = this.valuesList.find( '> div' );
+
+        let items = $( this.elements[ 'values-list' ] ).find( '> div' );
         if ( items.length == 0 ) {
             $( this.forms[ 'form' ] ).find( '#values-feedback.custom-feedback' )
                 .show();

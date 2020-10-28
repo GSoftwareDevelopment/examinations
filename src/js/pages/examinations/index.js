@@ -10,7 +10,7 @@ import { CreateNewValue } from './modals/createNewValue';
 import { CreateGroup } from './modals/createGroup';
 import { ListViewOptions } from './modals/listViewOptions';
 
-import { Dropdown } from 'gsd-minix/components';
+import { Dropdown, MessageBox } from 'gsd-minix/components';
 
 import { formatDate, formatTime } from '../../utils/misc';
 
@@ -31,65 +31,66 @@ export class Examinations extends Pages {
         const menuListOption = new Dropdown(
             $( ViewOptionsMenu() ),
             {
-                triggerElement: $( this.elements[ 'listOptionButton' ] ),
+                triggerElement: $( this.elements[ 'btn-listOption' ] ),
                 triggerSelectro: 'a',
-                // onSelect: ( e ) => { this.listOptionsMenu( e ) },
                 triggers: {
                     "listOption-refresh": ( e ) => { this.refreshList( e ); },
                     "listOption-deleteSelected": ( e ) => { this.deleteSelected( e ); },
                 }
             }, this );
 
-        this.examinationBody = this.body.find( 'div#examinationTable' );
-
-        this.examinations = new Fetcher( apiRoutes.examinationList, { method: "GET" } );
+        this.table = $( this.elements[ 'examinationTable' ] );
+        this.api = new Fetcher( apiRoutes.examinationList, { method: "GET" } );
 
         this.refreshList();
     }
 
     refreshList () {
         $( this.elements[ 'examinationFetch' ] ).show();
-        this.examinationBody.empty();
 
         const conf = this.modal[ 'listViewOptions' ].options;
 
-        this.examinations.getJSON()
+        this.api.getJSON()
             .then( ( data ) => {
-                this.examinationBody.html( ExaminationsListTemplate( {
+                // this.table.empty();
+                this.table.html( ExaminationsListTemplate( {
                     conf, lists: data.lists, groups: data.groups
                 } ) );
 
-                if ( conf[ 'fetch-latest' ] ) {
-
-                    this.examinationBody.find( `div.row-item` ).each( ( index, el ) => {
-                        const id = $( el ).data( 'item' );
-                        const html = $( el ).find( 'div.latest-date' );
-
-                        let latestFetch = new Fetcher( apiRoutes.measurementLatest + `?examinationId=${id}`, { method: 'GET' } );
-                        latestFetch.getJSON()
-                            .then( ( data ) => {
-                                if ( data.length ) {
-                                    const latestDate = new Date( data[ 0 ].createdAt );
-                                    html.text( formatDate( latestDate ) + ' @ ' + formatTime( latestDate ) )
-                                } else
-                                    html.text( '-' )
-                            } )
-                            .catch( ( error ) => {
-                                console.log( error );
-                            } );
-                    } );
-                }
+                this.getLatestDates();
             } )
             .finally( () => {
                 $( this.elements[ 'examinationFetch' ] ).hide();
             } );
     }
 
-    listOptionsMenu ( e ) {
-        let optionID = e.currentTarget.id;
-        switch ( optionID ) {
-            case "listOption-refresh": this.refreshList(); break;
-            case "listOption-deleteSelected": this.deleteSelected( e ); break;
+    getLatestDates () {
+        const conf = this.modal[ 'listViewOptions' ].options;
+
+        if ( conf[ 'fetch-latest' ] ) {
+
+            this.table
+                .find( `div.row-item` )
+                .each( ( index, el ) => {
+                    const id = el.dataset.item;
+                    const html = $( el ).find( 'div.latest-date' );
+
+                    new Fetcher(
+                        apiRoutes.measurementLatest + `?examinationId=${id}`,
+                        { method: 'GET' }
+                    )
+                        .getJSON()
+                        .then( ( data ) => {
+                            if ( data.length ) {
+                                const latestDate = new Date( data[ 0 ].createdAt );
+                                html.text( formatDate( latestDate ) + ' @ ' + formatTime( latestDate ) )
+                            } else
+                                html.text( '-' )
+                        } )
+                        .catch( ( error ) => {
+                            console.log( error );
+                        } );
+                } );
         }
     }
 
@@ -103,31 +104,47 @@ export class Examinations extends Pages {
     }
 
     deleteSelected ( e ) {
-        const selected = $( this.elements[ 'form-list' ] )
-            .find( 'input[type="checkbox"]:checked' );
-
-        const ids = selected.map( ( i, el ) => {
-            let id = $( el ).parents( 'div.row' ).data( 'item' );
-            return id;
-        } ).get();
+        const selected = this.table.find( 'input[type="checkbox"]:checked' );
+        const ids = selected.map( ( i, el ) => $( el ).parents( 'div.row' ).data( 'item' ) ).get();
 
         if ( !ids.length ) {
-            // TODO: zmień to na referencje (this.modal[...]) związaną ze stroną.
-            $( '#modal-noSelection' ).modal( 'show' );
+            new MessageBox( null, {
+                type: 'info',
+                title: 'Nie ma wybranych elementów',
+                message: 'Aby wykonać operację, konieczne jest wybranie przynajmniej jednego elementu z listy.',
+                buttons: [
+                    { id: 'understand', class: 'btn-info', text: 'Rozumiem' }
+                ]
+            } );
             return;
         }
 
-        selected
-            .each( ( i, el ) => {
-                const obj = $( el ).parents( 'div.row' )[ 0 ];
-                obj.style.backgroundColor = "yellow";
-                $( obj )
-                    .animate( { opacity: 0 }, 500, () => {
-                        $( obj ).detach();
-                    } )
-            } );
+        new MessageBox( null, {
+            type: 'warning',
+            title: 'Operacja nieodwracalna',
+            message: `Czy na pewno chcesz usunąć wybrane elementy?`,
+            buttons: [
+                {
+                    id: 'cancel', class: 'btn-secondary', text: 'Anuluj'
+                },
+                {
+                    id: 'delete', class: 'btn-primary', text: 'Usuń',
+                    onClick: () => {
+                        selected
+                            .each( ( i, el ) => {
+                                const obj = $( el ).parents( 'div.row' )[ 0 ];
+                                obj.style.backgroundColor = "yellow";
+                                $( obj )
+                                    .animate( { opacity: 0 }, 500, () => {
+                                        $( obj ).detach();
+                                    } )
+                            } );
 
-        this.fetchDeleteEntry( ids );
+                        this.fetchDeleteEntry( ids );
+                    }
+                }
+            ]
+        } );
     }
 
     async fetchDeleteEntry ( itemsList ) {
