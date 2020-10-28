@@ -109,8 +109,7 @@ app.use( '/vendor/mdbootstrap', express.static( path.join( __dirname, 'node_modu
 // Frontend Routes
 app.use( '/', require( './routes/index' ) );
 
-
-app.use( '/dashboard', require( './routes/dashboars' ) );
+app.use( '/dashboard', require( './routes/dashboard' ) );
 app.use( '/examinations', require( './routes/examinations' ) );
 app.use( '/measurements', require( './routes/measurements' ) );
 
