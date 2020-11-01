@@ -3,6 +3,8 @@ import './style.scss';
 import apiRoutes from '../../api-routes';
 
 import { Pages } from 'gsd-minix/class-pages';
+// import { Main } from '../main/main';
+
 import { Fetcher } from 'gsd-minix/class-fetcher';
 
 import { AddNewExamination } from './modals/newExamination';
@@ -16,10 +18,15 @@ import { formatDate, formatTime } from '../../utils/misc';
 
 import ExaminationsListTemplate from './templates/examinationsList.hbs';
 import ViewOptionsMenu from './templates/_viewOptionsMenu.hbs';
+import PageBody from './body.hbs';
 
 export class Examinations extends Pages {
-    constructor( _path ) {
-        super( _path );
+    constructor( opt ) {
+        super( {
+            parentPage: opt.App.redirect( '/' ),
+            HTMLBody: PageBody(),
+            ...opt
+        } );
 
         this.modal = {
             listViewOptions: new ListViewOptions( this ),
@@ -42,6 +49,10 @@ export class Examinations extends Pages {
         this.table = $( this.elements[ 'examinationTable' ] );
         this.api = new Fetcher( apiRoutes.examinationList, { method: "GET" } );
 
+        this.refreshList();
+    }
+
+    onShow () {
         this.refreshList();
     }
 

@@ -1,42 +1,55 @@
+import { MinixApp } from 'gsd-minix';
+
+import '../scss/main.scss';
 import 'gsd-minix/components/progressbar.scss';
 
-import { Configuration } from './utils/configuration';
+import apiRoutes from './api-routes';
 
+import { Configuration } from './utils/configuration';
+import { Fetcher } from 'gsd-minix/class-fetcher';
+
+import { Main } from './pages/main/main';
+import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard';
 import { Examinations } from './pages/examinations';
 import { Measurements } from './pages/measurements';
 
-import routes from './routes';
-
-export const App = {
+export let App = new MinixApp( {
     routes: {
+        '/': Main,
+        '/login': Login,
         '/dashboard': Dashboard,
         '/examinations': Examinations,
         '/measurements': Measurements,
     },
-    pages: [],
-    config: [],
-}
+} );
 
 async function Init () {
 
-    App.config.examinationsListView = await new Configuration( '/examinations/configuration', {
-        'list-pagination': false,
-        'fetch-latest': true,
-        'group-view': true,
-        'group-description': true,
-        'examination-description': true,
-    } );
+    console.log( 'Start application...' );
 
-    const currentPath = window.location.pathname
+    const user = await new Fetcher( apiRoutes.userData, { method: 'GET' } ).getJSON();
 
-    for ( let path in App.routes ) {
-        if ( path === currentPath ) {
-            App.pages.push( new App.routes[ path ]( path ) );
-        }
+    if ( !user || user.error ) {
+        App.redirect( '/login' )
+        return;
     }
 
-    console.log( App );
+    App.user = user;
+
+    App.config = {
+        examinationsListView: await new Configuration(
+            apiRoutes.confExaminations,
+            {
+                'list-pagination': false,
+                'fetch-latest': true,
+                'group-view': true,
+                'group-description': true,
+                'examination-description': true,
+            } )
+    }
+
+    App.redirect( '/dashboard' );
 }
 
 Init();

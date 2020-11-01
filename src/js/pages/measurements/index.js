@@ -2,18 +2,24 @@ import './style.scss';
 import apiRoutes from '../../api-routes';
 
 import { Pages } from 'gsd-minix/class-pages';
-import { Fetcher } from 'gsd-minix/class-fetcher';
+// import { Main } from '../main/main';
 
+import { Fetcher } from 'gsd-minix/class-fetcher';
 import { Paginator } from 'gsd-minix/components';
 
 import { AddMeasurement } from './modals/addMeasurement';
 import { FilterMeasurements } from './modals/filterMeasurement';
 
 import listTemplate from './templates/measurementList.hbs';
+import PageBody from './body.hbs';
 
 export class Measurements extends Pages {
-    constructor( _path ) {
-        super( _path );
+    constructor( opt ) {
+        super( {
+            parentPage: opt.App.redirect( '/' ),
+            HTMLBody: PageBody(),
+            ...opt
+        } );
 
         this.modal = {
             AddMeasurement: new AddMeasurement( this ),

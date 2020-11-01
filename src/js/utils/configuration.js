@@ -6,7 +6,7 @@ export class Configuration {
         this.defaults = defaults;
         this.current = {}
 
-        this.configFetch = new Fetcher( `/api${resourceName}`, { method: 'GET' } );
+        this.configFetch = new Fetcher( resourceName, { method: 'GET' } );
 
         return ( async () => {
             await this.loadConfigData();
@@ -15,7 +15,7 @@ export class Configuration {
     }
 
     async loadConfigData () {
-        console.log( `Loading config ${this.resourceName}...` );
+        console.log( `Loading config ${this.configFetch.url}...` );
         try {
             const loadedConfig = await this.configFetch.getJSON()
             if ( loadedConfig.error )

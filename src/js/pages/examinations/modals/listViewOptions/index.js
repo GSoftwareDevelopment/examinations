@@ -1,5 +1,6 @@
-import { Modal } from 'gsd-minix/components';
 import { App } from '../../../../app';
+
+import { Modal } from 'gsd-minix/components';
 
 import ModalTemplate from './_modal.hbs';
 
