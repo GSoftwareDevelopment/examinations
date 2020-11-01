@@ -1,11 +1,7 @@
-// Your variable overrides
 $enable-gradients: true;
-$border-color: rgba(0,0,0,.20);
-$nav-tabs-border-color: rgba(0,0,0,.20);
 
-// Bootstrap and its default variables
-@import "../../node_modules/bootstrap/scss/bootstrap";
-@import "../../node_modules/mdbootstrap/scss/mdb-free.scss";
+@import "./bootstrap.scss";
+// @import "./mdb.scss";
 
 //
 
