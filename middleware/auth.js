@@ -1,14 +1,15 @@
 module.exports = {
-    ensureAuth: function (req, res, next) {
-        if (req.isAuthenticated()) {
+    ensureAuth: function ( req, res, next ) {
+        if ( req.isAuthenticated() ) {
             return next();
         } else {
-            res.redirect('/')
+            console.log( 'Access denied! You are not logged.' )
+            res.redirect( '/' )
         }
     },
-    ensureGuest: function (req, res, next) {
-        if (req.isAuthenticated()) {
-            res.redirect('/dashboard');
+    ensureGuest: function ( req, res, next ) {
+        if ( req.isAuthenticated() ) {
+            res.redirect( '/' );
         } else {
             return next();
         }

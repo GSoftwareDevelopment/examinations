@@ -13,8 +13,8 @@ router.get( '/google', passport.authenticate( 'google', { scope: [ 'email', 'pro
 // @desc    Google auth callback
 // @route   GET /auth/google/callback
 router.get( '/google/callback', passport.authenticate( 'google', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/failure'
+    successRedirect: '/',
+    failureRedirect: '/#failure'
 } )
 );
 
@@ -29,16 +29,10 @@ router.get( '/facebook', passport.authenticate( 'facebook', { scope: [ 'id', 'di
 // @desc    Facebook auth callback
 // @route   GET /auth/facebook/callback
 router.get( '/facebook/callback', passport.authenticate( 'facebook', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/failure'
+    successRedirect: '/',
+    failureRedirect: '/#failure'
 } )
 );
-
-// @dest    Login fail
-// @route   GET /auth/failure
-router.get( '/failure', ( req, res ) => {
-    res.redirect( '/' );
-} );
 
 // @desc    Logout user
 // @route   GET /auth/logout
