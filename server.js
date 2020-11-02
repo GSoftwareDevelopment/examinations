@@ -70,11 +70,6 @@ app.use( function ( req, res, next ) {
 
 // Static folder
 app.use( express.static( path.join( __dirname, 'dist' ) ) );
-app.use( '/assets', express.static( path.join( __dirname, 'src/assets/' ) ) );
-app.use( '/vendor/jquery', express.static( path.join( __dirname, 'node_modules/jquery/dist/' ) ) );
-app.use( '/vendor/popper', express.static( path.join( __dirname, 'node_modules/popper.js/dist/umd/' ) ) );
-app.use( '/vendor/bootstrap', express.static( path.join( __dirname, 'node_modules/bootstrap/dist/js/' ) ) );
-app.use( '/vendor/mdbootstrap', express.static( path.join( __dirname, 'node_modules/mdbootstrap/js/' ) ) );
 
 // API Routes
 app.use( '/auth', require( './routes/auth' ) );
@@ -89,5 +84,6 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(
     PORT,
+    '0.0.0.0',
     console.log( `Server running in ${process.env.NODE_ENV} mode on port ${PORT}` )
 );
