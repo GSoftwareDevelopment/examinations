@@ -1,13 +1,24 @@
 const path = require( 'path' );
+const webpack = require( 'webpack' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const entryPath = "src/js";
+const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
+
+const nodeDir = __dirname + '/node_modules';
+const jsDir = "src/js";
 
 module.exports = {
     context: __dirname,
     entry: {
-        app: path.resolve( __dirname, entryPath, 'app.js' ),
+        // vendors: [ "jquery", "bootstrap" ],
+        minix: [ 'gsd-minix', 'gsd-minix/components' ],
+        app: path.resolve( __dirname, jsDir, 'app.js' ),
     },
+    // resolve: {
+    //     alias: {
+    //         'jquery': nodeDir + '/jquery/dist/jquery.js'
+    //     }
+    // },
     plugins: [
         new MiniCssExtractPlugin( {
             filename: './css/[name].css'
@@ -15,6 +26,12 @@ module.exports = {
         new HtmlWebpackPlugin( {
             template: './src/index.html',
         } ),
+        // new webpack.ProvidePlugin( { $: 'jquery', jQuery: 'jquery' } ),
+        new CopyWebpackPlugin( {
+            patterns: [
+                { from: './src/assets', to: './assets' }
+            ]
+        } )
     ],
     module: {
         rules: [
@@ -28,7 +45,7 @@ module.exports = {
                 loader: 'handlebars-loader',
                 options: {
                     rootRelative: '',
-                    runtime: path.resolve( __dirname, entryPath, 'helpers/handlebars-helpers.js' ),
+                    runtime: path.resolve( __dirname, jsDir, 'helpers/handlebars-helpers.js' ),
                     precompileOptions: {
                         knownHelpersOnly: false,
                     },
@@ -66,5 +83,5 @@ module.exports = {
                 ]
             }
         ]
-    }
+    },
 }
