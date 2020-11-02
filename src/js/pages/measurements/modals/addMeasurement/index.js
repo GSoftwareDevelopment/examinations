@@ -27,7 +27,13 @@ class AddMeasurement extends Modal {
                 url: apiRoutes.examinationList,
                 HTMLSpinner: this.elements[ 'examinationsFetching' ],
                 dataMap: ( data ) => {
-                    return data.lists.map( ( { _id, name, group } ) => ( { value: _id, name, data: { 'group': group._id } } ) );
+                    return data.lists.map( ( { _id, name, group } ) => (
+                        {
+                            value: _id,
+                            name,
+                            data: { 'group': ( group ) ? group._id : '' }
+                        }
+                    ) );
                 },
                 onChange: ( { value } ) => { this.prepareExaminationValues( value ); }
             }
