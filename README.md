@@ -66,3 +66,26 @@ So far, only the developer version of the application is available.
 ## Browser
 
 In your favorite browser, enter the address `http://localhost:3000` (or instead of 3000, enter the port number that is set in the configuration)
+
+# Known but unresolved issues
+
+* [ ] A frontend run by `npm run serve` is not able to login using google login.
+
+    I don't know how to fix CORS issue and fetch request.
+
+* [ ] I still don't know how to properly configure the Facebook for Developers API to be able to log in with my Facebook account.
+  
+* [x] How to configure WebPack to "pull" used static files (graphics etc) from Handlebars templates.
+    From what I have learned, the Webpack `CopyWebpackPlugin` plugin is an intermediate solution. However. I couldn't find a solution that would analyze the templates in terms of using images in them and extracting them.
+
+* [ ] A bothering problem is integrating Bootstrap and jQuery in the Webpack environment.
+ 
+    Currently, it loads these libraries from an external source (CDN), which does not allow for full application integration.
+
+    **What happens when I try to integrate Bootstrap and jQuery?**
+
+    The allocation of events to the Bootstrap interactive elements is disturbed. This causes, e.g.
+  - creating multiple copies of the `backdrop` for a modal element
+  - no reaction to the `dropdown` opening button
+  - browser load.
+
