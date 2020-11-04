@@ -1,0 +1,19 @@
+// $enable-gradients: true;
+// $border-color: rgba(0,0,0,.20);
+// $nav-tabs-border-color: rgba(0,0,0,.20);
+
+/*! Themestr.app `Hootstrap` Bootstrap 4.3.1 theme */
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+$font-family-base:Roboto;
+
+$enable-grid-classes:true;
+$primary:#528078;
+$secondary:#eed75a;
+$success:#FEC100;
+$danger:#703B3B;
+$info:#63e792;
+$warning:#FFE869;
+$light:#FDFBF7;
+$dark:#555555;
+
+@import "./node_modules/bootstrap/scss/bootstrap";
