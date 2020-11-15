@@ -4,7 +4,8 @@
   "description": "Backend",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "prod": "cross-env NODE_ENV=production node server",
+    "dev": "cross-env NODE_ENV=development nodemon server"
   },
   "author": "GSD",
   "license": "MIT",
@@ -12,6 +13,7 @@
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
