@@ -26,10 +26,8 @@ app.use( express.urlencoded( { extended: false } ) );
 app.use( express.json() );
 
 app.use( cors( {
-    origin: '*',
-    methods: "GET,POST,PATCH,DELETE,PUT",
-    allowedHeaders: "Content-Type, Authorization",
-} ) );
+    credentials: true,
+} ) )
 
 // Method override middleware
 app.use( methodOverride( function ( req, res ) {
@@ -57,26 +55,21 @@ app.use(
 );
 
 // Passport middleware
-app.use( passport.initialize() );
-app.use( passport.session() );
-
-// Set globar variable-login'
-// TODO: Usuń w przyszłości
-app.use( function ( req, res, next ) {
-    res.locals.user = req.user || null;
-    next();
-} );
+// app.use( passport.initialize() );
+// app.use( passport.session() );
 
 // Static folder
 app.use( express.static( path.join( __dirname, 'dist' ) ) );
 
-// API Routes
+// Authenticate Routes
 app.use( '/auth', require( './routes/auth' ) );
-app.use( '/api/user', require( './routes/api/user' ) );
-app.use( '/api/examinations', require( './routes/api/examinations' ) );
-app.use( '/api/groups', require( './routes/api/groups' ) );
-app.use( '/api/values', require( './routes/api/values' ) );
-app.use( '/api/measurements', require( './routes/api/measurements' ) );
+
+// API Routes
+app.use( '/api/user', passport.authenticate( 'jwt', { session: false } ), require( './routes/api/user' ) );
+app.use( '/api/examinations', passport.authenticate( 'jwt', { session: false } ), require( './routes/api/examinations' ) );
+app.use( '/api/groups', passport.authenticate( 'jwt', { session: false } ), require( './routes/api/groups' ) );
+app.use( '/api/values', passport.authenticate( 'jwt', { session: false } ), require( './routes/api/values' ) );
+app.use( '/api/measurements', passport.authenticate( 'jwt', { session: false } ), require( './routes/api/measurements' ) );
 
 //
 const PORT = process.env.PORT || 3000;

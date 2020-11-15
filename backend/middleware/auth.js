@@ -5,7 +5,8 @@ module.exports = {
             return next();
         } else {
             console.log( 'Access denied! You are not logged.' )
-            res.redirect( '/' )
+            // res.redirect( '/auth/failure' )
+            return next();
         }
     },
     ensureGuest: function ( req, res, next ) {
