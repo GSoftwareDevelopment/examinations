@@ -1,0 +1,55 @@
+
+div.row-item {
+  > div {
+    padding-top:.5em !important;
+    padding-bottom:.5em !important;
+  }
+
+  &.itemInGroup {
+    border-left:rgba(0,0,0,.7) solid 3px;
+  }
+
+  nav {
+    display:none;
+  }
+
+  &:hover{
+    background-color: rgba(0,0,0,.1);
+    nav {
+      display:flex;
+      position:absolute;
+      right:1em;
+      // transform: translateY(+2.5em);
+    }
+  }
+} 
+
+div.row-group {
+  > div {
+    padding-top:.5em !important;
+    padding-bottom:.5em !important;
+  }
+  nav {
+    display:none;
+  }
+
+  &:hover{
+    background-color: rgba(0,0,0,.1);
+    nav {
+      display:flex;
+      position:absolute;
+      right:1em;
+      // transform: translateY(+1.8em);
+    }
+  }
+}
+
+.item-value {
+  padding-top:.3em;
+  padding-bottom:.3em;
+
+  &:hover {
+    background-color:rgba(0,0,0,.15);
+    transition: .2s;
+  }
+}

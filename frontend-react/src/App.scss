@@ -1,0 +1,59 @@
+@for $i from 1 through 6 {
+  $zIndexBackdrop:  #{1040 + (5 * $i)};
+  $zIndexContent:  #{1040 + (5 * $i) + 2};
+  .modal-backdrop.show:nth-of-type(#{$i}) {
+    z-index: $zIndexBackdrop;
+  }
+  div[role="dialog"][aria-modal="true"]:nth-of-type(#{$i}) {
+    z-index: $zIndexContent;
+  }
+}
+
+.dropdown-toggle.noCaret:after {
+  display: none;
+}
+//
+
+.no-outline {
+  outline: none;
+}
+
+// 
+
+nav.fixed-bottom {
+  z-index:99;
+}
+
+.navbar .navbar-toggler {
+    border: none;
+    outline: none !important;
+}
+
+/*
+ * Bootstrap icon
+ */
+
+.bi {
+    position: relative;
+    top:-2px;
+    width: 1.5em;
+    height: 1.5em;
+  &.bi-sm {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.badge-overlay {
+  position: relative;
+
+  span.badge {
+    position:absolute;
+    transform: translate(-0%,240%);
+    font-size:.8em;
+  }
+}

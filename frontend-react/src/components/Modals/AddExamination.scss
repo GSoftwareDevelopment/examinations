@@ -1,0 +1,22 @@
+.row-value {
+      > div {
+    padding-top:.5em !important;
+    padding-left: .5em !important;
+    padding-bottom:.5em !important;
+  }
+
+  nav {
+    display:none;
+  }
+
+  &:hover{
+    background-color: rgba(0,0,0,.1);
+    nav {
+      display:flex;
+      position:absolute;
+      right:1em;
+      // transform: translateY(+2.5em);
+    }
+  }
+
+}
