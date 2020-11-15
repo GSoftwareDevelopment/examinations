@@ -1,5 +1,6 @@
 import './style.scss';
 import apiRoutes from '../../api-routes';
+import { Authorization } from '../../utils/authorization';
 
 import { Pages } from 'gsd-minix/class-pages';
 // import { Main } from '../main/main';
@@ -37,7 +38,7 @@ export class Measurements extends Pages {
             }
         } );
 
-        this.measurements = new Fetcher( apiRoutes.measurementList, { method: "GET" } );
+        this.measurements = new Fetcher( apiRoutes.measurementList, { method: "GET", ...Authorization } );
 
         this.getData();
     }

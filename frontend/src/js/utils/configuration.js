@@ -1,3 +1,4 @@
+import { Authorization } from '../utils/authorization';
 import { Fetcher } from 'gsd-minix/class-fetcher';
 
 export class Configuration {
@@ -6,7 +7,7 @@ export class Configuration {
         this.defaults = defaults;
         this.current = {}
 
-        this.configFetch = new Fetcher( resourceName, { method: 'GET' } );
+        this.configFetch = new Fetcher( resourceName, { method: 'GET', ...Authorization } );
 
         return ( async () => {
             await this.loadConfigData();

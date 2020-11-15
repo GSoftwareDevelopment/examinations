@@ -1,4 +1,5 @@
 import apiRoutes from '../../../../api-routes';
+import { Authorization } from '../../../../utils/authorization';
 
 import { Modal } from "gsd-minix/components";
 
@@ -31,7 +32,8 @@ class CreateGroup extends Modal {
                 let response = await fetch( apiRoutes.groupsList, {
                     method: 'post',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        ...Authorization,
                     },
                     body: fields,
                 } );

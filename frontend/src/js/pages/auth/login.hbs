@@ -1,23 +1,21 @@
 <section class="form-elegant">
-
 	<div class="row">
-
 		<div class="col col-md-6 offset-md-3">
 
-			<form id="login-form" action="/auth/login" method="POST" autocomplete="off">
+			<form id="login-form" autocomplete="off">
 
 				<div class="text-center">
 					<h3 class="dark-grey-text"><strong>Logowanie</strong></h3>
 				</div>
 
 				<div class="md-form mt-0">
-					<input type="text" id="form-email" name="email" class="form-control">
-					<label for="Form-email1">Adres e-mail</label>
+					<input type="email" tabindex=1 id="form-email" name="email" class="form-control" required>
+					<label for="form-email">Adres e-mail</label>
 				</div>
 
 				<div class="md-form mb-0">
-					<input type="password" id="form-pass" name="password" class="form-control">
-					<label for="Form-pass3">Twoje hasło</label>
+					<input type="password" tabindex=2 id="form-pass" name="password" class="form-control" required>
+					<label for="form-pass">Twoje hasło</label>
 					<p class="font-small grey-text d-flex justify-content-end">
 						<a href="/log/forgot" class="dark-grey-text ml-1 font-weight-bold">Zapomnialeś/aś
 							hasła?</a>
@@ -29,7 +27,7 @@
 					<!--Grid column-->
 					<div class="col d-flex justify-content-center align-items-center">
 						<div class="text-center">
-							<button id="btn-login" type="submit" class="btn btn-green rounded-pill z-depth-1a">
+							<button id="btn-login" tabindex=3 type="submit" class="btn btn-primary">
 								Loguj
 							</button>
 						</div>
@@ -37,6 +35,8 @@
 				</div>
 
 			</form>
+
+			<!-- TODO Zrobić logowanie społecznościowe
 
 			<div class="col">
 				<p class="font-small text-center mb-2 pt-3">lub zaloguj się używając konta:</p>
@@ -62,7 +62,7 @@
 				</button>
 			</div>
 
-			<!--Grid column-->
+			-->
 
 			<div class="footer">
 				<p class="font-small grey-text d-flex justify-content-end mt-3 mb-0">Nie masz konta?

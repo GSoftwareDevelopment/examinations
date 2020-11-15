@@ -1,4 +1,5 @@
 import apiRoutes from '../../../../api-routes';
+import { Authorization } from '../../../../utils/authorization';
 
 import { Modal, SelectFetch } from "gsd-minix/components";
 
@@ -21,6 +22,7 @@ export class AddNewExamination extends Modal {
         this.groupSelect = new SelectFetch(
             $( this.elements[ 'group' ] ),
             {
+                fetcherOpt: Authorization,
                 url: apiRoutes.groupsList,
                 HTMLSpinner: this.elements[ 'groupsFetching' ],
                 dataMap: ( data ) => {
@@ -77,7 +79,8 @@ export class AddNewExamination extends Modal {
                 let response = await fetch( apiRoutes.examinationList, {
                     method: 'post',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        ...Authorization.headers
                     },
                     body: fields,
                 } );

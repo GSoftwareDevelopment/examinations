@@ -2,56 +2,43 @@
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Nowy pomiar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header d-flex flex-column pb-0 w-100">
+                <div class="d-flex flex-row justify-content-between w-100">
+                    <h5 class="modal-title" id="exampleModalLabel">Nowy pomiar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <ul class="nav nav-tabs mt-2 mb-0 border-0" id="measurementsTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="#general2-tab" id="tab-general2" data-toggle="tab" role="tab"
+                            aria-controls="general" aria-selected="true">
+                            Ogólne
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#results-tab" id="tab-results" data-toggle="tab" role="tab"
+                            aria-controls="results" aria-selected="false">
+                            Wyniki
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#summary-tab" id="tab-summary" data-toggle="tab" role="tab"
+                            aria-controls="summary" aria-selected="false">
+                            Podsumowanie
+                        </a>
+                    </li>
+                </ul>
             </div>
             <form id="form" class="needs-validation" novalidate autocomplete="off">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-7 form-group">
-                            <label for="date">Data</label>
-                            <input class="form-control" type="date" name="date" id="date" autofocus value="" required>
-                        </div>
-                        <div class="col-5 form-group">
-                            <label for="time">Godzina</label>
-                            <input class="form-control" type="time" name="time" id="time" value="" required>
-                        </div>
+                    <div class="tab-content" id="tabContent">
+
+                        {{> ./tabs/_general}}
+                        {{> ./tabs/_results}}
+                        {{> ./tabs/_summary}}
+
                     </div>
-                    <div class="spinner-abs">
-                        <div id="groupsFetching" class="spinner-border spinner-border-sm" role="status">
-                            <span class="sr-only">Wczytywanie...</span>
-                        </div>
-                    </div>
-                    <div class="form-group row mr-1">
-                        <label for="group" class="col-3 col-sm-2 col-form-label">Grupa</label>
-                        <select class="form-control col-9 col-sm-10" id="group" name="group">
-                            <option data-type="emptyList" disabled>Brak zdefiniowanych grup</option>
-                            <option data-type="prompt" disabled>Wybierz grupę badań...</option>
-                            <option data-type="default" value="">Wszystkie</option>
-                            <option data-type="error" disabled>Błąd połączenia</option>
-                        </select>
-                    </div>
-                    <div class="spinner-abs">
-                        <div id="examinationsFetching" class="spinner-border spinner-border-sm" role="status">
-                            <span class="sr-only">Wczytywanie...</span>
-                        </div>
-                    </div>
-                    <div class="form-group row mr-1">
-                        <label for="examination" class="col-3 col-sm-2 col-form-label">Badanie</label>
-                        <select class="form-control col-9 col-sm-10" id="examination" name="examination" required>
-                            <option data-type="emptyList" disabled>Brak zdefiniowanych badań</option>
-                            <option data-type="prompt" value="" disabled>Wybierz badanie...</option>
-                            <option data-type="error" disabled>Błąd połączenia</option>
-                        </select>
-                        <div class="invalid-feedback offset-3 offset-sm-2 col-9 col-sm-10">
-                            Wybierz badanie z listy
-                        </div>
-                    </div>
-                    <label class="mt-3">Wynik badania</label>
-                    <div id="results" class="d-flex flex-column w-100 py-3 border-top border-bottom mb-3"></div>
                     <div class="form-group">
                         <label for="description">Adnotacje</label>
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>

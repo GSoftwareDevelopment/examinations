@@ -10,7 +10,7 @@ export class Main extends Pages {
         super( {
             HTMLBody: PageBase( { user: App.user } ),
             pageContent: 'main[role="main"]',
-            preventAnchors: true,
+            // preventAnchors: true,
             ...opt
         } );
 

@@ -5,11 +5,13 @@ import 'gsd-minix/components/progressbar.scss';
 
 import apiRoutes from './api-routes';
 
+import { Authorization } from './utils/authorization';
 import { Configuration } from './utils/configuration';
 import { Fetcher } from 'gsd-minix/class-fetcher';
 
 import { Log } from './pages/auth/log';
 import { Login } from './pages/auth/login';
+import { Logout } from './pages/auth/logout';
 import { Register } from './pages/auth/register';
 import { Forgot } from './pages/auth/forgot';
 import { Main } from './pages/main/main';
@@ -22,6 +24,7 @@ export let App = new MinixApp( {
         '/': Main,
         '/log': Log,
         '/log/in': Login,
+        '/log/out': Logout,
         '/log/register': Register,
         '/log/forgot': Forgot,
         '/dashboard': Dashboard,
@@ -36,7 +39,9 @@ async function Init () {
 
     console.log( 'Start application...' );
 
-    const user = await new Fetcher( apiRoutes.userData, { method: 'GET' } ).getJSON();
+    const user = await new Fetcher( apiRoutes.userData, {
+        method: 'GET', ...Authorization
+    } ).getJSON();
 
     if ( !user || user.error ) {
         App.redirect( '/log/in' )

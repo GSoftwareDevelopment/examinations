@@ -1,0 +1,44 @@
+<div class="tab-pane fade show active" id="general2-tab" role="tabpanel" aria-labelledby="general2-tab">
+
+    <div class="row">
+        <div class="col-7 form-group">
+            <label for="date">Data</label>
+            <input class="form-control" type="date" name="date" id="date" autofocus value="" required>
+        </div>
+        <div class="col-5 form-group">
+            <label for="time">Godzina</label>
+            <input class="form-control" type="time" name="time" id="time" value="" required>
+        </div>
+    </div>
+    <div class="spinner-abs">
+        <div id="groupsFetching" class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Wczytywanie...</span>
+        </div>
+    </div>
+    <div class="form-group row mr-1">
+        <label for="group" class="col-3 col-sm-2 col-form-label">Grupa</label>
+        <select class="form-control col-9 col-sm-10" id="group" name="group">
+            <option data-type="emptyList" disabled>Brak zdefiniowanych grup</option>
+            <option data-type="prompt" disabled>Wybierz grupę badań...</option>
+            <option data-type="default" value="">Wszystkie</option>
+            <option data-type="error" disabled>Błąd połączenia</option>
+        </select>
+    </div>
+    <div class="spinner-abs">
+        <div id="examinationsFetching" class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Wczytywanie...</span>
+        </div>
+    </div>
+    <div class="form-group row mr-1">
+        <label for="examination" class="col-3 col-sm-2 col-form-label">Badanie</label>
+        <select class="form-control col-9 col-sm-10" id="examination" name="examination" required>
+            <option data-type="emptyList" disabled>Brak zdefiniowanych badań</option>
+            <option data-type="prompt" value="" disabled>Wybierz badanie...</option>
+            <option data-type="error" disabled>Błąd połączenia</option>
+        </select>
+        <div class="invalid-feedback offset-3 offset-sm-2 col-9 col-sm-10">
+            Wybierz badanie z listy
+        </div>
+    </div>
+
+</div>

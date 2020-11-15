@@ -1,6 +1,7 @@
 import './style.scss';
 
 import apiRoutes from '../../api-routes';
+import { Authorization } from '../../utils/authorization';
 
 import { Pages } from 'gsd-minix/class-pages';
 // import { Main } from '../main/main';
@@ -47,7 +48,7 @@ export class Examinations extends Pages {
             }, this );
 
         this.table = $( this.elements[ 'examinationTable' ] );
-        this.api = new Fetcher( apiRoutes.examinationList, { method: "GET" } );
+        this.api = new Fetcher( apiRoutes.examinationList, { method: "GET", ...Authorization } );
 
         this.refreshList();
     }
@@ -88,7 +89,7 @@ export class Examinations extends Pages {
 
                     new Fetcher(
                         apiRoutes.measurementLatest + `?examinationId=${id}`,
-                        { method: 'GET' }
+                        { method: 'GET', ...Authorization }
                     )
                         .getJSON()
                         .then( ( data ) => {
@@ -163,7 +164,8 @@ export class Examinations extends Pages {
             let response = await fetch( apiRoutes.examinationList, {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    ...Authorization.headers
                 },
                 body: JSON.stringify( itemsList ),
             } );
@@ -200,7 +202,8 @@ export class Examinations extends Pages {
             let response = await fetch( apiRoutes.groupList, {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    ...Authorization.headers
                 },
                 body: JSON.stringify( groupList ),
             } );

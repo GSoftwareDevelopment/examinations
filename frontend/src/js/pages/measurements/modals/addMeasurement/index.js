@@ -4,6 +4,7 @@ import { Modal, SelectFetch } from "gsd-minix/components";
 import { formatDate, formatTime } from '../../../../utils/misc';
 
 import ModalTemplate from './_modal.hbs';
+import { Authorization } from '../../../../utils/authorization';
 
 class AddMeasurement extends Modal {
     constructor( _page ) {
@@ -13,6 +14,7 @@ class AddMeasurement extends Modal {
             this.elements[ 'group' ],
             {
                 url: apiRoutes.groupsList,
+                fetcherOpt: Authorization,
                 HTMLSpinner: this.elements[ 'groupsFetching' ],
                 dataMap: ( data ) => {
                     return data.map( ( { _id, name } ) => ( { value: _id, name } ) );
@@ -25,6 +27,7 @@ class AddMeasurement extends Modal {
             this.elements[ 'examination' ],
             {
                 url: apiRoutes.examinationList,
+                fetcherOpt: Authorization,
                 HTMLSpinner: this.elements[ 'examinationsFetching' ],
                 dataMap: ( data ) => {
                     return data.lists.map( ( { _id, name, group } ) => (
@@ -52,12 +55,16 @@ class AddMeasurement extends Modal {
         this.elements.date.value = formatDate( currentDate );
         this.elements.time.value = formatTime( currentDate );
 
+        $( this.elements[ 'tab-general2' ] ).tab( 'show' );
+
         this.groupSelect.refresh();
         this.examinationSelect.refresh();
     }
 
     clearResultsFields () {
         this.resultsFields.empty();
+        this.resultsFields.hide();
+        $( this.elements[ 'alertNoExaminationSelect' ] ).show();
     }
 
     selectExaminationsByGroupID ( groupID ) {
@@ -80,17 +87,21 @@ class AddMeasurement extends Modal {
         this.examinationSelect.HTMLComponent.find( 'option[data-type="prompt"]' ).attr( 'selected', true );
     }
 
-    prepareExaminationValues ( examinationID ) {
+    prepareExaminationValues ( examinationID, examinationName ) {
         fetch( apiRoutes.valuesList + `/${examinationID}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...Authorization.headers
             }
         } )
             .then( response => response.json() )
             .then( values => {
                 this.makePattern( values );
                 this.createResultsFields( values );
+                this.resultsFields.show();
+                $( this.elements[ 'examinationName' ] ).text( examinationName );
+                $( this.elements[ 'alertNoExaminationSelect' ] ).hide();
             } )
             .catch( ( error ) => {
                 console.error( 'Error:', error );
@@ -231,7 +242,7 @@ class AddMeasurement extends Modal {
 </button>`);
             commentBtn.on( 'click', ( e ) => {
                 const descID = $( e.currentTarget ).data( 'descid' );
-                $( `textarea[name='description-${descID}']` ).toggleClass( 'd-none' );
+                $( `textarea[name='description-${descID}']` ).toggleClass( 'd-none' ).trigger( 'focus' );
             } );
 
             inpctr.append( commentBtn );
@@ -242,7 +253,7 @@ class AddMeasurement extends Modal {
 
             this.resultsFields.append( ctr );
 
-            const commentField = $( `<textarea class="d-none form-control mb-3" name="description-${value._id}" />` );
+            const commentField = $( `<textarea class="d-none form-control mb-3" name="description-${value._id}" placeholder="Komentarz..."/>` );
             this.resultsFields.append( commentField );
         } )
     }
@@ -259,18 +270,18 @@ class AddMeasurement extends Modal {
 
             let fields = $( this.forms[ 'form' ] ).serialize();
 
-            console.log( fields );
-
             try {
                 let response = await fetch( apiRoutes.measurementList, {
                     method: 'post',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        ...Authorization.headers
                     },
                     body: fields,
                 } );
                 const result = await response.json()
 
+                console.log( result );
                 $( this.elements[ 'formSend' ] ).hide();
 
                 if ( !result.error ) {
