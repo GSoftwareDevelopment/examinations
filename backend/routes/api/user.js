@@ -5,11 +5,11 @@ const { ensureAuth } = require( '../../middleware/auth' );
 // @desc    Get user information if logged
 // @route   GET /user
 // @return  JSON data
-router.get( '/', ensureAuth, async ( req, res, next ) => {
+router.get( '/', async ( req, res, next ) => {
     if ( req.user ) {
         res.json( req.user );
     } else {
-        res.sendStatus( 403 );
+        res.json( { error: 'Access denied! You are not authorized' } );
     }
 } );
 

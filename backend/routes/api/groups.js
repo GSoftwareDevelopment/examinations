@@ -1,6 +1,5 @@
 const express = require( 'express' );
 const router = express.Router();
-const { ensureAuth } = require( '../../middleware/auth' );
 
 const Examination = require( '../../models/examination' );
 const Group = require( '../../models/group' );
@@ -9,18 +8,15 @@ const Value = require( '../../models/value' );
 // @desc    Examinations groups list
 // @route   GET /groups
 // @return  JSON data
-router.get( '/', ensureAuth, async ( req, res, next ) => {
+router.get( '/', async ( req, res, next ) => {
     try {
-        if ( typeof req.query.data !== 'undefine' ) {
-            const groups = await Group
-                .find( { user: req.user.id } )
-                .sort( {
-                    "name": 1,
-                } )
-                .lean();
-            return res.json( groups );
-        }
-        return next();
+        const groups = await Group
+            .find( { user: req.user.id } )
+            .sort( {
+                "name": 1,
+            } )
+            .lean();
+        return res.json( { 'OK': 1, groups } );
     } catch ( error ) {
         console.error( error );
         res.json( { error } );
@@ -28,25 +24,27 @@ router.get( '/', ensureAuth, async ( req, res, next ) => {
 } );
 
 // @desc    Create new group
-// @route   POST /groups/add
+// @route   POST /groups
 // @return  JSON data
-router.post( '/', ensureAuth, async ( req, res ) => {
-    try {
-        req.body.user = req.user.id;
-        console.log( req.body );
-        const result = await Group.create( req.body );
-        console.log( result );
-        res.json( result );
-    } catch ( error ) {
-        console.log( error );
-        res.json( { error: error.errors.name } );
-    }
+router.post( '/', ( req, res ) => {
+    req.body.user = req.user.id;
+    console.log( req.body );
+
+    Group.create( req.body )
+        .then( ( newGroup ) => {
+            console.log( newGroup );
+            res.json( { 'OK': 1, created: newGroup } );
+        } )
+        .catch( ( error ) => {
+            console.log( error );
+            res.json( { error: error.errors.name } );
+        } )
 } );
 
 // @desc    Process delete group(s)
-// @route   POST /examination
+// @route   POST /groups
 // @return  JSON data
-router.delete( '/', ensureAuth, ( req, res ) => {
+router.delete( '/', ( req, res ) => {
     let selectedGroups = req.body;
     console.log( req.body );
     if ( !selectedGroups ||

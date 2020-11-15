@@ -20,12 +20,16 @@ const ValueSchema = new mongoose.Schema( {
         trim: true,
     },
     list: {
-        type: String,
+        type: [],
         trim: true,
     },
     required: {
         type: Boolean,
         default: true,
+    },
+    description: {
+        type: String,
+        trim: true,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

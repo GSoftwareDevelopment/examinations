@@ -1,6 +1,5 @@
 const express = require( 'express' );
 const router = express.Router();
-const { ensureAuth } = require( '../../middleware/auth' );
 const mongoose = require( 'mongoose' );
 
 const Examination = require( '../../models/examination' );
@@ -8,7 +7,7 @@ const { Measurement, Result } = require( '../../models/measurement' );
 
 // @desc    Measurements list
 // @route   GET /measurements
-router.get( '/', ensureAuth, async ( req, res ) => {
+router.get( '/', async ( req, res ) => {
     try {
         const limit = parseInt( req.query.limit ) || 0;
         const page = parseInt( req.query.page ) || 0;
@@ -37,7 +36,7 @@ router.get( '/', ensureAuth, async ( req, res ) => {
 
 // @desc    Get latest measurement
 // @route   GET /measurements/latest?{examinationId=}
-router.get( '/latest', ensureAuth, async ( req, res ) => {
+router.get( '/latest', async ( req, res ) => {
     try {
         dbquery = {};
         if ( req.query.examinationId ) {
@@ -69,13 +68,14 @@ router.get( '/latest', ensureAuth, async ( req, res ) => {
 // @desc    Process add new measurement
 // @route   POST /measurements
 // @return  JSON data
-router.post( '/', ensureAuth, async ( req, res ) => {
+router.post( '/', async ( req, res ) => {
 
     let MeasurementBase = {
         examination: req.body.examination,
         user: req.user.id,
         createdAt: Date.parse( `${req.body.date} ${req.body.time}` )
     };
+    console.log( req.body );
 
     let values = new Array();
     for ( let key in req.body ) {

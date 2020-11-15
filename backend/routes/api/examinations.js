@@ -1,33 +1,24 @@
 const express = require( 'express' );
 const router = express.Router();
-const { ensureAuth } = require( '../../middleware/auth' );
-const mongoose = require( 'mongoose' );
 
 const Configure = require( '../../models/configure' );
 const Examination = require( '../../models/examination' );
-const { Measurement } = require( '../../models/measurement' );
 const Group = require( '../../models/group' );
 const Value = require( '../../models/value' );
 
 // @desc    Examinations list
 // @route   GET /examinations
-router.get( '/', ensureAuth, async ( req, res ) => {
+router.get( '/', async ( req, res ) => {
     try {
-        const lists = await Examination
+        const examinations = await Examination
             .find( { user: req.user.id } )
             .sort( {
                 "group": 1,
                 "name": 1,
             } )
-            .populate( 'group' )
             .lean();
 
-        const groups = await Group
-            .find( { user: req.user.id } )
-            .sort( { name: 1 } )
-            .lean();
-
-        res.json( { lists, groups } );
+        res.json( { 'OK': 1, examinations } );
     } catch ( error ) {
         console.error( error );
         res.json( { error } );
@@ -37,7 +28,7 @@ router.get( '/', ensureAuth, async ( req, res ) => {
 // @desc    Process add new examination form
 // @route   POST /examination
 // @return  JSON data
-router.post( '/', ensureAuth, ( req, res ) => {
+router.post( '/', ( req, res ) => {
     req.body.user = req.user.id;
     console.log( req.body );
 
@@ -61,7 +52,7 @@ router.post( '/', ensureAuth, ( req, res ) => {
 
     Examination.create( req.body )
         .then( ( newExamination ) => {
-            console.log( newExamination );
+            console.log( 'Response from DB:', newExamination );
 
             const values = req.body.values.map( ( entry ) => {
                 let value;
@@ -79,12 +70,15 @@ router.post( '/', ensureAuth, ( req, res ) => {
                 return value;
             } );
 
-            console.log( values );
-            return Value.create( values );
+            return {
+                examinationEntry: newExamination,
+                valuesEntry: Value.create( values )
+            }
         } )
-        .then( ( valuesEntry ) => {
-            console.log( valuesEntry );
-            res.json( { OK: 1 } );
+        .then( ( entrys ) => {
+            console.log( 'Response from DB examination:', entrys.examinationEntry );
+            console.log( 'Response from DB values:', entrys.valuesEntry );
+            res.json( { OK: 1, created: entrys } );
         } )
         .catch( ( err ) => {
             console.log( err );
@@ -95,43 +89,35 @@ router.post( '/', ensureAuth, ( req, res ) => {
 // @desc    Process delete item(s)
 // @route   POST /examination
 // @return  JSON data
-router.delete( '/', ensureAuth, async ( req, res ) => {
+router.delete( '/', ( req, res ) => {
     let selectedItems = req.body;
-    console.log( req.body );
-    try {
-        if ( !selectedItems ||
-            typeof selectedItems !== "object" ||
-            !selectedItems instanceof Array ) {
-            throw new Error( 'Items is not defined or invalid type.' );
-        }
-
-        console.log( '# deleting examination record(s)', selectedItems );
-        let result1 = await Examination.deleteMany( {
-            "_id": {
-                $in: selectedItems
-            }
-        } );
-        console.log( result1 );
-
-        console.log( '# deleting related values record(s)' );
-        let result2 = await Value.deleteMany( {
-            "examination": {
-                $in: selectedItems
-            }
-        } );
-        console.log( result2 );
-
-        res.json( { result1, result2 } );
-    } catch ( error ) {
-        console.error( error );
-        res.json( { error } );
+    if ( !selectedItems ||
+        typeof selectedItems !== "object" ||
+        !selectedItems instanceof Array ) {
+        throw new Error( 'Items is not defined or invalid type.' );
     }
+    console.log( '# deleting examination record(s)', selectedItems );
+
+    Examination.deleteMany( { "_id": { $in: selectedItems } } )
+        .then( deletedExaminations => {
+            console.log( deletedExaminations );
+            console.log( '# deleting related values record(s)' );
+            return Value.deleteMany( { "examination": { $in: selectedItems } } );
+        } )
+        .then( deletedValues => {
+            console.log( deletedValues );
+            res.json( { OK: '1' } );
+        } )
+        .catch( error => {
+            console.error( error );
+            res.json( { error } );
+        } )
 } );
 
 // @desc    Get configuration for Examination List View
 // @route   GET /configuration
 // @return  JSON data
-router.get( '/configuration', ensureAuth, async ( req, res ) => {
+router.get( '/configuration', async ( req, res ) => {
     try {
         const resource = await Configure
             .find( { resource: 'examination-list-view' } )
@@ -153,7 +139,7 @@ router.get( '/configuration', ensureAuth, async ( req, res ) => {
 // @desc    Store configuration for Examination List View
 // @route   POST /configuration
 // @return  JSON data
-router.post( '/configuration', ensureAuth, async ( req, res ) => {
+router.post( '/configuration', async ( req, res ) => {
     console.log( req.body );
 
     try {
