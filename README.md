@@ -9,83 +9,48 @@ However, with development, I have come to the conclusion that the app can store 
 
 The application is a "test" of skills related to technologies:
 
-- Docker
+## Stack:
+
+- Javascript
 - Node.JS
-- WebPack
-- MongoDB
-- Passport for Google and Facebook Login
+
+## Backend:
+
 - Express.js
-- Handlebars
+- MongoDB
+- Passport for login
+
+## Frontend:
+
+- React
   
 # Basic goals of the application
 
-- Defining the research structure divided into groups
+- Defining the structure of the research divided into groups
 - Defining test components, ie measurement values ​​and standards
 - Collecting measurements
 - Presentation of measurements
 
-# Launching the application
-
-So far, launching the application consists of several steps:
-
-1. Docker-compose
-2. Configuration
-3. Webpack
-4. Server
-   
-## Docker-compose
-
-Generally used to run the MongoDB database server, but if you have MongoDB you don't need to run it.
-
-`docker-compose up`
+# Launch
 
 ## Configuration
 
-The basic configuration of the application can be found in the `/config/config.env` file, and its individual elements define:
+The basic configuration of the application can be found in the `/backend/config/config.env` file, and its individual elements define:
 
 `PORT` - the port where the server is started, by default 3000
 
 `MONGO_URI` - address of the MongoDB database server
 
-`Google` section - defines the access parameters to the Google API interface of the login service.
+## Backend
 
-The `Facebook` section - defines the access parameters to the Facebook API login service
-
-## Webpack
-Creates a static UI page, but requires a server running to function fully.
-
-Run the command:
-
-`npm run build`
-
-## Server
-So far, only the developer version of the application is available.
+After configuring `.env`, run this command:
 
 `npm run dev`
 
-## Browser
+## Frontend
 
-In your favorite browser, enter the address `http://localhost:3000` (or instead of 3000, enter the port number that is set in the configuration)
+A backend must be run.
 
-# Known but unresolved issues
+Follow the command
 
-* [ ] A frontend run by `npm run serve` is not able to login using google login.
-
-    I don't know how to fix CORS issue and fetch request.
-
-* [ ] I still don't know how to properly configure the Facebook for Developers API to be able to log in with my Facebook account.
-  
-* [x] How to configure WebPack to "pull" used static files (graphics etc) from Handlebars templates.
-    From what I have learned, the Webpack `CopyWebpackPlugin` plugin is an intermediate solution. However. I couldn't find a solution that would analyze the templates in terms of using images in them and extracting them.
-
-* [ ] A bothering problem is integrating Bootstrap and jQuery in the Webpack environment.
- 
-    Currently, it loads these libraries from an external source (CDN), which does not allow for full application integration.
-
-    **What happens when I try to integrate Bootstrap and jQuery?**
-
-    The allocation of events to the Bootstrap interactive elements is disturbed. This causes, e.g.
-  - creating multiple copies of the `backdrop` for a modal element
-  - no reaction to the `dropdown` opening button
-  - browser load.
-
+`npm start`

@@ -5,13 +5,20 @@ Jednak z rozwojem, doszedłem do wniosku, że aplikacja może przechowywać ró�
 
 Aplikacja jest "sprawdzaniem" umiejętności związanych z technologiami:
 
-- Docker
+## Stack
+
+- Javascript
 - Node.JS
-- WebPack
-- MongoDB
-- Passport do logowania przez Google i Facebook
+
+Backend:
+
 - Express.js
-- Handlebars
+- MongoDB
+- Passport do logowania
+
+Frontend:
+
+- React
   
 # Podstawowe cele aplikacji
 
@@ -22,19 +29,6 @@ Aplikacja jest "sprawdzaniem" umiejętności związanych z technologiami:
 
 # Uruchomienie
 
-Jak na razie, uruchomienie aplikacji składa się z kilku kroków:
-
-1. Docker-compose
-2. Konfiguracja
-3. Webpack
-4. Serwer
-   
-## Docker-compose
-
-Generalnie wykorzystany do uruchomienia serwera baz danych MongoDB, ale jeśli posiadasz MongoDB to nie musisz go uruchamiać.
-
-`docker-compose up`
-
 ## Konfiguracja
 
 Podstawowa konfiguracja aplikacji znajdue się w pliku `/config/config.env`, a poszczególne jej elementy definiują:
@@ -43,46 +37,16 @@ Podstawowa konfiguracja aplikacji znajdue się w pliku `/config/config.env`, a p
 
 `MONGO_URI` - adres serwera baz danych MongoDB
 
-Sekcja `Google` - definiuje parametry dostępowe do interfejsu Google API usługi logowania.
+## Backend
 
-Sekcja `Facebook` - definiuje parametry dostępowe do interfejsu Facebook API usługi logowania
-
-## Webpack
-Tworzy statyczną stronę interfejsu użytkownika, ale do pełnego działania wymaga uruchomionego serwera.
-
-Uruchom polecenie:
-
-`npm run build`
-
-## Serwer
-Jak na razie dostępna jest tylko wersja deweloperska aplikacji.
+Po skonfigurowaniu `.env` uruchom poleceniem:
 
 `npm run dev`
 
-## Przeglądarka
+## Frontend
 
-W swojej ulubionej przeglądarce wpisz adres `http://localhost:3000` (lub zamiast :3000 wpisz numer portu który jest ustawiony w konfiguracji)
+Wymagane jest uruchomienie backendu.
 
-# Znane i nie rozwiązane problemy
+Wykonaj polecenie
 
-* [ ] Frontend uruchamiany przez `npm run serv` nie może zalogować się przy użyciu logowania Google.
-
-     Nie wiem, jak rozwiązać problem z CORS i pobrać żądanie.
-
-* [ ] Nadal nie wiem, jak poprawnie skonfigurować Facebooka API for Developers, aby móc zalogować się za pomocą konta Facebook.
-  
-* [x] Jak skonfigurować WebPack do „ściągania” używanych plików statycznych (grafiki itp.) z szablonów Handlebars.
-  
-     Z tego co się dowiedziałem, wtyczka Webpack `CopyWebpackPlugin` jest rozwiązaniem. Pośrednim, ale akceptowalnym.
-     Jednak, nie mogłem znaleźć rozwiązania, które analizowałoby szablony pod kątem wykorzystania w nich obrazów i ich wyodrębnienia.
-
-* [ ] Nurtującym problemem jest integrowanie Bootstrapa i jQuery w środowisku Webpack.
-
-    Obecnie wczytuje te biblioteki z zewnętrznego źródła (CDN) co nie pozwala na pełną integrację aplikacji.
-
-    **Co się dzieje, gdy próbuję zintegrować Bootstrap oraz jQuery?**
-
-    Zaburzone zostaje przydzielanie zdarzeń do elementów interaktywnych Bootstrapa. Powoduje to, np.
-  - tworzenie wielu kopi `backdrop` dla elementu modal
-  - brak reakcji na przycisk otwierający 'dropdown'
-  - obciążenie przeglądarki.
+`npm start`
