@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, autorun } from 'mobx';
 
 class ValidationStore {
 	fields = [];
@@ -43,11 +43,9 @@ class ValidationStore {
 	}
 
 	check ( componentName, fieldName ) {
-		let valid = null;
+		let valid = true;
 		this.getField( componentName, fieldName ).forEach( item => {
-			if ( item.value === true ) {
-				valid = true;
-			} else {
+			if ( item.value !== true ) {
 				valid = false;
 				return false
 			}
@@ -57,4 +55,12 @@ class ValidationStore {
 }
 
 let validationStore = window.validationStore = new ValidationStore();
+
+// autorun( () => {
+// 	console.log( '--- Validation store:' )
+// 	validationStore.fields.forEach( field => {
+// 		console.log( `${field.component}.${field.name}=${field.value}` )
+// 	} )
+// } );
+
 export default validationStore;
