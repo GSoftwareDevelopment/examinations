@@ -80,9 +80,9 @@ router.post( '/', ( req, res ) => {
             console.log( 'Response from DB values:', entrys.valuesEntry );
             res.json( { OK: 1, created: entrys } );
         } )
-        .catch( ( err ) => {
-            console.log( err );
-            res.json( { error: err.errors.name } );
+        .catch( ( error ) => {
+            console.log( error );
+            res.json( { error } );
         } );
 } );
 
