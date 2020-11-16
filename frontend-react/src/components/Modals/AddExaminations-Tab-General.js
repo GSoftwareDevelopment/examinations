@@ -1,82 +1,82 @@
-import React, { useState } from 'react'
+import React, { Component } from 'react'
+
 import { Form, Button } from 'react-bootstrap';
 import './AddExamination.scss';
+
+import CheckValid from '../CheckValid';
 
 import GroupsStore from '../../stores/groups';
 import AddGroup from './AddGroup';
 
-function TabGeneral ( props ) {
-    const [ modalAddGroup, setModalAddGroup ] = useState( false );
-    const [ validName, setValidName ] = useState( null );
+export default class TabGeneral extends Component {
+	state = {
+		name: '',
+		group: null,
+		modalAddGroup: false,
+	}
 
-    const validate = ( e ) => {
-        const field = e.target.name, value = e.target.value;
-        switch ( field ) {
-            case 'name':
-                setValidName( value.trim() !== '' )
-                break;
-            default:
-                break;
-        }
-    }
-
-    return (
-        <div>
-            <Form.Group controlId="name" className="mt-3">
-                <Form.Label>Nazwa badania</Form.Label>
-                <Form.Control
-                    type="text"
-                    name={"name"}
-                    required
-                    autoFocus
-                    onChange={( e ) => { props.onChange( e ); }}
-                    onBlur={( e ) => { validate( e ); }}
-                />
-                {validName === false && <Form.Text className="text-danger">
-                    Określ nazwę badania.
-                </Form.Text>}
-            </Form.Group>
-            <Form.Group>
-                <div className="d-flex flex-row justify-content-between align-items-center">
-                    <Form.Label htmlFor="group">Przypisz do grupy</Form.Label>
-                    <Button
-                        variant="light"
-                        size="sm"
-                        onClick={() => { setModalAddGroup( true ) }}
-                    >Utwórz grupę</Button>
-                </div>
-                <Form.Control
-                    as="select"
-                    custom
-                    defaultValue="DEFAULT"
-                    name={"group"}
-                    onChange={( e ) => { props.onChange( e ); }}
-                >
-                    {GroupsStore.items.length > 0
-                        ? <option key="noGroup" value="DEFAULT">Nie przypisuj do żadnej grupy</option>
-                        : <option key="empty" value="DEFAULT" disabled={true}>Brak zdefiniowanych grup</option>
-                    }
-                    {GroupsStore.items.map( group =>
-                        <option key={group._id} value={group._id}>{group.name}</option>
-                    )}
-                </Form.Control>
-            </Form.Group>
-            <Form.Group className="form-group">
-                <Form.Label htmlFor="description">Opis</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows="3"
-                    name={"description"}
-                    onChange={( e ) => { props.onChange( e ); }}
-                ></Form.Control>
-            </Form.Group>
-            {modalAddGroup &&
-                <AddGroup
-                    show={modalAddGroup}
-                    onHide={() => { setModalAddGroup( false ) }}
-                />}
-        </div>
-    )
+	render () {
+		return ( <React.Fragment>
+			<Form.Group controlId="name" className="mt-3">
+				<Form.Label>Nazwa badania</Form.Label>
+				<Form.Control
+					type="text"
+					name={"name"}
+					required
+					autoFocus
+					onBlur={( e ) => {
+						this.setState( { name: e.target.value } );
+						this.props.onChange( e );
+					}}
+				/>
+				<CheckValid field="name" validate={this.props.validate} />
+			</Form.Group>
+			<Form.Group>
+				<div className="d-flex flex-row justify-content-between align-items-center">
+					<Form.Label htmlFor="group">Przypisz do grupy</Form.Label>
+					<Button
+						variant="light"
+						size="sm"
+						onClick={() => {
+							this.setState( { modalAddGroup: true } );
+						}}
+					>Utwórz grupę</Button>
+				</div>
+				<Form.Control
+					as="select"
+					custom
+					defaultValue=""
+					name={"group"}
+					onChange={( e ) => {
+						this.setState( { group: e.target.value || null } );
+						this.props.onChange( e );
+					}}
+				>
+					{GroupsStore.items.length > 0
+						? <option key="noGroup" value="">Nie przypisuj do żadnej grupy</option>
+						: <option key="empty" value="" disabled={true}>Brak zdefiniowanych grup</option>
+					}
+					{GroupsStore.items.map( group =>
+						<option key={group._id} value={group._id}>{group.name}</option>
+					)}
+				</Form.Control>
+			</Form.Group>
+			<Form.Group className="form-group">
+				<Form.Label htmlFor="description">Opis</Form.Label>
+				<Form.Control
+					as="textarea"
+					rows="3"
+					name={"description"}
+					onChange={( e ) => { this.props.onChange( e ); }}
+				></Form.Control>
+			</Form.Group>
+			{
+				this.state.modalAddGroup &&
+				<AddGroup
+					show={this.state.modalAddGroup}
+					onHide={() => { this.setState( { modalAddGroup: false } ); }}
+				/>
+			}
+		</React.Fragment> )
+	}
 }
-
-export default TabGeneral
