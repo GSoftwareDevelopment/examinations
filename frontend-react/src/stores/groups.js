@@ -6,6 +6,7 @@ import ExaminationsStore from '../stores/examinations';
 class GroupsStore {
     state = "pending"; // "pending" / "done" / "error"
     items = [];
+    error = null;
 
     constructor() {
         makeAutoObservable( this );
@@ -16,6 +17,13 @@ class GroupsStore {
     }
 
     getState () { return this.state }
+    getError () { return this.error }
+    clearError () {
+        runInAction( () => {
+            this.state = 'done';
+            this.error = null;
+        } )
+    }
 
     async fetchGet () {
         this.items = [];
@@ -44,8 +52,13 @@ class GroupsStore {
                     this.items = result.groups;
                     this.state = "done";
                 } else {
-                    console.error( 'API Error:', result )
+                    console.error( 'Backend Error:', result )
                     this.state = "error";
+                    this.error = {
+                        title: 'Backend error',
+                        msg: result.error.message,
+                        error: result.error
+                    }
                 }
             } );
 
@@ -53,6 +66,11 @@ class GroupsStore {
             runInAction( () => {
                 console.error( 'Fetch error', error );
                 this.state = "error"
+                this.error = {
+                    title: 'Fetch error',
+                    msg: error.message,
+                    error
+                }
             } )
         }
 
@@ -87,7 +105,12 @@ class GroupsStore {
 
                 if ( result.error ) {
                     this.state = "error";
-                    console.error( 'API Error:', result.error );
+                    console.error( 'Backend error:', result.error );
+                    this.error = {
+                        title: 'Backend error',
+                        msg: result.error.message,
+                        error: result.error
+                    }
                 }
             } );
 
@@ -96,6 +119,11 @@ class GroupsStore {
             runInAction( () => {
                 this.state = "error";
                 console.error( 'Fetch error:', error );
+                this.error = {
+                    title: 'Fetch error',
+                    msg: error.message,
+                    error
+                }
             } )
             return false;
         }
@@ -132,7 +160,12 @@ class GroupsStore {
 
                 if ( result.error ) {
                     this.state = "error";
-                    console.error( 'API Error:', result.error );
+                    console.error( 'Backend error:', result.error );
+                    this.error = {
+                        title: 'Backend error',
+                        msg: result.error.message,
+                        error: result.error
+                    }
                 }
             } );
 
@@ -141,6 +174,11 @@ class GroupsStore {
             runInAction( () => {
                 this.state = "error";
                 console.error( 'Fetch error:', error );
+                this.error = {
+                    title: 'Fetch error',
+                    msg: error.message,
+                    error
+                }
             } )
             return false;
         }
