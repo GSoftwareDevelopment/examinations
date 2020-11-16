@@ -1,3 +1,14 @@
+.tabbable {
+
+	&.nav-tabs {
+  	flex-wrap: nowrap;
+
+		.nav-link {
+  		white-space: nowrap;
+		}
+	}
+}
+
 .row-value {
       > div {
     padding-top:.5em !important;
