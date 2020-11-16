@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 import './AddExamination.scss';
 
-import { Nav, Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Nav, Form, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 
-import CheckValid from '../CheckValid';
+import ValuesStore from '../../stores/values';
+import ValidationStore from '../../stores/validation';
 
 import AddValue from './AddValue';
 import EditValue from './EditValue';
@@ -60,13 +62,13 @@ function ValueItem ( props ) {
 					size="sm"
 					variant="flat"
 					className="my-0 px-2 shadow-none"
-					onClick={() => { props.onShowEdit( value.id ) }}
+					onClick={() => { props.onClickEdit( value.id ) }}
 				>
 					<Icon.PencilSquare size="20" />
 				</Button>
 				<OverlayTrigger
 					trigger="click"
-					overlay={ConfirmDelete( () => { props.onDelete( value.id ) } )}
+					overlay={ConfirmDelete( () => { props.onClickDelete( value.id ); } )}
 					placement="left"
 					rootClose
 				>
@@ -87,18 +89,17 @@ function ValueItem ( props ) {
 function ValuesList ( props ) {
 	return (
 		<div className="d-flex flex-column">
-			{props.values.length === 0 ?
+			{props.items.length === 0 ?
 				<div className="alert alert-info py-2 mt-2 text-center">
 					<Icon.EmojiDizzy size="64" /><br />
 					Brak definicji wartości określających badanie.
 				</div> :
-				props.values.map( value =>
+				props.items.map( value =>
 					<ValueItem
 						key={"value-" + value.id}
 						value={value}
-						onShowEdit={props.onShowEdit}
-						onDelete={props.onDelete}
-						onUpdate={props.onUpdate}
+						onClickEdit={props.onClickEdit}
+						onClickDelete={props.onClickDelete}
 					/>
 				)
 			}
@@ -110,22 +111,36 @@ class TabValues extends Component {
 	state = {
 		modalAddValue: false,
 		editedValueId: false,
+		validation: false,
+	}
+
+	validation () {
+		const values = ValuesStore.getItems();
+		if ( values.length > 0 ) {
+			this.setState( { validation: true } );
+			ValidationStore.setField( 'add-examination', 'values', true );
+		} else {
+			this.setState( { validation: 'Badanie musi zawierać przynajmniej jedną definicję wartości' } );
+			ValidationStore.setField( 'add-examination', 'values', 'Badanie musi zawierać przynajmniej jedną definicję wartości' );
+		}
 	}
 
 	render () {
 		return ( <React.Fragment>
+			{this.state.validation !== false && this.state.validation !== true &&
+				<Form.Text className="text-danger">{this.state.validation}</Form.Text>}
+
 			<div className="d-flex flex-row align-items-center bg-dark text-white p-2 mt-3">
 				<div>Definicje</div>
 			</div>
 
 			<ValuesList
-				values={this.props.values}
-				onDelete={( id ) => { this.props.onDelete( id ); }}
-				onShowEdit={( id ) => { this.setState( { editedValueId: id } ); }}
+				items={ValuesStore.getItems()}
+				onClickEdit={( id ) => { this.setState( { editedValueId: id } ); }}
+				onClickDelete={( id ) => { ValuesStore.remove( id ); this.validation(); }}
 			/>
 
 			<div className="d-flex flex-column justify-content-start align-items-end border-top py-2">
-				<CheckValid field="values" validate={this.props.validate} />
 				<Button
 					onClick={() => { this.setState( { modalAddValue: true } ); }}
 					variant="light"
@@ -139,8 +154,10 @@ class TabValues extends Component {
 				this.state.modalAddValue &&
 				<AddValue
 					show={this.state.modalAddValue}
-					onAdd={( data ) => { this.props.onAdd( data ) }}
-					onHide={() => { this.setState( { modalAddValue: false } ); }}
+					onHide={() => {
+						this.setState( { modalAddValue: false } );
+						this.validation();
+					}}
 				/>
 			}
 			{
@@ -148,14 +165,16 @@ class TabValues extends Component {
 				<EditValue
 					show={this.state.editedValueId !== false}
 					valueData={this.state.editedValueId !== false
-						? this.props.values[ this.state.editedValueId ]
+						? ValuesStore.items[ this.state.editedValueId ]
 						: null}
-					onUpdate={this.props.onUpdate}
-					onHide={() => { this.setState( { editedValueId: false } ); }}
+					onHide={() => {
+						this.setState( { editedValueId: false } );
+						this.validation();
+					}}
 				/>
 			}
 		</React.Fragment > )
 	}
 }
 
-export default TabValues;
+export default observer( TabValues );

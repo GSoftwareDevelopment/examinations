@@ -1,18 +1,50 @@
 import React, { Component } from 'react'
+import { observer } from 'mobx-react';
 
 import { Form, Button } from 'react-bootstrap';
 import './AddExamination.scss';
 
-import CheckValid from '../CheckValid';
-
+import ExaminationsStore from '../../stores/examinations';
 import GroupsStore from '../../stores/groups';
+import ValidationStore from '../../stores/validation';
+
 import AddGroup from './AddGroup';
 
-export default class TabGeneral extends Component {
+class TabGeneral extends Component {
 	state = {
 		name: '',
 		group: null,
 		modalAddGroup: false,
+		validation: false,
+	}
+
+	constructor( props ) {
+		super( props );
+
+		this.innerRef = React.createRef();
+	}
+
+	componentDidMount () {
+		setTimeout( () => {
+			this.innerRef.current.focus();
+		}, 1 )
+	}
+
+	validate ( currentState ) {
+		const { name, group } = currentState || this.state;
+
+		if ( name.trim() === '' ) {
+			this.setState( { validation: 'Wprowadź Nazwę badania' } )
+			ValidationStore.setField( 'add-examination', 'name', 'Wprowadź Nazwę badania' )
+		} else if ( ExaminationsStore.getItems().filter(
+			( item => ( item.group === group && item.name === name.trim() ) )
+		).length > 0 ) {
+			this.setState( { validation: 'W przypisanej grupie, podana nazwa badania juz występuje.' } );
+			ValidationStore.setField( 'add-examination', 'name', 'W przypisanej grupie, podana nazwa badania juz występuje.' )
+		} else {
+			this.setState( { validation: true } );
+			ValidationStore.setField( 'add-examination', 'name', true );
+		}
 	}
 
 	render () {
@@ -20,16 +52,21 @@ export default class TabGeneral extends Component {
 			<Form.Group controlId="name" className="mt-3">
 				<Form.Label>Nazwa badania</Form.Label>
 				<Form.Control
+					ref={this.innerRef}
 					type="text"
 					name={"name"}
 					required
+					value={this.state.name}
 					autoFocus
-					onBlur={( e ) => {
-						this.setState( { name: e.target.value } );
+					onChange={( e ) => {
+						const value = e.target.value;
+						this.setState( { name: value } );
 						this.props.onChange( e );
 					}}
+					onBlur={( e ) => { this.validate(); }}
 				/>
-				<CheckValid field="name" validate={this.props.validate} />
+				{this.state.validation !== false && this.state.validation !== true &&
+					<Form.Text className="text-danger">{this.state.validation}</Form.Text>}
 			</Form.Group>
 			<Form.Group>
 				<div className="d-flex flex-row justify-content-between align-items-center">
@@ -49,6 +86,9 @@ export default class TabGeneral extends Component {
 					name={"group"}
 					onChange={( e ) => {
 						this.setState( { group: e.target.value || null } );
+						this.forceUpdate( () => {
+							this.validate();
+						} );
 						this.props.onChange( e );
 					}}
 				>
@@ -80,3 +120,5 @@ export default class TabGeneral extends Component {
 		</React.Fragment> )
 	}
 }
+
+export default observer( TabGeneral )
