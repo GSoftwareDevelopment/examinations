@@ -6,6 +6,9 @@ import { Nav, Form, Button, Modal, Tabs, Tab, Spinner } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 
 import ExaminationsStore from '../../stores/examinations';
+import ValuesStore from '../../stores/values';
+import ValidationStore from '../../stores/validation';
+
 import TabGeneral from './AddExaminations-Tab-General';
 import TabValues from './AddExaminations-Tab-Values';
 
@@ -17,15 +20,11 @@ class AddExamination extends Component {
 			name: 'Nowe badanie',
 			group: null,
 			description: '',
-			values: [
-				{
-					id: 0,
-					type: 'numeric',
-					name: 'Wartość',
-					required: true,
-				}
-			],
 		}
+
+		ValidationStore.removeField( 'add-examination' );
+		ValuesStore.reset( [ { id: 0, type: 'numeric', name: 'Wartość', required: true } ] );
+		ValidationStore.setField( 'add-examination', 'values', true );
 	}
 
 	setInputValue ( property, val ) {
@@ -45,7 +44,7 @@ class AddExamination extends Component {
 			group: this.state.group || null,
 			description: this.state.description,
 			//it's needed to extract `id` property from object
-			values: this.state.values.map( ( { id, ...rest } ) => rest ),
+			values: ValuesStore.getItems().map( ( { id, ...rest } ) => rest ),
 		} );
 
 		if ( result.OK ) {
@@ -54,74 +53,13 @@ class AddExamination extends Component {
 		}
 	}
 
-	//
-	doValueAdd ( data ) {
-		console.log( 'Adding new value...', data )
-
-		// Determine the highest value for the value index
-		let lastValueId = 0;
-		this.state.values.forEach( ( item ) => {
-			if ( item.id > lastValueId )
-				lastValueId = item.id
-		} );
-		lastValueId++ // incrase to next "free" value
-
-		this.setState( ( oldState ) => {
-			oldState.values.push( { id: lastValueId, ...data } );
-			return oldState;
-		} );
+	isValid () {
+		return ValidationStore.check( 'add-examination' );
 	}
-
-	doValueDelete ( valueId ) {
-		console.log( `Delete value entry #${valueId}` );
-		this.setState( {
-			values: this.state.values.filter( value => ( value.id !== valueId ) )
-		} );
-	}
-
-	doValueUpdate ( valueId, data ) {
-		console.log( `Edit value entry #${valueId}`, data );
-		this.setState( ( oldState ) => {
-			oldState.values.forEach( ( value, index ) => {
-				if ( value.id === valueId ) {
-					oldState.values[ index ] = { ...value, ...data };
-				}
-			} );
-			return oldState;
-		} );
-	}
-
-	canDoCreate () {
-		return this.validateGeneral().length === 0 && this.validateValues().length === 0;
-	}
-
-	//
-	validateGeneral () {
-		let validationErrors = [];
-		const { name, group } = this.state;
-
-		if ( name.trim() === '' ) {
-			validationErrors.push( { field: 'name', message: 'Podaj Nazwę badania' } );
-		}
-		if ( ExaminationsStore.getItems().filter(
-			( item => ( item.group === group && item.name === name.trim() ) )
-		).length > 0 ) {
-			validationErrors.push( { field: 'name', message: 'W przypisanej grupie, podana nazwa badania juz występuje.' } );
-		}
-		return validationErrors;
-	}
-
-	validateValues () {
-		let validationErrors = [];
-		if ( this.state.values.length === 0 ) {
-			validationErrors.push( { field: 'values', message: 'Lista definicji wartości nie może być pusta' } );
-		}
-		return validationErrors;
-	};
 
 	render () {
 		return (
-			<Modal {...this.props} backdrop="static" autoFocus={true}>
+			<Modal {...this.props} backdrop="static" autoFocus={false}>
 				<Form
 					autoComplete="off"
 					onSubmit={( e ) => { this.doSubmit( e ) }}
@@ -135,10 +73,16 @@ class AddExamination extends Component {
 								<Nav as="h6" variant="tabs" className="flex-row mt-3"
 									style={{ transform: "translateY(1px)" }}>
 									<Nav.Item>
-										<Nav.Link eventKey="general">Ogólne</Nav.Link>
+										<Nav.Link eventKey="general">Ogólne
+												{ValidationStore.check( 'add-examination', 'name' ) === false &&
+												<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
+										</Nav.Link>
 									</Nav.Item>
 									<Nav.Item>
-										<Nav.Link eventKey="values">Wartości</Nav.Link>
+										<Nav.Link eventKey="values">Wartości
+												{ValidationStore.check( 'add-examination', 'values' ) === false &&
+												<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
+										</Nav.Link>
 									</Nav.Item>
 									<Nav.Item>
 										<Nav.Link eventKey="norms">Normy</Nav.Link>
@@ -155,17 +99,10 @@ class AddExamination extends Component {
 							<Tab eventKey="general">
 								<TabGeneral
 									onChange={( e ) => { this.setInputValue( e.target.name, e.target.value ) }}
-									validate={this.validateGeneral()}
 								/>
 							</Tab>
 							<Tab eventKey="values">
-								<TabValues
-									values={this.state.values}
-									onAdd={( data ) => { this.doValueAdd( data ); }}
-									onDelete={( id ) => { this.doValueDelete( id ); }}
-									onUpdate={( id, data ) => { this.doValueUpdate( id, data ); }}
-									validate={this.validateValues()}
-								/>
+								<TabValues />
 							</Tab>
 							<Tab eventKey="norms">
 							</Tab>
@@ -173,8 +110,7 @@ class AddExamination extends Component {
 					</Modal.Body>
 					<Modal.Footer>
 						<Button
-							disabled={!this.canDoCreate() ||
-								!ExaminationsStore.getState() === 'pending'}
+							disabled={!this.isValid() || !ExaminationsStore.getState() === 'pending'}
 							type="submit">
 							{ExaminationsStore.getState() === 'pending'
 								? <div className="d-flex felx-row align-items-center">
