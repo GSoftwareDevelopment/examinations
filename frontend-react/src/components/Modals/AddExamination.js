@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import './AddExamination.scss';
 
-import { Nav, Form, Button, Modal, Tabs, Tab, Spinner } from 'react-bootstrap';
-import * as Icon from 'react-bootstrap-icons';
-
 import ExaminationsStore from '../../stores/examinations';
 import ValuesStore from '../../stores/values';
 import ValidationStore from '../../stores/validation';
+
+import { Nav, Form, Button, Modal, Tabs, Tab, Spinner } from 'react-bootstrap';
+import * as Icon from 'react-bootstrap-icons';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import TabGeneral from './AddExaminations-Tab-General';
 import TabValues from './AddExaminations-Tab-Values';
@@ -64,32 +65,33 @@ class AddExamination extends Component {
 					autoComplete="off"
 					onSubmit={( e ) => { this.doSubmit( e ) }}
 				>
-					<Modal.Header closeButton className="pb-0">
-						<Modal.Title>
-							Nowe badanie
-							<Tab.Container
-								defaultActiveKey="general"
-								onSelect={( key ) => { this.setState( { activeTab: key } ); }}>
-								<Nav as="h6" variant="tabs" className="flex-row mt-3"
-									style={{ transform: "translateY(1px)" }}>
-									<Nav.Item>
-										<Nav.Link eventKey="general">Ogólne
+					<Modal.Header closeButton className="pb-0 border-0">
+						<Modal.Title>Nowe badanie</Modal.Title>
+					</Modal.Header>
+
+					<Modal.Header className="py-0">
+						<Tab.Container
+							defaultActiveKey="general"
+							onSelect={( key ) => { this.setState( { activeTab: key } ); }}>
+							<Nav as="nav" variant="tabs" className="tabbable h6 flex-row mt-3"
+								style={{ transform: "translateY(1px)" }}>
+								<Nav.Item>
+									<Nav.Link eventKey="general">Ogólne
 												{ValidationStore.check( 'add-examination', 'name' ) === false &&
-												<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
-										</Nav.Link>
-									</Nav.Item>
-									<Nav.Item>
-										<Nav.Link eventKey="values">Wartości
+											<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
+									</Nav.Link>
+								</Nav.Item>
+								<Nav.Item>
+									<Nav.Link eventKey="values">Wartości
 												{ValidationStore.check( 'add-examination', 'values' ) === false &&
-												<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
-										</Nav.Link>
-									</Nav.Item>
-									<Nav.Item>
-										<Nav.Link eventKey="norms">Normy</Nav.Link>
-									</Nav.Item>
-								</Nav>
-							</Tab.Container>
-						</Modal.Title>
+											<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
+									</Nav.Link>
+								</Nav.Item>
+								<Nav.Item>
+									<Nav.Link eventKey="norms">Normy</Nav.Link>
+								</Nav.Item>
+							</Nav>
+						</Tab.Container>
 					</Modal.Header>
 					<Modal.Body>
 						<Tabs
@@ -120,7 +122,7 @@ class AddExamination extends Component {
 						</Button>
 					</Modal.Footer>
 				</Form>
-			</Modal>
+			</Modal >
 		)
 	}
 }
