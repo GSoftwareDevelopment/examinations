@@ -10,195 +10,183 @@ import TabGeneral from './AddExaminations-Tab-General';
 import TabValues from './AddExaminations-Tab-Values';
 
 class AddExamination extends Component {
-    constructor( props ) {
-        super( props );
-        this.state = {
-            activeTab: 'general',
-            name: '',
-            group: '',
-            description: '',
-            values: [
-                {
-                    id: 0,
-                    type: 'numeric',
-                    name: 'Wartość',
-                    required: true,
-                }
-            ],
-            // validations state
-            validated: false,
-            uniqueName: true,
-            valuesError: false,
-        }
-    }
+	constructor( props ) {
+		super( props );
+		this.state = {
+			activeTab: 'general',
+			name: 'Nowe badanie',
+			group: null,
+			description: '',
+			values: [
+				{
+					id: 0,
+					type: 'numeric',
+					name: 'Wartość',
+					required: true,
+				}
+			],
+		}
+	}
 
-    setInputValue ( property, val ) {
-        this.setState( oldState => {
-            let changes = { [ property ]: val }
-            return { ...oldState, ...changes }
-        } );
-    }
+	setInputValue ( property, val ) {
+		this.setState( oldState => {
+			if ( property === 'group' && val === '' ) val = null;
+			let changes = { [ property ]: val }
+			return { ...oldState, ...changes }
+		} );
+	}
 
-    async doSubmit ( e ) {
-        e.preventDefault();
-        const form = e.currentTarget;
-        if ( form.checkValidity() === false ) {
-            e.stopPropagation();
-            this.setState( { validated: true } );
-            this.setState( { activeTab: 'general' } );
-            return false;
-        }
+	async doSubmit ( e ) {
+		e.preventDefault();
+		e.stopPropagation();
 
-        const result = await ExaminationsStore.fetchAdd( {
-            name: this.state.name,
-            group: this.state.group || null,
-            description: this.state.description,
-            //it's needed to extract `id` property from object
-            values: this.state.values.map( ( { id, ...rest } ) => rest ),
-        } );
+		const result = await ExaminationsStore.fetchAdd( {
+			name: this.state.name,
+			group: this.state.group || null,
+			description: this.state.description,
+			//it's needed to extract `id` property from object
+			values: this.state.values.map( ( { id, ...rest } ) => rest ),
+		} );
 
-        if ( result.OK ) {
-            this.props.onHide();
-            return
-        }
+		if ( result.OK ) {
+			this.props.onHide();
+			return
+		}
+	}
 
-        if ( result.error && result.error.name === "ValidatorError" ) {
-            switch ( result.error.kind ) {
-                case "unique":
-                    this.setState( { activeTab: 'general' } );
-                    this.setState( { uniqueName: false } );
-                    return
-                case "values":
-                    this.setState( { activeTab: 'values' } );
-                    this.setState( { valuesError: true } );
-                    return
-                default:
-                    console.error( result );
-            }
-            return false;
-        }
+	//
+	doValueAdd ( data ) {
+		console.log( 'Adding new value...', data )
 
-    }
+		// Determine the highest value for the value index
+		let lastValueId = 0;
+		this.state.values.forEach( ( item ) => {
+			if ( item.id > lastValueId )
+				lastValueId = item.id
+		} );
+		lastValueId++ // incrase to next "free" value
 
-    doValueAdd ( data ) {
-        console.log( 'Adding new value...', data )
+		this.setState( ( oldState ) => {
+			oldState.values.push( { id: lastValueId, ...data } );
+			return oldState;
+		} );
+	}
 
-        // Determine the highest value for the value index
-        let lastValueId = 0;
-        this.state.values.forEach( ( item ) => {
-            if ( item.id > lastValueId )
-                lastValueId = item.id
-        } );
-        lastValueId++ // incrase to next "free" value
+	doValueDelete ( valueId ) {
+		console.log( `Delete value entry #${valueId}` );
+		this.setState( {
+			values: this.state.values.filter( value => ( value.id !== valueId ) )
+		} );
+	}
 
-        this.setState( ( oldState ) => {
-            oldState.values.push( { id: lastValueId, ...data } );
-            return oldState;
-        } );
-    }
+	doValueUpdate ( valueId, data ) {
+		console.log( `Edit value entry #${valueId}`, data );
+		this.setState( ( oldState ) => {
+			oldState.values.forEach( ( value, index ) => {
+				if ( value.id === valueId ) {
+					oldState.values[ index ] = { ...value, ...data };
+				}
+			} );
+			return oldState;
+		} );
+	}
 
-    doValueDelete ( valueId ) {
-        console.log( `Delete value entry #${valueId}` );
-        this.setState( {
-            values: this.state.values.filter( value => ( value.id !== valueId ) )
-        } );
-    }
+	canDoCreate () {
+		return this.validateGeneral().length === 0 && this.validateValues().length === 0;
+	}
 
-    doValueUpdate ( valueId, data ) {
-        console.log( `Edit value entry #${valueId}`, data );
-        this.setState( ( oldState ) => {
-            oldState.values.forEach( ( value, index ) => {
-                if ( value.id === valueId ) {
-                    oldState.values[ index ] = { ...value, ...data };
-                }
-            } );
-            return oldState;
-        } );
-    }
+	//
+	validateGeneral () {
+		let validationErrors = [];
+		const { name, group } = this.state;
 
-    render () {
-        const canDoAdd = () => this.state.name.trim() !== '' && this.state.values.length > 0;
+		if ( name.trim() === '' ) {
+			validationErrors.push( { field: 'name', message: 'Podaj Nazwę badania' } );
+		}
+		if ( ExaminationsStore.getItems().filter(
+			( item => ( item.group === group && item.name === name.trim() ) )
+		).length > 0 ) {
+			validationErrors.push( { field: 'name', message: 'W przypisanej grupie, podana nazwa badania juz występuje.' } );
+		}
+		return validationErrors;
+	}
 
-        return (
-            <Modal {...this.props} backdrop="static" autoFocus={true}>
-                <Form
-                    noValidate
-                    validated={this.state.validated}
-                    autoComplete="off"
-                    onSubmit={( e ) => { this.doSubmit( e ) }}
-                >
-                    <Modal.Header closeButton className="pb-0">
-                        <Modal.Title>
-                            Nowe badanie
-                            <Tab.Container
-                                defaultActiveKey="general"
-                                onSelect={( key ) => { this.setState( { activeTab: key } ); }}>
-                                <Nav as="h6" variant="tabs" className="flex-row mt-3"
-                                    style={{ transform: "translateY(1px)" }}>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="general">Ogólne
-                                        {this.state.activeTab !== 'general' && ( this.state.name.trim() === '' || !this.state.uniqueName ) &&
-                                                <Icon.ExclamationDiamond className="ml-2 text-danger" />}
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="values">Wartości
-                                        {this.activeTab !== 'values' && this.state.values.length === 0 &&
-                                                <Icon.ExclamationDiamond className="ml-2 text-danger" />}
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="norms">Normy</Nav.Link>
-                                    </Nav.Item>
-                                </Nav>
-                            </Tab.Container>
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Tabs
-                            variant="pills"
-                            defaultActiveKey="general"
-                            activeKey={this.state.activeTab}>
-                            <Tab eventKey="general">
-                                {!this.state.uniqueName &&
-                                    <p className="text-danger small">
-                                        <Icon.ExclamationDiamond className="mr-2" />
-                                        Podana <strong>Nazwa badania</strong> jest już zdefiniowana
-                                        {this.state.group !== '' && <span>
-                                            w przypisanej grupie
-                                        </span>}
-                                    </p>}
-                                <TabGeneral
-                                    onChange={( e ) => { this.setInputValue( e.target.name, e.target.value ) }}
-                                />
-                            </Tab>
-                            <Tab eventKey="values">
-                                <TabValues
-                                    values={this.state.values}
-                                    onAdd={( data ) => { this.doValueAdd( data ); }}
-                                    onDelete={( id ) => { this.doValueDelete( id ); }}
-                                    onUpdate={( id, data ) => { this.doValueUpdate( id, data ); }}
-                                />
-                            </Tab>
-                            <Tab eventKey="norms">
-                            </Tab>
-                        </Tabs>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            disabled={!canDoAdd() || ExaminationsStore.getState() === 'pending'}
-                            type="submit">
-                            {ExaminationsStore.getState() === 'pending'
-                                ? <div className="d-flex felx-row align-items-center">
-                                    <Spinner size="sm" animation="border" role="status" /><span className="ml-2">Zapisywanie...</span>
-                                </div>
-                                : "Dodaj"}
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
-        )
-    }
+	validateValues () {
+		let validationErrors = [];
+		if ( this.state.values.length === 0 ) {
+			validationErrors.push( { field: 'values', message: 'Lista definicji wartości nie może być pusta' } );
+		}
+		return validationErrors;
+	};
+
+	render () {
+		return (
+			<Modal {...this.props} backdrop="static" autoFocus={true}>
+				<Form
+					autoComplete="off"
+					onSubmit={( e ) => { this.doSubmit( e ) }}
+				>
+					<Modal.Header closeButton className="pb-0">
+						<Modal.Title>
+							Nowe badanie
+							<Tab.Container
+								defaultActiveKey="general"
+								onSelect={( key ) => { this.setState( { activeTab: key } ); }}>
+								<Nav as="h6" variant="tabs" className="flex-row mt-3"
+									style={{ transform: "translateY(1px)" }}>
+									<Nav.Item>
+										<Nav.Link eventKey="general">Ogólne</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="values">Wartości</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="norms">Normy</Nav.Link>
+									</Nav.Item>
+								</Nav>
+							</Tab.Container>
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<Tabs
+							variant="pills"
+							defaultActiveKey="general"
+							activeKey={this.state.activeTab}>
+							<Tab eventKey="general">
+								<TabGeneral
+									onChange={( e ) => { this.setInputValue( e.target.name, e.target.value ) }}
+									validate={this.validateGeneral()}
+								/>
+							</Tab>
+							<Tab eventKey="values">
+								<TabValues
+									values={this.state.values}
+									onAdd={( data ) => { this.doValueAdd( data ); }}
+									onDelete={( id ) => { this.doValueDelete( id ); }}
+									onUpdate={( id, data ) => { this.doValueUpdate( id, data ); }}
+									validate={this.validateValues()}
+								/>
+							</Tab>
+							<Tab eventKey="norms">
+							</Tab>
+						</Tabs>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							disabled={!this.canDoCreate() ||
+								!ExaminationsStore.getState() === 'pending'}
+							type="submit">
+							{ExaminationsStore.getState() === 'pending'
+								? <div className="d-flex felx-row align-items-center">
+									<Spinner size="sm" animation="border" role="status" /><span className="ml-2">Zapisywanie...</span>
+								</div>
+								: "Dodaj"}
+						</Button>
+					</Modal.Footer>
+				</Form>
+			</Modal>
+		)
+	}
 }
 
 export default observer( AddExamination )
