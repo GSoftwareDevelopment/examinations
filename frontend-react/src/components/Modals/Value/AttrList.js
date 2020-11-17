@@ -91,7 +91,7 @@ class AttrList extends Component {
 									placeholder={"#" + ( id + 1 )}
 									onChange={( e ) => { this.setItemValue( id, e.target.value ); }}
 									onBlur={( e ) => { this.checkEmptyOptions(); }}
-									autoComplete="no" />
+									autoComplete="off" />
 								{this.state.highlightItem === id &&
 									<Form.Text>{ValidationStore.getField( 'add-value-attr', 'zero-field' )[ 0 ].value}</Form.Text>}
 							</div>
