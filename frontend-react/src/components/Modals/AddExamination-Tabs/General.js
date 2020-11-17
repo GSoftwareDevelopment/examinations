@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react';
 
 import { Form, Button } from 'react-bootstrap';
-import './AddExamination.scss';
 
-import ExaminationsStore from '../../stores/examinations';
-import GroupsStore from '../../stores/groups';
-import ValidationStore from '../../stores/validation';
+import ExaminationsStore from '../../../stores/examinations';
+import GroupsStore from '../../../stores/groups';
+import ValidationStore from '../../../stores/validation';
 
-import AddGroup from './AddGroup';
+import AddGroup from '../AddGroup';
 
 class TabGeneral extends Component {
 	state = {
