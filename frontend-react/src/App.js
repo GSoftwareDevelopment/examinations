@@ -31,7 +31,7 @@ class App extends React.Component {
 					? <React.Fragment>
 						<AppNavbar />
 						<Scrollbars autohide="true">
-							<main className="m-3" role="main" style={{ paddingTop: '3.5em' }}>
+							<main role="main" style={{ paddingTop: '4.5em' }}>
 								<Switch>
 									<Route exact path="/dashboard" component={Dashboard} />
 									<Route exact path="/profile" component={Profile} />
