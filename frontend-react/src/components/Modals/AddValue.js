@@ -2,14 +2,16 @@
 
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import ConfigurationStore from '../../stores/configuration';
-import ValuesStore from '../../stores/values';
-import ValidationStore from '../../stores/validation';
 
 import * as Icon from 'react-bootstrap-icons';
 import { Button, Modal, Form, ListGroup } from 'react-bootstrap';
 
-import { defineTypes } from './Value/DefineTypes';
+import { ValuesTypesDef } from './Value/ValuesTypesDef';
+
+import ConfigurationStore from '../../stores/configuration';
+import ValuesStore from '../../stores/values';
+import ValidationStore from '../../stores/validation';
+
 import AttrGeneral from './Value/AttrGeneral';
 import ValueAttributes from './Value/ValueAttributes';
 
@@ -44,26 +46,19 @@ class AddValue extends Component {
 		e.stopPropagation();
 
 		if ( this.isValid() ) {
+			const { name, description, required } = this.state.general;
 			let newValue = {
 				type: this.state.type,
-				name: this.state.general.name,
-				description: this.state.general.description,
-				required: this.state.general.required,
+				name,
+				description,
+				required,
 			}
 
 			const attr = this.state.attributes;
 
-			switch ( this.state.type ) {
-				case "numeric":
-					newValue[ 'unit' ] = attr.unit;
-					break;
-				case "enum":
-				case "sets":
-					newValue[ 'list' ] = [ ...attr.items ];
-					break;
-				default:
-					break;
-			}
+			const fn = ValuesTypesDef.find( def => def.type === this.state.type );
+			if ( fn && fn.precedSubmit ) fn.precedSubmit( newValue, attr );
+
 			ValuesStore.insert( newValue );
 			this.props.onHide();
 		}
@@ -110,7 +105,7 @@ class AddValue extends Component {
 									/>
 								</div>
 								<ListGroup variant="flush">
-									{defineTypes.map( type =>
+									{ValuesTypesDef.map( type =>
 										<ListGroup.Item
 											key={"value-type-" + type.type}
 											action

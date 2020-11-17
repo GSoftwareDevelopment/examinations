@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
+
 import { Modal, Button, Form } from 'react-bootstrap';
+
+import { ValuesTypesDef } from './Value/ValuesTypesDef';
+
 import ValuesStore from '../../stores/values';
 
 import AttrGeneral from './Value/AttrGeneral';
@@ -46,22 +50,10 @@ class EditValue extends Component {
 			}
 
 			const attr = this.state.attributes;
-			if ( attr === null ) {
-				console.log( 'Something wrong with attributes!!' )
-				return;
-			}
 
-			switch ( this.state.type ) {
-				case "numeric":
-					newValue[ 'unit' ] = attr.unit;
-					break;
-				case "enum":
-				case "sets":
-					newValue[ 'list' ] = [ ...attr.items ];
-					break;
-				default:
-					break;
-			}
+			const fn = ValuesTypesDef.find( def => def.type === this.state.type );
+			if ( fn && fn.precedSubmit ) fn.precedSubmit( newValue, attr );
+
 			ValuesStore.update( this.state.id, newValue );
 			this.props.onHide();
 		}
