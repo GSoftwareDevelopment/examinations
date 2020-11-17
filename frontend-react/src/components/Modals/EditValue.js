@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
 import { ValuesTypesDef } from './Value/ValuesTypesDef';
 
 import ValuesStore from '../../stores/values';
+import ValidationStore from '../../stores/validation';
 
 import AttrGeneral from './Value/AttrGeneral';
 import ValueAttributes from './Value/ValueAttributes';
@@ -24,16 +26,11 @@ class EditValue extends Component {
 			},
 			attributes,
 		}
+		ValidationStore.removeField( 'add-value-attr' );
 	}
 
 	isValid () {
-		if ( this.state.type === 'DEFAULT' )
-			return false
-
-		if ( this.state.general && this.state.general.name.trim() === '' )
-			return false
-
-		return true
+		return ValidationStore.check( 'add-value-attr' );
 	}
 
 	onSubmit ( e ) {
@@ -72,15 +69,11 @@ class EditValue extends Component {
 					<Modal.Body>
 						<AttrGeneral
 							setTo={this.state.general}
-							attributes={( data ) => {
-								this.setState( { general: data } );
-							}} />
+							attributes={( data ) => { this.setState( { general: data } ); }} />
 						<ValueAttributes
 							type={this.props.valueData.type}
 							setTo={this.state.attributes}
-							attributes={( data ) => {
-								this.setState( { attributes: data } );
-							}} />
+							attributes={( data ) => { this.setState( { attributes: data } ); }} />
 					</Modal.Body>
 					<Modal.Footer>
 						<Button
@@ -96,4 +89,4 @@ class EditValue extends Component {
 	}
 }
 
-export default EditValue
+export default observer( EditValue )

@@ -15,24 +15,20 @@ class TabValues extends Component {
 	state = {
 		modalAddValue: false,
 		editedValueId: false,
-		validation: false,
 	}
 
 	validation () {
 		const values = ValuesStore.getItems();
 		if ( values.length > 0 ) {
-			this.setState( { validation: true } );
 			ValidationStore.setField( 'add-examination', 'values', true );
 		} else {
-			this.setState( { validation: 'Badanie musi zawierać przynajmniej jedną definicję wartości' } );
 			ValidationStore.setField( 'add-examination', 'values', 'Badanie musi zawierać przynajmniej jedną definicję wartości' );
 		}
 	}
 
 	render () {
 		return ( <React.Fragment>
-			{this.state.validation !== false && this.state.validation !== true &&
-				<Form.Text className="text-danger">{this.state.validation}</Form.Text>}
+			{ValidationStore.formMessage( 'add-examination', 'values' )}
 
 			<div className="d-flex flex-row align-items-center bg-dark text-white p-2 mt-3">
 				<div>Definicje</div>

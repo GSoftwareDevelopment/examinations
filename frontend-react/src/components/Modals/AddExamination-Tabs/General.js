@@ -14,7 +14,6 @@ class TabGeneral extends Component {
 		name: '',
 		group: null,
 		modalAddGroup: false,
-		validation: false,
 	}
 
 	constructor( props ) {
@@ -33,15 +32,12 @@ class TabGeneral extends Component {
 		const { name, group } = currentState || this.state;
 
 		if ( name.trim() === '' ) {
-			this.setState( { validation: 'Wprowadź Nazwę badania' } )
 			ValidationStore.setField( 'add-examination', 'name', 'Wprowadź Nazwę badania' )
 		} else if ( ExaminationsStore.getItems().filter(
 			( item => ( item.group === group && item.name === name.trim() ) )
 		).length > 0 ) {
-			this.setState( { validation: 'W przypisanej grupie, podana nazwa badania juz występuje.' } );
 			ValidationStore.setField( 'add-examination', 'name', 'W przypisanej grupie, podana nazwa badania juz występuje.' )
 		} else {
-			this.setState( { validation: true } );
 			ValidationStore.setField( 'add-examination', 'name', true );
 		}
 	}
@@ -64,8 +60,7 @@ class TabGeneral extends Component {
 					}}
 					onBlur={( e ) => { this.validate(); }}
 				/>
-				{this.state.validation !== false && this.state.validation !== true &&
-					<Form.Text className="text-danger">{this.state.validation}</Form.Text>}
+				{ValidationStore.formMessage( 'add-examination', 'name' )}
 			</Form.Group>
 			<Form.Group>
 				<div className="d-flex flex-row justify-content-between align-items-center">
@@ -73,15 +68,13 @@ class TabGeneral extends Component {
 					<Button
 						variant="light"
 						size="sm"
-						onClick={() => {
-							this.setState( { modalAddGroup: true } );
-						}}
+						onClick={() => { this.setState( { modalAddGroup: true } ); }}
 					>Utwórz grupę</Button>
 				</div>
 				<Form.Control
 					as="select"
 					custom
-					defaultValue=""
+					value={this.state.group || ""}
 					name={"group"}
 					onChange={( e ) => {
 						this.setState( { group: e.target.value || null } );
@@ -114,6 +107,7 @@ class TabGeneral extends Component {
 				<AddGroup
 					show={this.state.modalAddGroup}
 					onHide={() => { this.setState( { modalAddGroup: false } ); }}
+					isCreated={( group ) => { this.setState( { group: group._id } ) }}
 				/>
 			}
 		</React.Fragment> )

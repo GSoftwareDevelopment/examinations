@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import ValidationStore from '../../../stores/validation';
 
 import * as Icon from 'react-bootstrap-icons'
-import { Button, Form, Alert } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 class AttrList extends Component {
 	constructor( props ) {
@@ -77,9 +77,7 @@ class AttrList extends Component {
 			<React.Fragment>
 				<Form.Label>Lista wyboru</Form.Label>
 				{this.state.items.length === 0
-					? <Alert variant="warning" className="text-center">
-						{ValidationStore.getField( 'add-value-attr', 'empty-list' )[ 0 ].value}
-					</Alert>
+					? ValidationStore.formMessage( 'add-value-attr', 'empty-list' )
 					: this.state.items.map( ( item, id ) => (
 						<Form.Group key={"enum-" + id} className="mb-0 d-flex flex-row justify-content-between align-items-start">
 							<div className="flex-fill">
@@ -93,7 +91,7 @@ class AttrList extends Component {
 									onBlur={( e ) => { this.checkEmptyOptions(); }}
 									autoComplete="off" />
 								{this.state.highlightItem === id &&
-									<Form.Text>{ValidationStore.getField( 'add-value-attr', 'zero-field' )[ 0 ].value}</Form.Text>}
+									ValidationStore.formMessage( 'add-value-attr', 'zero-field' )}
 							</div>
 							<Button
 								onClick={( e ) => { this.doDeleteItem( id ) }}
@@ -107,7 +105,7 @@ class AttrList extends Component {
 					onClick={( e ) => { this.doInsertItem() }}
 					variant="light" size="sm">
 					<Icon.PlusCircle size="20" className="mr-2" />Dodaj opcje
-                </Button>
+        </Button>
 			</React.Fragment>
 		)
 	}

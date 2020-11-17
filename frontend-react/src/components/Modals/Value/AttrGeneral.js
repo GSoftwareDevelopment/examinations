@@ -1,7 +1,7 @@
-/*eslint no-duplicate-case: "off"*/
-
 import React, { Component } from 'react'
 import { Row, Col, Form } from 'react-bootstrap';
+
+import ValidationStore from '../../../stores/validation';
 
 class AttrGeneral extends Component {
 	constructor( props ) {
@@ -19,18 +19,27 @@ class AttrGeneral extends Component {
 				required: true,
 			};
 		}
+		ValidationStore.setField( 'add-value-attr', 'attr-name', false );
 	}
 
 	setInputValue ( property, val ) {
 		this.setState( ( state ) => {
 			let newState = { [ property ]: val };
 			this.props.attributes( { ...state, ...newState } );
-			return newState;
+			return { ...state, ...newState };
 		} );
 	}
 
 	componentDidMount () {
 		this.props.attributes( this.state );
+	}
+
+	validate () {
+		const valueName = this.state.name;
+		if ( valueName.trim() === '' )
+			ValidationStore.setField( 'add-value-attr', 'attr-name', 'Wprowadź nazwę dla definicji wartości' )
+		else
+			ValidationStore.setField( 'add-value-attr', 'attr-name', true )
 	}
 
 	render () {
@@ -54,7 +63,9 @@ class AttrGeneral extends Component {
 							type="text"
 							value={this.state.name}
 							onChange={( e ) => { this.setInputValue( 'name', e.target.value ) }}
+							onBlur={( e ) => { this.validate() }}
 						/>
+						{ValidationStore.formMessage( 'add-value-attr', 'attr-name' )}
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row} controlId="valueDescription">

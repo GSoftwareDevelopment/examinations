@@ -1,5 +1,3 @@
-/*eslint no-duplicate-case: "off"*/
-
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
@@ -25,6 +23,7 @@ class AddValue extends Component {
 			attributes: null,
 			descriptionsHide: ConfigurationStore.getConf( 'AddValue', 'descriptionsHide' ),
 		}
+		ValidationStore.removeField( 'add-value-attr' );
 	}
 
 	setInputValue ( property, val ) {
@@ -33,9 +32,6 @@ class AddValue extends Component {
 
 	isValid () {
 		if ( this.state.type === 'PROMPT' )
-			return false
-
-		if ( this.state.general && this.state.general.name.trim() === '' )
 			return false
 
 		return ValidationStore.check( 'add-value-attr' );
@@ -125,15 +121,11 @@ class AddValue extends Component {
 
 							: <React.Fragment>
 								<AttrGeneral
-									attributes={( data ) => {
-										this.setState( { general: data } );
-									}}
+									attributes={( data ) => { this.setState( { general: data } ); }}
 								/>
 								<ValueAttributes
 									type={this.state.type}
-									attributes={( data ) => {
-										this.setState( { attributes: data } );
-									}}
+									attributes={( data ) => { this.setState( { attributes: data } ); }}
 								/>
 							</React.Fragment>
 						}
@@ -147,7 +139,7 @@ class AddValue extends Component {
 								disabled={!this.isValid()}
 							>
 								Utwórz
-												</Button>}
+							</Button>}
 					</Modal.Footer>
 				</Form>
 			</Modal >
