@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import './AddExamination.scss';
+import './examination.scss';
 
 import ExaminationsStore from '../../stores/examinations';
 import ValuesStore from '../../stores/values';
@@ -8,12 +8,11 @@ import ValidationStore from '../../stores/validation';
 
 import { Nav, Form, Button, Modal, Tabs, Tab, Spinner } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
-import { Scrollbars } from 'react-custom-scrollbars';
 
-import TabGeneral from './AddExaminations-Tab-General';
-import TabValues from './AddExaminations-Tab-Values';
+import TabGeneral from './AddExamination-Tabs/General';
+import TabValues from './AddExamination-Tabs/Values';
 
-class AddExamination extends Component {
+class ModalExamination extends Component {
 	constructor( props ) {
 		super( props );
 		this.state = {
@@ -127,4 +126,4 @@ class AddExamination extends Component {
 	}
 }
 
-export default observer( AddExamination )
+export default observer( ModalExamination )
