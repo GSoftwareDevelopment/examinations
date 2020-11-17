@@ -10,9 +10,9 @@ import {
 	Dropdown,
 } from 'react-bootstrap';
 
-import ExaminationsList from '../ExaminationsList';
-import AddExamination from '../Modals/AddExamination';
-import ExaminationViewOptions from '../Modals/ExaminationViewOptions';
+import ExaminationsList from './ExaminationsList';
+import ModalExamination from '../Modals/Examination';
+import ModalExaminationViewOptions from '../Modals/Examination-ViewOptions';
 
 class Examinations extends Component {
 	constructor() {
@@ -56,6 +56,11 @@ class Examinations extends Component {
 		this.setState( { selected: [] } )
 	}
 
+	async doExaminationDelete ( itemId ) {
+		console.log( 'delete item #' + itemId + '...' )
+		await ExaminationsStore.fetchDelete( [ itemId ] );
+	}
+
 	async doDeleteSelected () {
 		await ExaminationsStore.fetchDelete( this.state.selected );
 		this.setState( { selected: [] } );
@@ -72,13 +77,14 @@ class Examinations extends Component {
 
 		return (
 			<div style={{ paddingBottom: "5em" }}>
-				<div className="d-flex flex-row justify-content-between align-items-center border-bottom mb-2">
+				<div className="mx-3 d-flex flex-row justify-content-between align-items-center border-bottom mb-2">
 					<h4 className="">Lista badań</h4>
 				</div>
 
 				<ExaminationsList
 					silentFetch={this.state.silentFetch}
 					onSelect={( itemId ) => { this.handleSelectItem( itemId ) }}
+					onItemDelete={( itemId ) => { this.doExaminationDelete( itemId ) }}
 					onGroupDelete={( groupId ) => { this.doGroupDelete( groupId ) }}
 				/>
 
@@ -139,12 +145,12 @@ class Examinations extends Component {
 				</nav>
 
 				{this.state.modalAddExamination &&
-					<AddExamination
+					<ModalExamination
 						show={this.state.modalAddExamination}
 						onHide={closeAddExaminationModal}
 					/>}
 				{this.state.modalViewOption &&
-					<ExaminationViewOptions
+					<ModalExaminationViewOptions
 						show={this.state.modalViewOption}
 						onHide={closeViewOptionsModal}
 					/>}
