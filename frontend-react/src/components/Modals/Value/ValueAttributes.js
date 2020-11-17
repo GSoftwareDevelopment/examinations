@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import { defineTypes } from './DefineTypes';
+import { ValuesTypesDef } from './ValuesTypesDef';
 
 class ValueAttributes extends Component {
 	constructor( props ) {
@@ -15,7 +15,7 @@ class ValueAttributes extends Component {
 	}
 
 	render () {
-		let typeDef = defineTypes.filter( type => type.type === this.props.type )
+		let typeDef = ValuesTypesDef.filter( type => type.type === this.props.type )
 		if ( typeDef.length > 0 ) {
 			const Attr = typeDef[ 0 ].component;
 			if ( Attr )
