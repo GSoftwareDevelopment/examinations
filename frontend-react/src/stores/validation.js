@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { Form } from 'react-bootstrap';
 
 class ValidationStore {
 	fields = [];
@@ -51,6 +52,19 @@ class ValidationStore {
 			}
 		} );
 		return valid;
+	}
+
+	formMessage ( componentName, fieldName ) {
+		const invalidValues = this.getField( componentName, fieldName )
+			.filter( item => ( item !== false && item !== true ) );
+
+		console.log( `messages for ${componentName}.${fieldName}:` )
+		invalidValues.forEach( field => {
+			console.log( `${field.component}.${field.name}=${field.value}` )
+		} )
+
+		return invalidValues.map( value =>
+			<Form.Text key={value.value} className="text-danger">{value.value}</Form.Text> )
 	}
 }
 
