@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { observer } from 'mobx-react';
+
 import ExaminationsStore from '../../stores/examinations';
 import GroupsStore from '../../stores/groups';
 import ValuesStore from '../../stores/values';
@@ -96,10 +98,7 @@ class Examinations extends Component {
 				<div className="mx-3 d-flex flex-row justify-content-between align-items-center border-bottom mb-2">
 					<h4 className="">Lista badań</h4>
 				</div>
-				{this.state.silentFetch &&
-					( ValuesStore.state === "pending" ||
-						ExaminationsStore.state === "pending" ||
-						GroupsStore.state === "pending" ) &&
+				{[ ExaminationsStore, GroupsStore, ValuesStore ].find( store => store.state === "pending" ) &&
 					<div className="progress bg-secondary custom-progress">
 						<div className="indeterminate"></div>
 					</div>
@@ -182,4 +181,4 @@ class Examinations extends Component {
 	}
 }
 
-export default Examinations
+export default observer( Examinations )

@@ -141,7 +141,7 @@ class ModalExamination extends Component {
 								? <div className="d-flex felx-row align-items-center">
 									<Spinner size="sm" animation="border" role="status" /><span className="ml-2">Zapisywanie...</span>
 								</div>
-								: "Dodaj"}
+								: this.props.setTo ? "Zapisz" : "Dodaj"}
 						</Button>
 					</Modal.Footer>
 				</Form>
