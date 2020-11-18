@@ -60,6 +60,7 @@ function GroupHeader ( props ) {
 					variant="light"
 					size="sm"
 					className="p-2"
+					onClick={() => { props.onClickEdit( id ) }}
 				><Icon.PencilSquare size="20" /></Button>
 				<OverlayTrigger
 					trigger="click"
@@ -134,10 +135,11 @@ const ExaminationItem = observer( ( props ) => {
 					variant="light"
 					size="sm"
 					className="p-2"
+					onClick={() => { props.onClickEdit( id ); }}
 				><Icon.PencilSquare size="20" /></Button>
 				<OverlayTrigger
 					trigger="click"
-					overlay={ConfirmDelete( () => { props.onDelete( id ) } )}
+					overlay={ConfirmDelete( () => { props.onClickDelete( id ) } )}
 					placement="left"
 					rootClose
 				>
@@ -179,7 +181,8 @@ class ExaminationsList extends Component {
 									inGroup={this.props.inGroup}
 									item={itemWOGroup}
 									onSelect={this.props.onSelect}
-									onDelete={this.props.onItemDelete}
+									onClickDelete={this.props.onItemDelete}
+									onClickEdit={this.props.onItemEdit}
 								/>
 							)
 						} );
@@ -196,7 +199,8 @@ class ExaminationsList extends Component {
 									inGroup={this.props.inGroup}
 									item={itemInGroup}
 									onSelect={this.props.onSelect}
-									onDelete={this.props.onItemDelete}
+									onClickDelete={this.props.onItemDelete}
+									onClickEdit={this.props.onItemEdit}
 								/>
 							)
 						} );
@@ -206,6 +210,7 @@ class ExaminationsList extends Component {
 							<GroupHeader
 								group={currentGroup}
 								onDelete={this.props.onGroupDelete}
+								onClickEdit={this.props.onGroupEdit}
 							/>
 							{groupItems.length === 0
 								? <div className="alert alert-info my-2">
@@ -221,10 +226,6 @@ class ExaminationsList extends Component {
 		if ( this.props.silentFetch ) {
 			return ( <React.Fragment>
 				<ListHeader />
-				{( ExaminationsStore.state === "pending" || GroupsStore.state === "pending" ) &&
-					<div className="progress bg-secondary custom-progress">
-						<div className="indeterminate"></div>
-					</div>}
 				{list}
 			</React.Fragment> )
 		} else {

@@ -10,22 +10,31 @@ import { Form, Button, Modal, Tabs, Tab, Spinner } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 import { ModalTabsButtons } from '../ModalTabsButtons';
 
-import TabGeneral from './AddExamination-Tabs/General';
-import TabValues from './AddExamination-Tabs/Values';
+import TabGeneral from './examination-tabs/General';
+import TabValues from './examination-tabs/Values';
 
 class ModalExamination extends Component {
 	constructor( props ) {
 		super( props );
-		this.state = {
-			activeTab: 'general',
-			name: 'Nowe badanie',
-			group: null,
-			description: '',
+
+		if ( !props.setTo ) { // if `setTo` is set to` null` it indicates creating a new examination
+			this.state = {
+				activeTab: 'general',
+				name: 'Nowe badanie',
+				group: null,
+				description: '',
+			}
+			ValuesStore.reset( [ { id: 0, type: 'numeric', name: 'Wartość', required: true } ] );
+		} else { // ...otherwise, it is edit mode of existing examination.
+			// Inside `isSet` property is object with examination data
+			this.state = {
+				activeTab: 'general',
+				...props.setTo
+			}
 		}
 
-		ValidationStore.removeField( 'add-examination' );
-		ValuesStore.reset( [ { id: 0, type: 'numeric', name: 'Wartość', required: true } ] );
-		ValidationStore.setField( 'add-examination', 'values', true );
+		ValidationStore.removeField( 'modal-examination' );
+		ValidationStore.setField( 'modal-examination', 'values', true );
 	}
 
 	setInputValue ( property, val ) {
@@ -40,13 +49,19 @@ class ModalExamination extends Component {
 		e.preventDefault();
 		e.stopPropagation();
 
-		const result = await ExaminationsStore.fetchAdd( {
+		let result;
+		const examinationData = {
 			name: this.state.name,
 			group: this.state.group || null,
 			description: this.state.description,
 			//it's needed to extract `id` property from object
-			values: ValuesStore.getItems().map( ( { id, ...rest } ) => rest ),
-		} );
+			values: ValuesStore.getItems().map( ( { id, ...rest } ) => rest )
+		}
+
+		if ( !this.props.setTo )
+			result = await ExaminationsStore.fetchAdd( examinationData )
+		else
+			result = await ExaminationsStore.fetchUpdate( this.state._id, examinationData )
 
 		if ( result.OK ) {
 			this.props.onHide();
@@ -55,7 +70,7 @@ class ModalExamination extends Component {
 	}
 
 	isValid () {
-		return ValidationStore.check( 'add-examination' );
+		return ValidationStore.check( 'modal-examination' );
 	}
 
 	render () {
@@ -65,7 +80,7 @@ class ModalExamination extends Component {
 				key: 'general',
 				name: 'Ogólne',
 				afterName: <React.Fragment>
-					{ValidationStore.check( 'add-examination', 'name' ) === false &&
+					{ValidationStore.check( 'modal-examination', 'name' ) === false &&
 						<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
 				</React.Fragment>
 			},
@@ -73,7 +88,7 @@ class ModalExamination extends Component {
 				key: 'values',
 				name: 'Wartości',
 				afterName: <React.Fragment>
-					{ValidationStore.check( 'add-examination', 'values' ) === false &&
+					{ValidationStore.check( 'modal-examination', 'values' ) === false &&
 						<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />}
 				</React.Fragment>
 			},
@@ -90,7 +105,10 @@ class ModalExamination extends Component {
 					onSubmit={( e ) => { this.doSubmit( e ) }}
 				>
 					<Modal.Header closeButton className="pb-0 border-0">
-						<Modal.Title>Nowe badanie</Modal.Title>
+						{!this.props.setTo
+							? <Modal.Title>Nowe badanie</Modal.Title>
+							: <Modal.Title>Edycja badania</Modal.Title>
+						}
 					</Modal.Header>
 
 					<ModalTabsButtons
@@ -104,6 +122,7 @@ class ModalExamination extends Component {
 							activeKey={this.state.activeTab}>
 							<Tab eventKey="general">
 								<TabGeneral
+									setTo={this.props.setTo}
 									onChange={( e ) => { this.setInputValue( e.target.name, e.target.value ) }}
 								/>
 							</Tab>

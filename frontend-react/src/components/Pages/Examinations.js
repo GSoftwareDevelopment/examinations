@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ExaminationsStore from '../../stores/examinations';
 import GroupsStore from '../../stores/groups';
+import ValuesStore from '../../stores/values';
 import './progressbar.scss';
 
 import * as Icon from 'react-bootstrap-icons';
@@ -20,7 +21,8 @@ class Examinations extends Component {
 
 		this.state = {
 			modalViewOption: false,
-			modalAddExamination: false,
+			modalExamination: false,
+			examinationData: null,
 			silentFetch: false,
 			selected: []
 		}
@@ -71,20 +73,43 @@ class Examinations extends Component {
 		await GroupsStore.fetchDelete( [ groupId ] );
 	}
 
+	async prepareToEditItem ( itemId ) {
+		console.log( 'Item edit #' + itemId );
+		await ValuesStore.fetchGet( itemId );
+		const examinationData = ExaminationsStore.getItemById( itemId );
+		this.setState( {
+			examinationData,
+			modalExamination: true
+		} )
+	}
+
+	prepareToEditGroup ( groupId ) {
+		console.log( 'Group edit #' + groupId )
+	}
+
 	render () {
 		const closeViewOptionsModal = () => { this.setState( { modalViewOption: false } ) }
-		const closeAddExaminationModal = () => { this.setState( { modalAddExamination: false } ) }
+		const closeModalExamination = () => { this.setState( { modalExamination: false } ) }
 
 		return (
 			<div style={{ paddingBottom: "5em" }}>
 				<div className="mx-3 d-flex flex-row justify-content-between align-items-center border-bottom mb-2">
 					<h4 className="">Lista badań</h4>
 				</div>
-
+				{this.state.silentFetch &&
+					( ValuesStore.state === "pending" ||
+						ExaminationsStore.state === "pending" ||
+						GroupsStore.state === "pending" ) &&
+					<div className="progress bg-secondary custom-progress">
+						<div className="indeterminate"></div>
+					</div>
+				}
 				<ExaminationsList
 					silentFetch={this.state.silentFetch}
 					onSelect={( itemId ) => { this.handleSelectItem( itemId ) }}
+					onItemEdit={( itemId ) => { this.prepareToEditItem( itemId ) }}
 					onItemDelete={( itemId ) => { this.doExaminationDelete( itemId ) }}
+					onGroupEdit={( groupId ) => { this.prepareToEditGroup( groupId ) }}
 					onGroupDelete={( groupId ) => { this.doGroupDelete( groupId ) }}
 				/>
 
@@ -94,7 +119,7 @@ class Examinations extends Component {
 						className="rounded-circle p-2 m-0"
 						style={{ transform: "translateX(+5em)", zIndex: 2 }}
 						variant="primary"
-						onClick={() => { this.setState( { modalAddExamination: true } ) }}
+						onClick={() => { this.setState( { examinationData: null, modalExamination: true } ) }}
 					>
 						<Icon.Plus size="48" />
 					</Button>
@@ -118,14 +143,11 @@ class Examinations extends Component {
 								<Icon.ArrowRepeat size="16" /> Odśwież widok</Dropdown.Item>
 							<Dropdown.Divider />
 							<Dropdown.Item eventKey="1">
-								<Icon.SquareFill className="mr-2" />Zaznacz wszystkie
-                            </Dropdown.Item>
+								<Icon.SquareFill className="mr-2" />Zaznacz wszystkie</Dropdown.Item>
 							<Dropdown.Item eventKey="2">
-								<Icon.Square className="mr-2" />Odznacz wszystkie
-                            </Dropdown.Item>
+								<Icon.Square className="mr-2" />Odznacz wszystkie</Dropdown.Item>
 							<Dropdown.Item eventKey="3">
-								<Icon.SquareHalf className="mr-2" />Odwróć zaznaczenie
-                            </Dropdown.Item>
+								<Icon.SquareHalf className="mr-2" />Odwróć zaznaczenie</Dropdown.Item>
 							<Dropdown.Divider />
 							<Dropdown.Item
 								className="d-flex flex-row justify-content-between align-items-center"
@@ -144,10 +166,11 @@ class Examinations extends Component {
 
 				</nav>
 
-				{this.state.modalAddExamination &&
+				{this.state.modalExamination &&
 					<ModalExamination
-						show={this.state.modalAddExamination}
-						onHide={closeAddExaminationModal}
+						show={this.state.modalExamination}
+						setTo={this.state.examinationData}
+						onHide={closeModalExamination}
 					/>}
 				{this.state.modalViewOption &&
 					<ModalExaminationViewOptions
