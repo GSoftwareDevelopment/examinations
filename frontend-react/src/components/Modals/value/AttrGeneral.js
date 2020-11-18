@@ -12,14 +12,15 @@ class AttrGeneral extends Component {
 				description: props.setTo.description,
 				required: props.setTo.required,
 			};
+			ValidationStore.setField( 'modal-value', 'attr-name', true );
 		} else {
 			this.state = {
 				name: '',
 				description: '',
 				required: true,
 			};
+			ValidationStore.setField( 'modal-value', 'attr-name', false );
 		}
-		ValidationStore.setField( 'modal-value', 'attr-name', false );
 	}
 
 	setInputValue ( property, val ) {

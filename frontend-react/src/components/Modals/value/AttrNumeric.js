@@ -1,6 +1,8 @@
-/*eslint no-duplicate-case: "off"*/
-
 import React, { Component } from 'react'
+import { observer } from 'mobx-react';
+
+import ValidationStore from '../../../stores/validation';
+
 import { Row, Col, Form } from 'react-bootstrap';
 
 class AttrNumeric extends Component {
@@ -9,6 +11,7 @@ class AttrNumeric extends Component {
 		this.state = {
 			unit: props.setTo ? props.setTo.unit || '' : '',
 		};
+		ValidationStore.setField( 'modal-value', 'unit-field', true );
 	}
 
 	componentDidMount () {
@@ -23,6 +26,10 @@ class AttrNumeric extends Component {
 		} );
 	}
 
+	validate () {
+		ValidationStore.setField( 'modal-value', 'unit-field', true );
+	}
+
 	render () {
 		return (
 			<Form.Group as={Row} controlId="unit">
@@ -32,6 +39,7 @@ class AttrNumeric extends Component {
 						type="text"
 						value={this.state.unit}
 						onChange={( e ) => { this.setUnitValue( e.target.value ) }}
+						onBlur={( e ) => { this.validate(); }}
 						autoComplete="no" />
 				</Col>
 			</Form.Group>
@@ -39,4 +47,4 @@ class AttrNumeric extends Component {
 	}
 }
 
-export default AttrNumeric
+export default observer( AttrNumeric )
