@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { observer } from 'mobx-react';
+
 import UserStore from './stores/user';
+import ValuesStore from './stores/values';
 import ExaminationsStore from './stores/examinations';
 import GroupsStore from './stores/groups';
 
@@ -52,6 +54,20 @@ class App extends React.Component {
 								<Redirect to="/" />
 							</Switch>
 						</React.Fragment>
+				}
+				{
+					ValuesStore.getState() === 'error' &&
+					<Modal show={true}>
+						<Modal.Header closeButton>
+							<Modal.Title>{ExaminationsStore.getError().title}</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>{ExaminationsStore.getError().msg}</Modal.Body>
+						<Modal.Footer>
+							<Button variant="secondary"
+								onClick={() => { ExaminationsStore.clearError() }}
+							>Close</Button>
+						</Modal.Footer>
+					</Modal>
 				}
 				{
 					ExaminationsStore.getState() === 'error' &&
