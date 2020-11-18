@@ -155,7 +155,7 @@ class ExaminationsStore {
 			runInAction( () => {
 				if ( result.OK ) {
 					this.state = "done";
-					this.insert( result.created.examinationEntry )
+					// this.insert( result.created.examinationEntry )
 				}
 
 				if ( result.error ) {
