@@ -17,6 +17,17 @@ import ExaminationsList from './ExaminationsList';
 import ModalExamination from '../Modals/Examination';
 import ModalExaminationViewOptions from '../Modals/Examination-ViewOptions';
 
+const SilentFetchBar = observer( () => {
+	if ( [ ExaminationsStore, GroupsStore, ValuesStore ].find( store => store.state === "pending" ) )
+		return (
+			<div className="progress bg-secondary custom-progress">
+				<div className="indeterminate"></div>
+			</div>
+		)
+	else
+		return null
+} )
+
 class Examinations extends Component {
 	constructor() {
 		super();
@@ -98,11 +109,8 @@ class Examinations extends Component {
 				<div className="mx-3 d-flex flex-row justify-content-between align-items-center border-bottom mb-2">
 					<h4 className="">Lista badań</h4>
 				</div>
-				{[ ExaminationsStore, GroupsStore, ValuesStore ].find( store => store.state === "pending" ) &&
-					<div className="progress bg-secondary custom-progress">
-						<div className="indeterminate"></div>
-					</div>
-				}
+				<SilentFetchBar />
+
 				<ExaminationsList
 					silentFetch={this.state.silentFetch}
 					onSelect={( itemId ) => { this.handleSelectItem( itemId ) }}
@@ -181,4 +189,4 @@ class Examinations extends Component {
 	}
 }
 
-export default observer( Examinations )
+export default Examinations
