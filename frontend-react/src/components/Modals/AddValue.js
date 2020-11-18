@@ -4,14 +4,14 @@ import { observer } from 'mobx-react';
 import * as Icon from 'react-bootstrap-icons';
 import { Button, Modal, Form, ListGroup } from 'react-bootstrap';
 
-import { ValuesTypesDef } from './Value/ValuesTypesDef';
+import { ValuesTypesDef } from './value/ValuesTypesDef';
 
 import ConfigurationStore from '../../stores/configuration';
 import ValuesStore from '../../stores/values';
 import ValidationStore from '../../stores/validation';
 
-import AttrGeneral from './Value/AttrGeneral';
-import ValueAttributes from './Value/ValueAttributes';
+import AttrGeneral from './value/AttrGeneral';
+import ValueAttributes from './value/ValueAttributes';
 
 class AddValue extends Component {
 	constructor( props ) {
@@ -23,7 +23,7 @@ class AddValue extends Component {
 			attributes: null,
 			descriptionsHide: ConfigurationStore.getConf( 'AddValue', 'descriptionsHide' ),
 		}
-		ValidationStore.removeField( 'add-value-attr' );
+		ValidationStore.removeField( 'modal-value' );
 	}
 
 	setInputValue ( property, val ) {
@@ -34,7 +34,7 @@ class AddValue extends Component {
 		if ( this.state.type === 'PROMPT' )
 			return false
 
-		return ValidationStore.check( 'add-value-attr' );
+		return ValidationStore.check( 'modal-value' );
 	}
 
 	onSubmit ( e ) {
@@ -106,7 +106,7 @@ class AddValue extends Component {
 											key={"value-type-" + type.type}
 											action
 											onClick={( e ) => {
-												ValidationStore.removeField( 'add-value-attr' );
+												ValidationStore.removeField( 'modal-value' );
 												this.setInputValue( 'type', type.type );
 												this.setState( { typeName: type.name } );
 											}}>

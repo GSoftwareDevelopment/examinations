@@ -3,13 +3,16 @@ import { observer } from 'mobx-react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
-import { ValuesTypesDef } from './Value/ValuesTypesDef';
+import {
+	ValuesTypesDef,
+	getNameByType as getValueName
+} from './value/ValuesTypesDef';
 
 import ValuesStore from '../../stores/values';
 import ValidationStore from '../../stores/validation';
 
-import AttrGeneral from './Value/AttrGeneral';
-import ValueAttributes from './Value/ValueAttributes';
+import AttrGeneral from './value/AttrGeneral';
+import ValueAttributes from './value/ValueAttributes';
 
 class EditValue extends Component {
 	constructor( props ) {
@@ -26,11 +29,11 @@ class EditValue extends Component {
 			},
 			attributes,
 		}
-		ValidationStore.removeField( 'add-value-attr' );
+		ValidationStore.removeField( 'modal-value' );
 	}
 
 	isValid () {
-		return ValidationStore.check( 'add-value-attr' );
+		return ValidationStore.check( 'modal-value' );
 	}
 
 	onSubmit ( e ) {
@@ -63,7 +66,7 @@ class EditValue extends Component {
 					<Modal.Header closeButton>
 						<Modal.Title>
 							Edycja definicji:
-              <span className="ml-3">{this.state.type}</span>
+              <span className="ml-3">{getValueName( this.state.type )}</span>
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
