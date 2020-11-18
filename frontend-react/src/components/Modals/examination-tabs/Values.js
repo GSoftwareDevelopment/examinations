@@ -17,6 +17,17 @@ class TabValues extends Component {
 		editedValueId: false,
 	}
 
+	deleteItem ( itemId ) {
+		if ( !this.props.editMode )
+			// In the new examination mode, just delete the entry from the table of values
+			ValuesStore.remove( itemId )
+		else
+			// In edit examination mode, set the flag `deleteOnUpdate` on deleted value.
+			// The backend needs to know which value definition is to be removed from the database
+			ValuesStore.removeOnUpdate( itemId );
+		this.validation();
+	}
+
 	validation () {
 		const values = ValuesStore.getItems();
 		if ( values.length > 0 ) {
@@ -37,7 +48,7 @@ class TabValues extends Component {
 			<ValuesList
 				items={ValuesStore.getItems()}
 				onClickEdit={( id ) => { this.setState( { editedValueId: id } ); }}
-				onClickDelete={( id ) => { ValuesStore.remove( id ); this.validation(); }}
+				onClickDelete={( id ) => { this.deleteItem( id ); }}
 			/>
 
 			<div className="d-flex flex-column justify-content-start align-items-end border-top py-2">
@@ -65,7 +76,7 @@ class TabValues extends Component {
 				<EditValue
 					show={this.state.editedValueId !== false}
 					valueData={this.state.editedValueId !== false
-						? ValuesStore.items[ this.state.editedValueId ]
+						? ValuesStore.items.find( value => value.id === this.state.editedValueId )
 						: null}
 					onHide={() => {
 						this.setState( { editedValueId: false } );
