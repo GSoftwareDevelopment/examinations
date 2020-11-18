@@ -3,33 +3,26 @@ import React, { Component } from 'react'
 import { Nav, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 
+import { ValuesTypesDef } from '../value/ValuesTypesDef';
+
 function ValueItem ( props ) {
 	const { value } = props;
 
-	const valueSymbolize = ( value ) => (
-		<React.Fragment>
-			{ value.required
-				? <strong className="mr-1">
-					<Icon.ExclamationCircleFill className="mr-1" />
-					{value.name}
-				</strong>
-				: <span className="mr-1">{value.name}</span>
-			}
-			<span className="font-italic mr-1">{value.type}</span>
-			{ value.unit && <span className="mr-1">[{value.unit}]</span>}
-			{ value.list &&
-				<span className="mr-1">{'{'}
-					{value.list.map( ( item, id, arr ) => <span>
-						<u key={"value-list-item-" + id} className="mx-1 ">{item}</u>
-						{( id !== ( arr.length - 1 ) ) && <span>,</span>}
-					</span> )}
-					{'}'}</span>
-			}
-			{value.description && <div>
-				<Icon.ChatDots className="mr-1" />{value.description}
-			</div>}
-		</React.Fragment>
-	)
+	const valueSymbolize = ( value ) => {
+		const def = ValuesTypesDef.find( def => def.type === value.type );
+		return (
+			<React.Fragment>
+				{ value.required && <Icon.ExclamationCircleFill className="mr-1" />}
+				<strong key="name" className="mr-1">{value.name}</strong>
+				<span key="type" className="font-italic mr-1">{value.type}</span>
+
+				{def ? def.symbolize( value ) : null}
+				{value.description && <div>
+					<Icon.ChatDots className="mr-1" />{value.description}
+				</div>}
+			</React.Fragment>
+		)
+	}
 
 	const ConfirmDelete = ( onConfirm ) => {
 		return (
@@ -49,7 +42,7 @@ function ValueItem ( props ) {
 
 	return (
 		<div
-			key={"value-" + value.id}
+			key={"value-item-" + value.id}
 			className="row-value d-flex flex-row justify-content-between align-items-start">
 			<div>{valueSymbolize( value )}</div>
 			<Nav as="nav">

@@ -10,15 +10,24 @@ import ValidationStore from '../../../stores/validation';
 import AddGroup from '../AddGroup';
 
 class TabGeneral extends Component {
-	state = {
-		name: '',
-		group: null,
-		modalAddGroup: false,
-	}
 
 	constructor( props ) {
 		super( props );
 
+		if ( !props.setTo )
+			this.state = {
+				name: '',
+				group: null,
+				description: null,
+				modalAddGroup: false,
+			}
+		else
+			this.state = {
+				id: props.setTo._id,
+				name: props.setTo.name,
+				group: props.setTo.group || null,
+				description: props.setTo.description,
+			}
 		this.innerRef = React.createRef();
 	}
 
@@ -28,17 +37,19 @@ class TabGeneral extends Component {
 		}, 1 )
 	}
 
-	validate ( currentState ) {
-		const { name, group } = currentState || this.state;
+	validate () {
 
-		if ( name.trim() === '' ) {
-			ValidationStore.setField( 'add-examination', 'name', 'Wprowadź Nazwę badania' )
-		} else if ( ExaminationsStore.getItems().filter(
-			( item => ( item.group === group && item.name === name.trim() ) )
-		).length > 0 ) {
-			ValidationStore.setField( 'add-examination', 'name', 'W przypisanej grupie, podana nazwa badania juz występuje.' )
+		let { id: _id, name, group } = this.state;
+		name = name.trim();
+
+		if ( name === '' ) {
+			ValidationStore.setField( 'modal-examination', 'name', 'Wprowadź Nazwę badania' )
+		} else if ( ExaminationsStore.getItems()
+			.find( item => item._id !== _id && item.group === group && item.name === name )
+		) {
+			ValidationStore.setField( 'modal-examination', 'name', 'W przypisanej grupie, podana nazwa badania juz występuje.' )
 		} else {
-			ValidationStore.setField( 'add-examination', 'name', true );
+			ValidationStore.setField( 'modal-examination', 'name', true );
 		}
 	}
 
@@ -60,7 +71,7 @@ class TabGeneral extends Component {
 					}}
 					onBlur={( e ) => { this.validate(); }}
 				/>
-				{ValidationStore.formMessage( 'add-examination', 'name' )}
+				{ValidationStore.formMessage( 'modal-examination', 'name' )}
 			</Form.Group>
 			<Form.Group>
 				<div className="d-flex flex-row justify-content-between align-items-center">
@@ -99,8 +110,9 @@ class TabGeneral extends Component {
 					as="textarea"
 					rows="3"
 					name={"description"}
+					value={this.state.description}
 					onChange={( e ) => { this.props.onChange( e ); }}
-				></Form.Control>
+				/>
 			</Form.Group>
 			{
 				this.state.modalAddGroup &&

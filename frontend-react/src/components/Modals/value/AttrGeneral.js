@@ -19,7 +19,7 @@ class AttrGeneral extends Component {
 				required: true,
 			};
 		}
-		ValidationStore.setField( 'add-value-attr', 'attr-name', false );
+		ValidationStore.setField( 'modal-value', 'attr-name', false );
 	}
 
 	setInputValue ( property, val ) {
@@ -37,9 +37,9 @@ class AttrGeneral extends Component {
 	validate () {
 		const valueName = this.state.name;
 		if ( valueName.trim() === '' )
-			ValidationStore.setField( 'add-value-attr', 'attr-name', 'Wprowadź nazwę dla definicji wartości' )
+			ValidationStore.setField( 'modal-value', 'attr-name', 'Wprowadź nazwę dla definicji wartości' )
 		else
-			ValidationStore.setField( 'add-value-attr', 'attr-name', true )
+			ValidationStore.setField( 'modal-value', 'attr-name', true )
 	}
 
 	render () {
@@ -52,7 +52,10 @@ class AttrGeneral extends Component {
 							checked={this.state.required}
 							label="Wymagaj podania wartości"
 							custom
-							onChange={( e ) => { this.setInputValue( 'required', e.target.checked ) }}
+							onChange={( e ) => {
+								this.setInputValue( 'required', e.target.checked );
+								this.forceUpdate( () => { this.validate(); } );
+							}}
 						></Form.Check>
 					</Form.Group>
 				</Form.Row>
@@ -65,7 +68,7 @@ class AttrGeneral extends Component {
 							onChange={( e ) => { this.setInputValue( 'name', e.target.value ) }}
 							onBlur={( e ) => { this.validate() }}
 						/>
-						{ValidationStore.formMessage( 'add-value-attr', 'attr-name' )}
+						{ValidationStore.formMessage( 'modal-value', 'attr-name' )}
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row} controlId="valueDescription">
@@ -75,6 +78,7 @@ class AttrGeneral extends Component {
 							as="textarea"
 							value={this.state.description}
 							onChange={( e ) => { this.setInputValue( 'description', e.target.value ) }}
+							onBlur={( e ) => { this.validate() }}
 						></Form.Control>
 					</Col>
 				</Form.Group>

@@ -15,7 +15,7 @@ class AttrList extends Component {
 			highligtItem: false,
 		};
 		if ( !props.setTo )
-			ValidationStore.setField( 'add-value-attr', 'zero-field', false );
+			ValidationStore.setField( 'modal-value', 'zero-field', false );
 	}
 
 	componentDidMount () {
@@ -37,15 +37,15 @@ class AttrList extends Component {
 		items.forEach( ( item, id ) => {
 			if ( item.trim() === '' ) {
 				this.setState( { highlightItem: id } );
-				ValidationStore.setField( 'add-value-attr', 'zero-field', 'Pole wyboru nie może być puste.' )
-				ValidationStore.setField( 'add-value-attr', 'empty-list', true );
+				ValidationStore.setField( 'modal-value', 'zero-field', 'Pole wyboru nie może być puste.' )
+				ValidationStore.setField( 'modal-value', 'empty-list', true );
 				isEmpty = true;
 			}
 		} );
 
 		if ( !isEmpty ) {
 			this.setState( { highlightItem: false } );
-			ValidationStore.setField( 'add-value-attr', 'zero-field', true )
+			ValidationStore.setField( 'modal-value', 'zero-field', true )
 		}
 		return isEmpty
 	}
@@ -53,8 +53,8 @@ class AttrList extends Component {
 	doInsertItem () {
 		if ( !this.checkEmptyOptions() ) {
 			this.setState( { items: [ ...this.state.items, '' ] } );
-			ValidationStore.setField( 'add-value-attr', 'zero-field', false )
-			ValidationStore.setField( 'add-value-attr', 'empty-list', true );
+			ValidationStore.setField( 'modal-value', 'zero-field', false )
+			ValidationStore.setField( 'modal-value', 'empty-list', true );
 		}
 	}
 
@@ -65,10 +65,10 @@ class AttrList extends Component {
 			highlightItem: false,
 		} );
 		if ( items.length === 0 ) {
-			ValidationStore.setField( 'add-value-attr', 'empty-list', 'Brak zdefiniowanych opcji wyboru' );
+			ValidationStore.setField( 'modal-value', 'empty-list', 'Brak zdefiniowanych opcji wyboru' );
 		} else {
 			if ( !this.checkEmptyOptions( items ) )
-				ValidationStore.setField( 'add-value-attr', 'empty-list', true );
+				ValidationStore.setField( 'modal-value', 'empty-list', true );
 		}
 	}
 
@@ -77,7 +77,7 @@ class AttrList extends Component {
 			<React.Fragment>
 				<Form.Label>Lista wyboru</Form.Label>
 				{this.state.items.length === 0
-					? ValidationStore.formMessage( 'add-value-attr', 'empty-list' )
+					? ValidationStore.formMessage( 'modal-value', 'empty-list' )
 					: this.state.items.map( ( item, id ) => (
 						<Form.Group key={"enum-" + id} className="mb-0 d-flex flex-row justify-content-between align-items-start">
 							<div className="flex-fill">
@@ -91,7 +91,7 @@ class AttrList extends Component {
 									onBlur={( e ) => { this.checkEmptyOptions(); }}
 									autoComplete="off" />
 								{this.state.highlightItem === id &&
-									ValidationStore.formMessage( 'add-value-attr', 'zero-field' )}
+									ValidationStore.formMessage( 'modal-value', 'zero-field' )}
 							</div>
 							<Button
 								onClick={( e ) => { this.doDeleteItem( id ) }}

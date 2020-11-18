@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 
 import ValuesStore from '../../../stores/values';
@@ -20,15 +20,15 @@ class TabValues extends Component {
 	validation () {
 		const values = ValuesStore.getItems();
 		if ( values.length > 0 ) {
-			ValidationStore.setField( 'add-examination', 'values', true );
+			ValidationStore.setField( 'modal-examination', 'values', true );
 		} else {
-			ValidationStore.setField( 'add-examination', 'values', 'Badanie musi zawierać przynajmniej jedną definicję wartości' );
+			ValidationStore.setField( 'modal-examination', 'values', 'Badanie musi zawierać przynajmniej jedną definicję wartości' );
 		}
 	}
 
 	render () {
 		return ( <React.Fragment>
-			{ValidationStore.formMessage( 'add-examination', 'values' )}
+			{ValidationStore.formMessage( 'modal-examination', 'values' )}
 
 			<div className="d-flex flex-row align-items-center bg-dark text-white p-2 mt-3">
 				<div>Definicje</div>
