@@ -7,16 +7,21 @@ const Value = require( '../../models/value' );
 // @route   GET /values
 // @return  JSON data
 router.get( '/:id', async ( req, res ) => {
-    const id = req.params.id;
-    try {
-        const values = await Value
-            .find( { examination: id } )
-            .lean();
-        res.json( values );
-    } catch ( error ) {
-        console.error( error );
-        res.json( { error } );
-    }
+	console.log( req.params );
+
+	try {
+		if ( req.params.id === 'undefined' ) {
+			return res.json( { error: 'Examination ID not specified in body' } );
+		}
+		const examinationId = req.params.id;
+		const values = await Value
+			.find( { examination: examinationId } )
+			.lean();
+		res.json( { 'OK': 1, values } );
+	} catch ( error ) {
+		console.error( error );
+		res.json( { error } );
+	}
 } );
 
 module.exports = router;
