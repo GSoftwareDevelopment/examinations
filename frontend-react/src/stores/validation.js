@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+// import { autorun } from 'mobx';
 import { Form } from 'react-bootstrap';
 
 class ValidationStore {
@@ -72,4 +73,4 @@ let validationStore = window.validationStore = new ValidationStore();
 // 	} )
 // } );
 
-export default validationStore;
+export default validationStore
