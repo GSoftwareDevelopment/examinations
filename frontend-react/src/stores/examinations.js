@@ -15,6 +15,10 @@ class ExaminationsStore {
 		return this.items;
 	}
 
+	getItemById ( itemId ) {
+		return this.items.find( ( item ) => item._id === itemId );
+	}
+
 	getState () { return this.state }
 	getError () { return this.error }
 	clearError () {
@@ -93,6 +97,58 @@ class ExaminationsStore {
 						'Authorization': 'Bearer ' + token
 					},
 					body: JSON.stringify( newExamination )
+				} );
+
+			let result = await res.json();
+			runInAction( () => {
+				if ( result.OK ) {
+					this.state = "done";
+					this.insert( result.created.examinationEntry )
+				}
+
+				if ( result.error ) {
+					this.state = "error";
+					console.error( 'Backend error:', result.error );
+					this.error = {
+						title: 'Backend error',
+						msg: result.error.message,
+						error: result.error
+					}
+				}
+			} )
+
+			return result;
+		} catch ( error ) {
+			runInAction( () => {
+				this.state = "error";
+				console.error( 'Fetch error:', error );
+				this.error = {
+					title: 'Fetch error',
+					msg: error.message,
+					error
+				}
+			} )
+			return false;
+		}
+	}
+
+	async fetchUpdate ( examinationId, updatedExamination ) {
+		if ( UserStore.state !== 'logged' ) {
+			console.log( `Can't do operation 'fetchAdd' when user is not logged` );
+			return;
+		}
+		const token = UserStore.getToken();
+		this.state = "pending";
+
+		try {
+			const res = await fetch( API.examinations + `/${examinationId}`, // 'http://localhost:3000/api/examinations/:id',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + token
+					},
+					body: JSON.stringify( updatedExamination )
 				} );
 
 			let result = await res.json();
