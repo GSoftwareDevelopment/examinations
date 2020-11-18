@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { observer } from 'mobx-react';
 
 import { Nav, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
@@ -75,16 +76,18 @@ function ValueItem ( props ) {
 	)
 }
 
-export default class ValuesList extends Component {
+class ValuesList extends Component {
 	render () {
+		const items = this.props.items.filter( item => item.deleteOnUpdate !== true );
+
 		return (
 			<div className="d-flex flex-column">
-				{this.props.items.length === 0
+				{items.length === 0
 					? <div className="alert alert-info py-2 mt-2 text-center">
 						<Icon.EmojiDizzy size="64" /><br />
 					Brak definicji wartości określających badanie.
 					</div>
-					: this.props.items.map( value =>
+					: items.map( value =>
 						<ValueItem
 							key={"value-" + value.id}
 							value={value}
@@ -97,3 +100,5 @@ export default class ValuesList extends Component {
 		)
 	}
 }
+
+export default observer( ValuesList )
