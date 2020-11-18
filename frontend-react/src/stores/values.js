@@ -108,6 +108,11 @@ class ValuesStore {
 		this.items = this.items.filter( value => ( value.id !== valueId ) )
 	}
 
+	removeOnUpdate ( valueId ) {
+		console.log( `Setting flag deleteOnUpdate on entry #${valueId}` );
+		let item = this.items.find( value => value.id === valueId );
+		item.deleteOnUpdate = true;
+	}
 	update ( valueId, data ) {
 		console.log( `Edit value entry #${valueId}`, data );
 
