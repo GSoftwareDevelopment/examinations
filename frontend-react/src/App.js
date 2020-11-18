@@ -20,6 +20,25 @@ import Profile from './components/Pages/Profile';
 import Examinations from './components/Pages/Examinations';
 import Measurements from './components/Pages/Measurements';
 
+const ErrorHandle = observer( ( props ) => {
+	console.log( props.Store )
+	if ( props.Store.getState() === 'error' )
+		return ( <Modal show={true}>
+			<Modal.Header closeButton>
+				<Modal.Title>{props.Store.getError().title}</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>{props.Store.getError().msg}</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary"
+					onClick={() => { props.Store.clearError() }}
+				>Close</Button>
+			</Modal.Footer>
+		</Modal> )
+	else
+		return null
+} );
+
+
 class App extends React.Component {
 
 	async componentDidMount () {
@@ -55,48 +74,8 @@ class App extends React.Component {
 							</Switch>
 						</React.Fragment>
 				}
-				{
-					ValuesStore.getState() === 'error' &&
-					<Modal show={true}>
-						<Modal.Header closeButton>
-							<Modal.Title>{ExaminationsStore.getError().title}</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>{ExaminationsStore.getError().msg}</Modal.Body>
-						<Modal.Footer>
-							<Button variant="secondary"
-								onClick={() => { ExaminationsStore.clearError() }}
-							>Close</Button>
-						</Modal.Footer>
-					</Modal>
-				}
-				{
-					ExaminationsStore.getState() === 'error' &&
-					<Modal show={true}>
-						<Modal.Header closeButton>
-							<Modal.Title>{ExaminationsStore.getError().title}</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>{ExaminationsStore.getError().msg}</Modal.Body>
-						<Modal.Footer>
-							<Button variant="secondary"
-								onClick={() => { ExaminationsStore.clearError() }}
-							>Close</Button>
-						</Modal.Footer>
-					</Modal>
-				}
-				{
-					GroupsStore.getState() === 'error' &&
-					<Modal show={true}>
-						<Modal.Header closeButton>
-							<Modal.Title>{GroupsStore.getError().title}</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>{GroupsStore.getError().msg}</Modal.Body>
-						<Modal.Footer>
-							<Button variant="secondary"
-								onClick={() => { GroupsStore.clearError() }}
-							>Close</Button>
-						</Modal.Footer>
-					</Modal>
-				}
+				{[ ExaminationsStore, GroupsStore, ValuesStore ]
+					.map( ( Store, id ) => <ErrorHandle key={id} Store={Store} /> )}
 			</Router>
 		);
 	}
