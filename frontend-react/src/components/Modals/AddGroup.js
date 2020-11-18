@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Button, Modal, Form, Spinner } from 'react-bootstrap';
 
-import * as Icon from 'react-bootstrap-icons';
-
 import GroupsStore from '../../stores/groups';
 import ValidationStore from '../../stores/validation';
 
