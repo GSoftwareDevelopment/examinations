@@ -1,14 +1,3 @@
-@for $i from 1 through 6 {
-  $zIndexBackdrop:  #{1040 + (5 * $i)};
-  $zIndexContent:  #{1040 + (5 * $i) + 2};
-  .modal-backdrop.show:nth-of-type(#{$i}) {
-    z-index: $zIndexBackdrop;
-  }
-  div[role="dialog"][aria-modal="true"]:nth-of-type(#{$i}) {
-    z-index: $zIndexContent;
-  }
-}
-
 .dropdown-toggle.noCaret:after {
   display: none;
 }
@@ -18,7 +7,7 @@
   outline: none;
 }
 
-// 
+//
 
 nav.fixed-bottom {
   z-index:99;
