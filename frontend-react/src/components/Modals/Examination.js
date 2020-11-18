@@ -54,8 +54,8 @@ class ModalExamination extends Component {
 			name: this.state.name,
 			group: this.state.group || null,
 			description: this.state.description,
-			//it's needed to extract `id` property from object
-			values: ValuesStore.getItems().map( ( { id, ...rest } ) => rest )
+			// TODO: Po stronie backendu, przy tworzeniu badania, wyrzucić ID z listy wartości przed ich utworzeniem
+			values: ValuesStore.getItems()
 		}
 
 		if ( !this.props.setTo )
@@ -127,7 +127,7 @@ class ModalExamination extends Component {
 								/>
 							</Tab>
 							<Tab eventKey="values">
-								<TabValues />
+								<TabValues editMode={this.props.setTo !== null} />
 							</Tab>
 							<Tab eventKey="norms">
 							</Tab>
