@@ -21,7 +21,6 @@ import Examinations from './components/Pages/Examinations';
 import Measurements from './components/Pages/Measurements';
 
 const ErrorHandle = observer( ( props ) => {
-	console.log( props.Store )
 	if ( props.Store.getState() === 'error' )
 		return ( <Modal show={true}>
 			<Modal.Header closeButton>
