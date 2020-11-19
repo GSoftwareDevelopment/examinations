@@ -25,8 +25,8 @@ router.get( '/', async ( req, res ) => {
 	}
 } );
 
-// @desc    Process examination form
-// @route   POST /examination					- add new entry
+// @desc    Process examination data with values definition
+// @route   POST /examination/created	- add new entry
 // @route		POST /examination/:id			- update entry
 // @return	JSON data
 router.post( '/:id', async ( req, res ) => {
@@ -34,76 +34,87 @@ router.post( '/:id', async ( req, res ) => {
 	console.log( 'Params: ', req.params );
 	console.log( 'Body: ', req.body );
 
-	if ( !req.body.values || !req.body.values.length ) {
-		console.error( `Can't process request. There is no values definition.` );
+	let { values, ...examinationBody } = req.body;
+
+	let processValues = values && values.length > 0;
+	if ( req.params.id === "created" && ( !values || !values.length ) ) {
+		console.error( `Can't create examination without values definitions.` );
 		return res.json( {
 			error: {
 				name: "ValidatorError",
 				kind: "values",
-				message: "No definition of values"
+				message: "No values definitions"
 			}
 		} );
 	}
 
-	let { values, ...examinationBody } = req.body;
-	for ( value of values ) {
-		if ( typeof value !== 'object' ) {
-			console.error( `Can't process request. Wrong value type: ${typeof value}` );
-			return res.json( {
-				error: {
-					name: "ValidatorError",
-					kind: "values",
-					message: `Wrong value type: ${typeof value}`
-				}
-			} );
+	if ( processValues )
+		for ( value of values ) {
+			if ( typeof value !== 'object' ) {
+				console.error( `Can't process request. Wrong value type: ${typeof value}` );
+				return res.json( {
+					error: {
+						name: "ValidatorError",
+						kind: "values",
+						message: `Wrong value type: ${typeof value}`
+					}
+				} );
+			}
 		}
-	}
 
 	try {
 
-		let examinationId,
-			response = {};
+		let examinationId, response = {};
 
 		if ( req.params.id !== 'create' ) {
 			examinationId = req.params.id;
-			response.updated = await Examination.updateOne( { user: req.user.id, "_id": examinationId }, examinationBody )
+			response.updated = await Examination.findOneAndUpdate(
+				{ user: req.user.id, "_id": examinationId },
+				examinationBody,
+				{ upsert: true }
+			)
 		} else {
 			response.created = await Examination.create( { ...examinationBody, user: req.user.id } );
 			console.log( response.created );
-			examinationId = response.created._id;
-			values.forEach( value => {
-				value.examination = examinationId;
-				value.user = req.user.id;
-			} );
+
+			if ( processValues ) {
+				examinationId = response.created._id;
+				values.forEach( value => {
+					value.examination = examinationId;
+					value.user = req.user.id;
+				} );
+			}
 		}
 
-		const valuesToDelete = values
-			.filter( item => item.action === 'delete' )
-			.map( item => item.id );
-		const valuesToCreate = values
-			.filter( item => item.action === 'create' )
-			.map( item => { delete item.id; return item } );
+		if ( processValues ) {
+			const valuesToDelete = values
+				.filter( item => item.action === 'delete' )
+				.map( item => item.id );
+			const valuesToCreate = values
+				.filter( item => item.action === 'create' )
+				.map( item => { delete item.id; return item } );
 
-		const idsToUpdate = [];
-		const valuesToUpdate = values
-			.filter( item => item.action === 'update' )
-			.map( item => {
-				idsToUpdate.push( item.id );
-				delete item.id;
-				return item;
-			} );
+			const idsToUpdate = [];
+			const valuesToUpdate = values
+				.filter( item => item.action === 'update' )
+				.map( item => {
+					idsToUpdate.push( item.id );
+					delete item.id;
+					return item;
+				} );
 
-		response.values = {}
+			response.values = {}
 
-		if ( valuesToCreate.length > 0 )
-			response.values.created = await Value.create( valuesToCreate );
+			if ( valuesToCreate.length > 0 )
+				response.values.created = await Value.create( valuesToCreate );
 
-		if ( idsToUpdate.length > 0 )
-			response.values.updated = idsToUpdate.map( async ( itemId, index ) => {
-				return await Value.findByIdAndUpdate( itemId, { ...valuesToUpdate[ index ] } )
-			} );
-		if ( valuesToDelete.length > 0 )
-			response.values.deleted = await Value.deleteMany( { "_id": { $in: valuesToDelete } } );
+			if ( idsToUpdate.length > 0 )
+				response.values.updated = idsToUpdate.map( async ( itemId, index ) => {
+					return await Value.findByIdAndUpdate( itemId, { ...valuesToUpdate[ index ] } )
+				} );
+			if ( valuesToDelete.length > 0 )
+				response.values.deleted = await Value.deleteMany( { "_id": { $in: valuesToDelete } } );
+		}
 
 		console.log( 'Responses:', response );
 
