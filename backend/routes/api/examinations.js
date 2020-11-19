@@ -25,93 +25,95 @@ router.get( '/', async ( req, res ) => {
 	}
 } );
 
-// @desc    Process add new examination form
-// @route   POST /examination
-// @return  JSON data
-router.post( '/', ( req, res ) => {
-	req.body.user = req.user.id;
-	console.log( req.body );
+// @desc    Process examination form
+// @route   POST /examination					- add new entry
+// @route		POST /examination/:id			- update entry
+// @return	JSON data
+router.post( '/:id', async ( req, res ) => {
+
+	console.log( 'Params: ', req.params );
+	console.log( 'Body: ', req.body );
 
 	if ( !req.body.values || !req.body.values.length ) {
 		console.error( `Can't process request. There is no values definition.` );
-		res.json( {
+		return res.json( {
 			error: {
 				name: "ValidatorError",
 				kind: "values",
 				message: "No definition of values"
 			}
 		} );
-		return;
 	}
 
-	// if only one value is defined
-	// convert string to array with that string,
-	if ( typeof req.body.values === 'string' ) {
-		req.body.values = [ req.body.values ];
-	}
-
-	Examination.create( req.body )
-		.then( ( newExamination ) => {
-			console.log( 'Response from DB:', newExamination );
-
-			const values = req.body.values.map( ( entry ) => {
-				let value;
-				if ( typeof entry === 'string' )
-					value = JSON.parse( entry )
-				else
-					value = entry;
-
-				if ( typeof value !== 'object' ) {
-					throw new Error( `Wrong value definition ${value}` )
+	let { values, ...examinationBody } = req.body;
+	for ( value of values ) {
+		if ( typeof value !== 'object' ) {
+			console.error( `Can't process request. Wrong value type: ${typeof value}` );
+			return res.json( {
+				error: {
+					name: "ValidatorError",
+					kind: "values",
+					message: `Wrong value type: ${typeof value}`
 				}
+			} );
+		}
+	}
 
-				value.examination = newExamination._id;
+	try {
+
+		let examinationId,
+			response = {};
+
+		if ( req.params.id !== 'create' ) {
+			examinationId = req.params.id;
+			response.updated = await Examination.updateOne( { user: req.user.id, "_id": examinationId }, examinationBody )
+		} else {
+			response.created = await Examination.create( { ...examinationBody, user: req.user.id } );
+			console.log( response.created );
+			examinationId = response.created._id;
+			values.forEach( value => {
+				value.examination = examinationId;
 				value.user = req.user.id;
-				return value;
+			} );
+		}
+
+		const valuesToDelete = values
+			.filter( item => item.action === 'delete' )
+			.map( item => item.id );
+		const valuesToCreate = values
+			.filter( item => item.action === 'create' )
+			.map( item => { delete item.id; return item } );
+
+		const idsToUpdate = [];
+		const valuesToUpdate = values
+			.filter( item => item.action === 'update' )
+			.map( item => {
+				idsToUpdate.push( item.id );
+				delete item.id;
+				return item;
 			} );
 
-			return {
-				examinationEntry: newExamination,
-				valuesEntry: Value.create( values )
-			}
-		} )
-		.then( ( entrys ) => {
-			console.log( 'Response from DB examination:', entrys.examinationEntry );
-			console.log( 'Response from DB values:', entrys.valuesEntry );
-			res.json( { OK: 1, created: entrys } );
-		} )
-		.catch( ( error ) => {
-			console.log( error );
-			res.json( { error } );
-		} );
-} );
+		response.values = {}
 
-// @desc		Update examintion
-// @route		POST /examination/:id
-// @return	JSON data
-router.post( '/:id', ( req, res ) => {
-	req.body.user = req.user.id;
-	console.log( req.body );
+		if ( valuesToCreate.length > 0 )
+			response.values.created = await Value.create( valuesToCreate );
 
-	if ( !req.body.values || !req.body.values.length ) {
-		console.error( `Can't process request. There is no values definition.` );
-		res.json( {
-			error: {
-				name: "ValidatorError",
-				kind: "values",
-				message: "No definition of values"
-			}
-		} );
-		return;
+		if ( idsToUpdate.length > 0 )
+			response.values.updated = idsToUpdate.map( async ( itemId, index ) => {
+				return await Value.findByIdAndUpdate( itemId, { ...valuesToUpdate[ index ] } )
+			} );
+		if ( valuesToDelete.length > 0 )
+			response.values.deleted = await Value.deleteMany( { "_id": { $in: valuesToDelete } } );
+
+		console.log( 'Responses:', response );
+
+		res.json( { OK: 1, ...response } );
+
+	} catch ( error ) {
+		console.log( error );
+		res.json( { error } );
 	}
 
-	// if only one value is defined
-	// convert string to array with that string,
-	if ( typeof req.body.values === 'string' ) {
-		req.body.values = [ req.body.values ];
-	}
-
-	res.json( { OK: 1 } )
 } );
 
 // @desc    Process delete item(s)
