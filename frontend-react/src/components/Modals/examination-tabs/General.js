@@ -18,7 +18,7 @@ class TabGeneral extends Component {
 			this.state = {
 				name: '',
 				group: null,
-				description: null,
+				description: '',
 				modalAddGroup: false,
 			}
 		else
@@ -110,8 +110,12 @@ class TabGeneral extends Component {
 					as="textarea"
 					rows="3"
 					name={"description"}
-					value={this.state.description}
-					onChange={( e ) => { this.props.onChange( e ); }}
+					value={this.state.description || ""}
+					onChange={( e ) => {
+						const value = e.target.value;
+						this.setState( { description: value } );
+						this.props.onChange( e );
+					}}
 				/>
 			</Form.Group>
 			{
