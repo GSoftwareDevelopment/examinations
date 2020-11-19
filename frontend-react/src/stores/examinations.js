@@ -158,18 +158,23 @@ class ExaminationsStore {
 			console.log( result );
 			runInAction( () => {
 				if ( result.OK ) {
+					const body = {
+						name: updatedExamination.name,
+						group: updatedExamination.group,
+						description: updatedExamination.description,
+					}
+					this.update( examinationId, body );
 					this.state = "done";
-					this.update( result.updated );
 				}
 
 				if ( result.error ) {
-					this.state = "error";
 					console.error( 'Backend error:', result.error );
 					this.error = {
 						title: 'Backend error',
 						msg: result.error.message,
 						error: result.error
 					}
+					this.state = "error";
 				}
 			} )
 
@@ -256,7 +261,7 @@ class ExaminationsStore {
 
 		runInAction( () => {
 			this.items.forEach( ( examination, index ) => {
-				if ( examination.id !== examinationId ) return
+				if ( examination._id !== examinationId ) return
 
 				this.items[ index ] = {
 					...examination,
