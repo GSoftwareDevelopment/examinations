@@ -40,7 +40,7 @@ class ExaminationsStore {
 
 		try {
 
-			const res = await fetch( API.examinations,
+			const res = await fetch( API.examinationsGet,
 				{
 					method: 'GET',
 					headers: {
@@ -89,7 +89,7 @@ class ExaminationsStore {
 		this.state = "pending";
 
 		try {
-			const res = await fetch( API.examinations, // 'http://localhost:3000/api/examinations',
+			const res = await fetch( API.examinationsCreate, // 'http://localhost:3000/api/examinations',
 				{
 					method: 'POST',
 					headers: {
@@ -98,12 +98,15 @@ class ExaminationsStore {
 					},
 					body: JSON.stringify( newExamination )
 				} );
-
+			if ( !res.ok ) {
+				let result = await res.text();
+				throw new Error( result );
+			}
 			let result = await res.json();
 			runInAction( () => {
 				if ( result.OK ) {
 					this.state = "done";
-					this.insert( result.created.examinationEntry )
+					this.insert( result.created )
 				}
 
 				if ( result.error ) {
@@ -141,7 +144,7 @@ class ExaminationsStore {
 		this.state = "pending";
 
 		try {
-			const res = await fetch( API.examinations + `/${examinationId}`, // 'http://localhost:3000/api/examinations/:id',
+			const res = await fetch( API.examinationsUpdate + examinationId, // 'http://localhost:3000/api/examinations/:id',
 				{
 					method: 'POST',
 					headers: {
@@ -152,10 +155,11 @@ class ExaminationsStore {
 				} );
 
 			let result = await res.json();
+			console.log( result );
 			runInAction( () => {
 				if ( result.OK ) {
 					this.state = "done";
-					// this.insert( result.created.examinationEntry )
+					this.update( result.updated );
 				}
 
 				if ( result.error ) {
@@ -194,7 +198,7 @@ class ExaminationsStore {
 		this.state = "pending";
 
 		try {
-			const res = await fetch( API.examinations, // 'http://localhost:3000/api/examinations',
+			const res = await fetch( API.examinationsDelete, // 'http://localhost:3000/api/examinations',
 				{
 					method: 'DELETE',
 					headers: {
@@ -243,8 +247,23 @@ class ExaminationsStore {
 		}
 	}
 
-	insert ( examination ) {
-		this.items.push( examination );
+	insert ( examinationData ) {
+		this.items.push( examinationData );
+	}
+
+	update ( examinationId, examinationData ) {
+		console.log( `Update examination entry #${examinationId}`, examinationData );
+
+		runInAction( () => {
+			this.items.forEach( ( examination, index ) => {
+				if ( examination.id !== examinationId ) return
+
+				this.items[ index ] = {
+					...examination,
+					...examinationData
+				};
+			} );
+		} )
 	}
 
 	remove ( itemId ) {

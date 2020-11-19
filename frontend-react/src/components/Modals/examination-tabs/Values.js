@@ -18,18 +18,12 @@ class TabValues extends Component {
 	}
 
 	deleteItem ( itemId ) {
-		if ( !this.props.editMode )
-			// In the new examination mode, just delete the entry from the table of values
-			ValuesStore.remove( itemId )
-		else
-			// In edit examination mode, set the flag `deleteOnUpdate` on deleted value.
-			// The backend needs to know which value definition is to be removed from the database
-			ValuesStore.removeOnUpdate( itemId );
+		ValuesStore.remove( itemId )
 		this.validation();
 	}
 
 	validation () {
-		const values = ValuesStore.getItems();
+		const values = ValuesStore.getItems().filter( value => value.action !== 'delete' );
 		if ( values.length > 0 ) {
 			ValidationStore.setField( 'modal-examination', 'values', true );
 		} else {

@@ -17,15 +17,18 @@ class ModalExamination extends Component {
 	constructor( props ) {
 		super( props );
 
-		if ( !props.setTo ) { // if `setTo` is set to` null` it indicates creating a new examination
+		if ( !props.setTo ) {
+			// if `setTo` property is set to `null` it indicates creating a new examination
 			this.state = {
 				activeTab: 'general',
 				name: 'Nowe badanie',
 				group: null,
 				description: '',
 			}
-			ValuesStore.reset( [ { id: 0, type: 'numeric', name: 'Wartość', required: true } ] );
-		} else { // ...otherwise, it is edit mode of existing examination.
+			ValuesStore.reset();
+			ValuesStore.insert( { type: 'numeric', name: 'Wartość', description: '', required: true, unit: '' } );
+		} else {
+			// ...otherwise, it is edit mode of existing examination.
 			// Inside `isSet` property is object with examination data
 			this.state = {
 				activeTab: 'general',
@@ -127,7 +130,7 @@ class ModalExamination extends Component {
 								/>
 							</Tab>
 							<Tab eventKey="values">
-								<TabValues editMode={this.props.setTo !== null} />
+								<TabValues />
 							</Tab>
 							<Tab eventKey="norms">
 							</Tab>

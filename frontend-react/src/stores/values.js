@@ -21,7 +21,7 @@ class ValuesStore {
 	}
 
 	reset ( defaults ) {
-		this.items = defaults
+		this.items = [];
 	}
 
 	getItems () { return this.items; }
@@ -99,28 +99,35 @@ class ValuesStore {
 			} );
 			lastValueId++ // incrase to next "free" value
 
-			this.items.push( { id: lastValueId, ...data } );
+			this.items.push( {
+				action: 'create',
+				id: lastValueId,
+				...data
+			} );
 		} );
 	}
 
 	remove ( valueId ) {
 		console.log( `Delete value entry #${valueId}` );
-		this.items = this.items.filter( value => ( value.id !== valueId ) )
+		let item = this.items.find( value => value.id === valueId );
+		if ( item.action === "create" )
+			this.items = this.items.filter( value => ( value.id !== valueId ) )
+		else
+			item.action = "delete";
 	}
 
-	removeOnUpdate ( valueId ) {
-		console.log( `Setting flag deleteOnUpdate on entry #${valueId}` );
-		let item = this.items.find( value => value.id === valueId );
-		item.deleteOnUpdate = true;
-	}
 	update ( valueId, data ) {
 		console.log( `Edit value entry #${valueId}`, data );
 
 		runInAction( () => {
 			this.items.forEach( ( value, index ) => {
-				if ( value.id === valueId ) {
-					this.items[ index ] = { ...value, ...data };
-				}
+				if ( value.id !== valueId ) return
+
+				this.items[ index ] = {
+					...value,
+					action: ( value.action ? value.action : "update" ),
+					...data
+				};
 			} );
 		} )
 	}

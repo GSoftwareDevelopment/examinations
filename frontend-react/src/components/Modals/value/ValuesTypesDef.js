@@ -1,6 +1,18 @@
 import AttrNumeric from './AttrNumeric';
 import AttrList from './AttrList';
 
+const ListItems = ( props ) => {
+	return (
+		<span key={"value-item-" + props.value.id + "-attr-list"} className="mr-1">{'{'}
+			{props.value.list.map( ( item, id, arr ) =>
+				<span key={"value-item-" + props.value.id + "-attr-list-item-" + id}>
+					<u className="mx-1 ">{item}</u>
+					{( id !== ( arr.length - 1 ) ) && <span>, </span>}
+				</span> )}
+			{'}'}
+		</span>
+	)
+}
 const ValuesTypesDef = [
 	{
 		type: 'numeric',
@@ -30,14 +42,7 @@ const ValuesTypesDef = [
 		description: 'Typ listy wyboru. Pozwala na wybór jednej opcji z listy wielu elementów',
 		symbolize: ( value ) => {
 			if ( value.list )
-				return (
-					<span key="list" className="mr-1">{'{'}
-						{value.list.map( ( item, id, arr ) => <span>
-							<u key={"value-list-item-" + id} className="mx-1 ">{item}</u>
-							{( id !== ( arr.length - 1 ) ) && <span>, </span>}
-						</span> )}
-						{'}'}</span>
-				)
+				return ( <ListItems value={value} /> )
 			else
 				return null
 		},
@@ -52,14 +57,7 @@ const ValuesTypesDef = [
 		description: 'Typ listy wyboru. Daje możliwość zaznaczenia kilku opcji z listy wielu elementów',
 		symbolize: ( value ) => {
 			if ( value.list )
-				return (
-					<span key="list" className="mr-1">{'{'}
-						{value.list.map( ( item, id, arr ) => <span>
-							<u key={"value-list-item-" + id} className="mx-1 ">{item}</u>
-							{( id !== ( arr.length - 1 ) ) && <span>, </span>}
-						</span> )}
-						{'}'}</span>
-				)
+				return ( <ListItems value={value} /> )
 			else
 				return null
 		},

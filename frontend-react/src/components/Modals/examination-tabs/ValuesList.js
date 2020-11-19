@@ -12,16 +12,17 @@ function ValueItem ( props ) {
 	const valueSymbolize = ( value ) => {
 		const def = ValuesTypesDef.find( def => def.type === value.type );
 		return (
-			<React.Fragment>
-				{ value.required && <Icon.ExclamationCircleFill className="mr-1" />}
-				<strong key="name" className="mr-1">{value.name}</strong>
-				<span key="type" className="font-italic mr-1">{value.type}</span>
+			<div key={"value-item-" + value.id}>
+				{ value.required && <Icon.ExclamationCircleFill key={"value-item-" + value.id + "-required"} className="mr-1" />}
+				<strong key={"value-item-" + value.id + "-name"} className="mr-1">{value.name}</strong>
+				<span key={"value-item-" + value.id + "-type"} className="font-italic mr-1">{value.type}</span>
 
 				{def ? def.symbolize( value ) : null}
+
 				{value.description && <div>
-					<Icon.ChatDots className="mr-1" />{value.description}
+					<Icon.ChatDots key={"value-item-" + value.id + "-description"} className="mr-1" />{value.description}
 				</div>}
-			</React.Fragment>
+			</div>
 		)
 	}
 
@@ -45,12 +46,12 @@ function ValueItem ( props ) {
 		<div
 			key={"value-item-" + value.id}
 			className="row-value d-flex flex-row justify-content-between align-items-start">
-			<div>{valueSymbolize( value )}</div>
+			{valueSymbolize( value )}
 			<Nav as="nav">
 				<Button
 					type="button"
 					size="sm"
-					variant="flat"
+					variant="white"
 					className="my-0 px-2 shadow-none"
 					onClick={() => { props.onClickEdit( value.id ) }}
 				>
@@ -65,7 +66,7 @@ function ValueItem ( props ) {
 					<Button
 						type="button"
 						size="sm"
-						variant="flat"
+						variant="danger"
 						className="my-0 px-2 shadow-none"
 					>
 						<Icon.Trash size="20" />
@@ -78,7 +79,7 @@ function ValueItem ( props ) {
 
 class ValuesList extends Component {
 	render () {
-		const items = this.props.items.filter( item => item.deleteOnUpdate !== true );
+		const items = this.props.items.filter( item => item.action !== "delete" );
 
 		return (
 			<div className="d-flex flex-column">

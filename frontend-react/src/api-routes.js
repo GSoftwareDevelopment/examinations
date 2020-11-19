@@ -8,7 +8,11 @@ const ROUTES = {
 	authenticate: AUTH_URL + "/login",
 	registerUser: AUTH_URL + "/register",
 	userData: API_URL + "/user",
-	examinations: API_URL + "/examinations",
+
+	examinationsCreate: API_URL + "/examinations/create",
+	examinationsGet: API_URL + "/examinations",
+	examinationsUpdate: API_URL + "/examinations/",
+	examinationsDelete: API_URL + "/examinations",
 	groups: API_URL + "/groups",
 	measurementList: API_URL + "/measurements",
 	measurementLatest: API_URL + "/measurements/latest",
