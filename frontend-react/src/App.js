@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { observer } from 'mobx-react';
 
-import UserStore from './stores/user';
+import UserStore, { AuthorizeMessage } from './stores/user';
 import ValuesStore from './stores/values';
 import ExaminationsStore from './stores/examinations';
 import GroupsStore from './stores/groups';
@@ -21,12 +21,16 @@ import Examinations from './components/Pages/Examinations';
 import Measurements from './components/Pages/Measurements';
 
 const ErrorHandle = observer( ( props ) => {
-	if ( props.Store.getState() === 'error' )
+	const error=props.Store.getError();
+
+	if ( props.Store.state === 'error' )
 		return ( <Modal show={true}>
 			<Modal.Header closeButton>
-				<Modal.Title>{props.Store.getError().title}</Modal.Title>
+				<Modal.Title>{error.title}</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>{props.Store.getError().msg}</Modal.Body>
+			<Modal.Body>
+			{error.msg}
+			</Modal.Body>
 			<Modal.Footer>
 				<Button variant="secondary"
 					onClick={() => { props.Store.clearError() }}
@@ -63,7 +67,7 @@ class App extends React.Component {
 						</Scrollbars>
 					</React.Fragment>
 					: ( UserStore.state === 'pending' )
-						? null
+						? <AuthorizeMessage />
 						: <React.Fragment>
 							<Switch>
 								<Route exact path="/" component={LoginForm} />
