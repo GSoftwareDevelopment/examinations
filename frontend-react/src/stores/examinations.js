@@ -1,14 +1,24 @@
 import API from '../api-routes';
-import { makeAutoObservable, runInAction } from 'mobx';
-import UserStore from '../stores/user';
+import { makeObservable, observable, computed, action, runInAction } from 'mobx';
+import Fetcher from './Fetcher';
 
-class ExaminationsStore {
-	state = "pending"; // "pending" / "done" / "error"
+class ExaminationsStore extends Fetcher {
 	items = [];
-	error = null;
 
 	constructor() {
-		makeAutoObservable( this );
+		super('Examinations');
+		makeObservable( this, {
+			getItems: observable,
+			getItemById: action,
+			fetchGet: action,
+			fetchAdd: action,
+			fetchDelete: action,
+			fetchUpdate: action,
+			insert: action,
+			update: action,
+			remove: action,
+			removeGroup: action,
+		} );
 	}
 
 	getItems () {
@@ -19,237 +29,54 @@ class ExaminationsStore {
 		return this.items.find( ( item ) => item._id === itemId );
 	}
 
-	getState () { return this.state }
-	getError () { return this.error }
-	clearError () {
-		runInAction( () => {
-			this.state = 'done';
-			this.error = null;
-		} )
-	}
-
 	async fetchGet () {
-		this.state = "pending";
-		// this.items = [];
-
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchGet' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-
-		try {
-
-			const res = await fetch( API.examinationsGet,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					}
-				} );
-
-			let result = await res.json();
-
-			runInAction( () => {
-				if ( result.OK ) {
-					this.items = result.examinations;
-					this.state = "done";
-				} else {
-					console.error( 'Backend error', result );
-					this.state = "error";
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-				}
-			} );
-
-		} catch ( error ) {
-			runInAction( () => {
-				console.error( 'Fetch error:', error );
-				this.state = "error";
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-		}
-
+		const result = await this.fetch( API.examinationsGet, 'GET' );
+		runInAction( () => {
+			if ( result.OK ) {
+				this.items = result.examinations;
+			}
+		} );
 	}
 
 	async fetchAdd ( newExamination ) {
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchAdd' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-		this.state = "pending";
-
-		try {
-			const res = await fetch( API.examinationsCreate, // 'http://localhost:3000/api/examinations',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					},
-					body: JSON.stringify( newExamination )
-				} );
-			if ( !res.ok ) {
-				let result = await res.text();
-				throw new Error( result );
+		const result = await this.fetch( API.examinationsCreate, 'POST', JSON.stringify( newExamination ) );
+		runInAction( () => {
+			if ( result.OK ) {
+				this.insert( result.created )
 			}
-			let result = await res.json();
-			runInAction( () => {
-				if ( result.OK ) {
-					this.state = "done";
-					this.insert( result.created )
-				}
-
-				if ( result.error ) {
-					this.state = "error";
-					console.error( 'Backend error:', result.error );
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-				}
-			} )
-
-			return result;
-		} catch ( error ) {
-			runInAction( () => {
-				this.state = "error";
-				console.error( 'Fetch error:', error );
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-			return false;
-		}
+		} );
+		return result;
 	}
 
 	async fetchUpdate ( examinationId, updatedExamination ) {
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchAdd' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-		this.state = "pending";
-
-		try {
-			const res = await fetch( API.examinationsUpdate + examinationId, // 'http://localhost:3000/api/examinations/:id',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					},
-					body: JSON.stringify( updatedExamination )
-				} );
-
-			let result = await res.json();
-			console.log( result );
-			runInAction( () => {
-				if ( result.OK ) {
-					const body = {
-						name: updatedExamination.name,
-						group: updatedExamination.group,
-						description: updatedExamination.description,
-					}
-					this.update( examinationId, body );
-					this.state = "done";
+		const result = await this.fetch( API.examinationsUpdate + examinationId, 'POST', JSON.stringify( updatedExamination ) );
+		runInAction( () => {
+			if ( result.OK ) {
+				const body = {
+					name: updatedExamination.name,
+					group: updatedExamination.group,
+					description: updatedExamination.description,
 				}
+				this.update( examinationId, body );
+			}
+		} );
 
-				if ( result.error ) {
-					console.error( 'Backend error:', result.error );
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-					this.state = "error";
-				}
-			} )
-
-			return result;
-		} catch ( error ) {
-			runInAction( () => {
-				this.state = "error";
-				console.error( 'Fetch error:', error );
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-			return false;
-		}
+		return result;
 	}
 
 	async fetchDelete ( items ) {
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchDelete' when user is not logged` );
-			return;
-		}
+		const result = await this.fetch( API.examinationsDelete, 'DELETE', JSON.stringify( items ) );
 
-		const token = UserStore.getToken();
-		this.state = "pending";
-
-		try {
-			const res = await fetch( API.examinationsDelete, // 'http://localhost:3000/api/examinations',
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					},
-					body: JSON.stringify( items )
+		runInAction( () => {
+			if ( !result.error ) {
+				console.log( 'Examination(s) was successfull deleted' );
+				items.forEach( itemId => {
+					this.remove( itemId );
 				} );
+			}
+		} );
 
-			let result = await res.json();
-
-			runInAction( () => {
-				if ( !result.error ) {
-					console.log( 'Examination(s) was successfull deleted' );
-					this.state = "done";
-					items.forEach( itemId => {
-						this.remove( itemId );
-					} );
-				}
-
-				if ( result.error ) {
-					this.state = "error";
-					console.log( 'Backend error:', result.error );
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-
-				}
-			} )
-
-			return result;
-		} catch ( error ) {
-			runInAction( () => {
-				this.state = "error";
-				console.error( 'Fetch error: ', error );
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-
-			} )
-			return false;
-		}
+		return result;
 	}
 
 	insert ( examinationData ) {

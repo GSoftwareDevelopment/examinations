@@ -1,23 +1,21 @@
 import API from '../api-routes';
-import { makeAutoObservable, runInAction } from 'mobx';
-import UserStore from '../stores/user';
+import { makeObservable, observable, action, runInAction } from 'mobx';
+import Fetcher from './Fetcher';
 
-class ValuesStore {
-	state = "done" // "pending" / "error" / "done"
+class ValuesStore extends Fetcher {
 	items = []
-	error = null;
 
 	constructor() {
-		makeAutoObservable( this );
-	}
-
-	getState () { return this.state }
-	getError () { return this.error }
-	clearError () {
-		runInAction( () => {
-			this.state = 'done';
-			this.error = null;
-		} )
+		super('Values');
+		makeObservable( this, {
+			items: observable,
+			reset: action,
+			getItems: action,
+			fetchGet: action,
+			insert: action,
+			remove: action,
+			update: action,
+		} );
 	}
 
 	reset ( defaults ) {
@@ -27,64 +25,22 @@ class ValuesStore {
 	getItems () { return this.items; }
 
 	async fetchGet ( examinationId ) {
-		this.state = "pending";
-		// this.items = [];
-
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchGet' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-
-		try {
-
-			const res = await fetch( API.valuesList + `/${examinationId}`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
+		const result = await this.fetch( API.valuesList + `/${examinationId}`, 'GET' );
+		runInAction( () => {
+			if ( result.OK ) {
+				this.items = result.values.map( value => {
+					// eslint-disable-next-line
+					const { createdAt, examination, name, required, type, user, __v, _id, ...rest } = value;
+					return {
+						id: _id,
+						type,
+						name,
+						required,
+						...rest
 					}
 				} );
-
-			let result = await res.json();
-
-			runInAction( () => {
-				if ( result.OK ) {
-					this.items = result.values.map( value => {
-						// eslint-disable-next-line
-						const { createdAt, examination, name, required, type, user, __v, _id, ...rest } = value;
-						return {
-							id: _id,
-							type,
-							name,
-							required,
-							...rest
-						}
-					} );
-					this.state = "done";
-				} else {
-					console.error( 'Backend error', result );
-					this.state = "error";
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-				}
-			} );
-
-		} catch ( error ) {
-			runInAction( () => {
-				console.error( 'Fetch error:', error );
-				this.state = "error";
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-		}
+			}
+		} );
 	}
 
 	insert ( data ) {

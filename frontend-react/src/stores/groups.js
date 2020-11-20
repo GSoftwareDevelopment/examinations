@@ -1,187 +1,63 @@
 import API from '../api-routes';
-import { makeAutoObservable, runInAction } from 'mobx';
-import UserStore from '../stores/user';
+import { makeObservable, observable, action, runInAction } from 'mobx';
+import Fetcher from './Fetcher';
 import ExaminationsStore from '../stores/examinations';
 
-class GroupsStore {
-	state = "pending"; // "pending" / "done" / "error"
+class GroupsStore extends Fetcher {
 	items = [];
-	error = null;
 
 	constructor() {
-		makeAutoObservable( this );
+		super(`Groups`);
+		makeObservable( this, {
+			items: observable,
+			getItems: action,
+			fetchGet: action,
+			fetchAdd: action,
+			fetchDelete: action,
+			insert: action,
+			remove: action,
+		} );
 	}
 
 	getItems () {
 		return this.items;
 	}
 
-	getState () { return this.state }
-	getError () { return this.error }
-	clearError () {
-		runInAction( () => {
-			this.state = 'done';
-			this.error = null;
-		} )
-	}
-
 	async fetchGet () {
-		// this.items = [];
-		this.state = "pending";
-
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchGet' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-
-		try {
-
-			const res = await fetch( API.groups,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					}
-				} );
-			let result = await res.json();
-
-			runInAction( () => {
-				if ( result.OK ) {
-					this.items = result.groups;
-					this.state = "done";
-				} else {
-					console.error( 'Backend Error:', result )
-					this.state = "error";
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-				}
-			} );
-
-		} catch ( error ) {
-			runInAction( () => {
-				console.error( 'Fetch error', error );
-				this.state = "error"
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-		}
-
+		let result = await this.fetch( API.groups, 'GET' );
+		runInAction( () => {
+			if ( result.OK ) {
+				this.items = result.groups;
+				this.state = "done";
+			}
+		} );
 	}
 
 	async fetchAdd ( newGroup ) {
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchAdd' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-		this.state = "pending";
+		const result = await this.fetch( API.groups, 'POST', JSON.stringify( newGroup ) );
+		runInAction( () => {
+			if ( result.OK ) {
+				this.insert( result.created );
+				this.state = "done";
+			}
+		} );
 
-		try {
-			const res = await fetch( API.groups,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					},
-					body: JSON.stringify( newGroup )
-				} );
-
-			let result = await res.json();
-
-			runInAction( () => {
-				if ( result.OK ) {
-					this.insert( result.created );
-					this.state = "done";
-				}
-
-				if ( result.error ) {
-					this.state = "error";
-					console.error( 'Backend error:', result.error );
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-				}
-			} );
-
-			return result;
-		} catch ( error ) {
-			runInAction( () => {
-				this.state = "error";
-				console.error( 'Fetch error:', error );
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-			return false;
-		}
+		return result;
 	}
 
 	async fetchDelete ( groupsIDsList ) {
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't do operation 'fetchDelete' when user is not logged` );
-			return;
-		}
-		const token = UserStore.getToken();
-		this.state = "pending";
+		const result = await this.fetch( API.groups, 'DELETE', JSON.stringify( groupsIDsList ) )
 
-		try {
-			const res = await fetch( API.groups,
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					},
-					body: JSON.stringify( groupsIDsList )
+		runInAction( () => {
+			if ( result.OK ) {
+				this.state = "done";
+				groupsIDsList.forEach( groupId => {
+					this.remove( groupId );
 				} );
+			}
+		} );
 
-			let result = await res.json();
-
-			runInAction( () => {
-				if ( result.OK ) {
-					this.state = "done";
-					groupsIDsList.forEach( groupId => {
-						this.remove( groupId );
-					} );
-				}
-
-				if ( result.error ) {
-					this.state = "error";
-					console.error( 'Backend error:', result.error );
-					this.error = {
-						title: 'Backend error',
-						msg: result.error.message,
-						error: result.error
-					}
-				}
-			} );
-
-			return result;
-		} catch ( error ) {
-			runInAction( () => {
-				this.state = "error";
-				console.error( 'Fetch error:', error );
-				this.error = {
-					title: 'Fetch error',
-					msg: error.message,
-					error
-				}
-			} )
-			return false;
-		}
+		return result;
 	}
 
 	insert ( group ) {

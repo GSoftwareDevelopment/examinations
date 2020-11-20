@@ -1,4 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
+import React, { Component } from 'react';
+import { Spinner } from 'react-bootstrap';
+
 import API from '../api-routes';
 
 class UserStore {
@@ -22,18 +25,20 @@ class UserStore {
         this.state = "pending";
         this.data = null;
 
+				let result, res;
+
         console.log( 'Checking authentication...' )
         if ( token ) {
             console.log( '...getting user information...' )
             try {
-                let result;
-                let res = await fetch( API.userData, { // 'http://localhost:3000/api/user'
+                res = await fetch( API.userData, { // 'http://localhost:3000/api/user'
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     }
-                } );
+								} );
+
                 if ( res.ok ) {
                     result = await res.json();
 
@@ -63,9 +68,11 @@ class UserStore {
                 }
             } catch ( error ) {
                 runInAction( () => {
-                    console.log( 'Fetch error', error )
+                    console.log( 'Fetch error', error,res )
                     this.state = "error";
-                    this.message = error;
+										this.message = 'The authorization token cannot be verified. You have been logged out.';
+										this.removeToken();
+										this.data = null;
                 } );
             }
 
@@ -80,8 +87,8 @@ class UserStore {
 
     /**
      * Login method
-     * @param {*} username 
-     * @param {*} password 
+     * @param {*} username
+     * @param {*} password
      */
     async login ( username, password ) {
 
@@ -127,7 +134,7 @@ class UserStore {
             runInAction( () => {
                 this.state = "error";
                 console.log( 'Fetch error:', error );
-                this.message = error;
+                this.message = 'Connection error. Unable to login.';
             } );
             return false;
         }
@@ -185,7 +192,43 @@ class UserStore {
                 console.log( 'Fetch error:', error );
             } )
         }
-    }
+		}
+
+}
+
+export class AuthorizeMessage extends Component {
+	state={
+		visible:false
+	}
+
+	timerHandle=null;
+
+	componentDidMount() {
+		this.timerHandle=setTimeout(()=>{
+			this.setState({visible:true})
+			console.log('turn on message...')
+			clearTimeout(this.timerHandle);
+			this.timerHandle=null;
+		},1000);
+	}
+
+	componentWillUnmount() {
+		if (this.timerHandle) {
+			clearTimeout(this.timerHandle);
+			this.timerHandle=null;
+		}
+	}
+
+	render() {
+		if (this.state.visible) {
+			return(
+				<div className="d-flex flex-row justify-content-center align-items-center w-100 h-100">
+					<div><Spinner animation="border" role="status"/> Checking Authentication...</div>
+				</div>
+			);
+		} else
+		return null;
+	}
 }
 
 let userStore = window.userStore = new UserStore();
