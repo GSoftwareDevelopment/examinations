@@ -10,12 +10,14 @@ import ValuesStore from "../../stores/values";
 
 import * as Icon from "react-bootstrap-icons";
 import { Badge, Button, Dropdown } from "react-bootstrap";
+import Media from "react-media";
 
 import GroupsList from "./examinations/GroupsList";
 import ExaminationsList from "./examinations/ExaminationsList";
 import CombinedList from "./examinations/CombinedList";
 
 import ModalExamination from "../Modals/Examination";
+import ModalGroupEdit from "../Modals/GroupEdit";
 import ModalExaminationViewOptions from "../Modals/Examination-ViewOptions";
 
 const SilentFetchBar = observer(() => {
@@ -39,6 +41,7 @@ class Examinations extends Component {
 		this.state = {
 			modalViewOption: false,
 			modalExamination: false,
+			modalGroupEdit: false,
 			examinationData: null,
 			silentFetch: false,
 			selected: [],
@@ -107,6 +110,10 @@ class Examinations extends Component {
 
 	prepareToEditGroup(groupId) {
 		console.log("Group edit #" + groupId);
+		this.setState({
+			choicedGroup: groupId,
+			modalGroupEdit: true,
+		});
 	}
 
 	render() {
@@ -116,6 +123,9 @@ class Examinations extends Component {
 		const closeModalExamination = () => {
 			this.setState({ modalExamination: false });
 		};
+		const closeModalGroupEdit = () => {
+			this.setState({ modalGroupEdit: false });
+		};
 
 		return (
 			<div style={{ paddingBottom: "5em" }}>
@@ -124,59 +134,69 @@ class Examinations extends Component {
 				</div>
 				<SilentFetchBar />
 
-				<div className="d-none d-md-flex flex-row">
-					<div className="col-4">
-						<GroupsList
-							silentFetch={this.state.silentFetch}
-							group={this.state.choicedGroup}
-							onItemChoice={(groupId) => {
-								this.doGroupChoiced(groupId);
-							}}
-							onItemEdit={(groupId) => {
-								this.prepareToEditGroup(groupId);
-							}}
-							onItemDelete={(groupId) => {
-								this.doGroupDelete(groupId);
-							}}
-						/>
-					</div>
-					<div className="col-8">
-						<ExaminationsList
-							silentFetch={this.state.silentFetch}
-							group={this.state.choicedGroup}
-							onSelect={(itemId) => {
-								this.handleSelectItem(itemId);
-							}}
-							onItemEdit={(itemId) => {
-								this.prepareToEditItem(itemId);
-							}}
-							onItemDelete={(itemId) => {
-								this.doExaminationDelete(itemId);
-							}}
-						/>
-					</div>
-				</div>
+				<Media
+					query="(min-width:768px)"
+					render={() => (
+						<div className="d-flex flex-row">
+							<div className="col-4">
+								<GroupsList
+									silentFetch={this.state.silentFetch}
+									group={this.state.choicedGroup}
+									onItemChoice={(groupId) => {
+										this.doGroupChoiced(groupId);
+									}}
+									onItemEdit={(groupId) => {
+										this.prepareToEditGroup(groupId);
+									}}
+									onItemDelete={(groupId) => {
+										this.doGroupDelete(groupId);
+									}}
+								/>
+							</div>
+							<div className="col-8">
+								<ExaminationsList
+									silentFetch={this.state.silentFetch}
+									group={this.state.choicedGroup}
+									onSelect={(itemId) => {
+										this.handleSelectItem(itemId);
+									}}
+									onItemEdit={(itemId) => {
+										this.prepareToEditItem(itemId);
+									}}
+									onItemDelete={(itemId) => {
+										this.doExaminationDelete(itemId);
+									}}
+								/>
+							</div>
+						</div>
+					)}
+				/>
+				<Media
+					query="(max-width:768px)"
+					render={() => (
+						<div className="d-flex flex-column d-md-none">
+							<CombinedList
+								silentFetch={this.state.silentFetch}
+								onSelect={(itemId) => {
+									this.handleSelectItem(itemId);
+								}}
+								onItemEdit={(itemId) => {
+									this.prepareToEditItem(itemId);
+								}}
+								onItemDelete={(itemId) => {
+									this.doExaminationDelete(itemId);
+								}}
+								onGroupEdit={(groupId) => {
+									this.prepareToEditGroup(groupId);
+								}}
+								onGroupDelete={(groupId) => {
+									this.doGroupDelete(groupId);
+								}}
+							/>
+						</div>
+					)}
+				/>
 
-				<div className="d-flex flex-column d-md-none">
-					<CombinedList
-						silentFetch={this.state.silentFetch}
-						onSelect={(itemId) => {
-							this.handleSelectItem(itemId);
-						}}
-						onItemEdit={(itemId) => {
-							this.prepareToEditItem(itemId);
-						}}
-						onItemDelete={(itemId) => {
-							this.doExaminationDelete(itemId);
-						}}
-						onGroupEdit={(groupId) => {
-							this.prepareToEditGroup(groupId);
-						}}
-						onGroupDelete={(groupId) => {
-							this.doGroupDelete(groupId);
-						}}
-					/>
-				</div>
 				<nav className="d-flex flex-row justify-content-end align-items-center m-3 fixed-bottom">
 					<Button
 						className="rounded-circle p-2 m-0"
@@ -260,6 +280,13 @@ class Examinations extends Component {
 						show={this.state.modalExamination}
 						setTo={this.state.examinationData}
 						onHide={closeModalExamination}
+					/>
+				)}
+				{this.state.modalGroupEdit && (
+					<ModalGroupEdit
+						show={this.state.modalGroupEdit}
+						groupId={this.state.choicedGroup}
+						onHide={closeModalGroupEdit}
 					/>
 				)}
 				{this.state.modalViewOption && (
