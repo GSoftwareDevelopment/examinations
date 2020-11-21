@@ -1,87 +1,89 @@
-import { makeObservable, observable, action, runInAction } from 'mobx';
-import UserStore from '../stores/user';
+import { makeObservable, observable, action, runInAction } from "mobx";
+import UserStore from "../stores/user";
 
 class Fetcher {
 	state = "done"; // "pending" / "done" / "error"
 	error = null;
-	__className = 'Fetcher';
+	__className = "Fetcher";
 
 	constructor(className) {
-		makeObservable( this, {
+		makeObservable(this, {
 			state: observable,
 			error: observable,
 			getState: action,
 			getError: action,
 			clearError: action,
 			fetch: action,
-		} );
-		if (className) this.__className=className;
+		});
+		if (className) this.__className = className;
 	}
 
-	getState () { return this.state }
-	getError () { return this.error }
-	clearError () {
-		runInAction( () => {
-			this.state = 'done';
+	getState() {
+		return this.state;
+	}
+	getError() {
+		return this.error;
+	}
+	clearError() {
+		runInAction(() => {
+			this.state = "done";
 			this.error = null;
-		} )
+		});
 	}
 
-	async fetch ( uri, method, body ) {
+	async fetch(uri, method, body) {
 		this.state = "pending";
 
-		if ( UserStore.state !== 'logged' ) {
-			console.log( `Can't fetch data when user is not logged` );
-			return {OK:0};
+		if (UserStore.state !== "logged") {
+			console.log(`Can't fetch data when user is not logged`);
+			return { OK: 0 };
 		}
 		const token = UserStore.getToken();
 		let result;
 
 		try {
+			const res = await fetch(uri, {
+				method,
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + token,
+				},
+				body,
+			});
 
-			const res = await fetch( uri,
-				{
-					method,
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + token
-					}, body
-				} );
-
-			if ( !res.ok ) {
+			if (!res.ok) {
 				let result = await res.text();
-				throw new Error( result );
+				throw new Error(result);
 			}
 
 			result = await res.json();
 
-			runInAction( () => {
-				if ( result.OK ) {
+			runInAction(() => {
+				if (result.OK) {
 					this.state = "done";
 				} else {
-					console.error( `${this.__className} backend response error`, result );
+					console.error(`${this.__className} backend response error`, result);
 					this.state = "error";
 					this.error = {
 						title: `${this.__className} backend response error`,
 						msg: result.error.message,
-						error: result.error
-					}
+						error: result.error,
+					};
 				}
-			} );
+			});
 
-			console.log(result);
-			return result
-		} catch ( error ) {
-			runInAction( () => {
-				console.error( `${this.__className} fetch error:`, error );
+			return result;
+		} catch (error) {
+			runInAction(() => {
+				console.error(`${this.__className} fetch error:`, error);
 				this.state = "error";
 				this.error = {
 					title: `${this.__className} fetch error`,
 					msg: error.message,
-					error
-				}
-			} )
-			return { OK:0, error }
+					error,
+				};
+			});
+			return { OK: 0, error };
 		}
 	}
 }
