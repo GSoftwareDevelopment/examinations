@@ -4,13 +4,22 @@ import * as Icon from "react-bootstrap-icons";
 import { Badge, Button, OverlayTrigger, Popover } from "react-bootstrap";
 
 /**
- * Single entry of examination
- * @param {Object} props Component properties
- * @param {Object} props.item Examination object definition
- * @param {string} props.item._id Unique examination identificator
- * @param {string} props.item.name Examination name
- * @param {string} props.item.description Description to examination
- * @param {function} props.onSelect event for selecting item
+ * @typedef propsListItem
+ * @property {Object} props.item Item object definition
+ * @property {string} props.item._id Unique item identificator
+ * @property {string} props.item.name item name
+ * @property {string} props.item.description Description to item
+ * @property {boolean} props.selected
+ * @property {boolean} props.selectable
+ * @property {string} props.badge
+ * @property {function} props.onSelect event for selecting item
+ * @property {function} props.onItemDelete
+ * @property {function} props.onItemEdit
+ * @property {function} props.onItemChoice
+ */
+/**
+ * Single list item
+ * @param {zpropsListItem} props Component properties
  */
 const ListItem = observer((props) => {
 	const { _id: id, name, description } = props.item;
@@ -41,6 +50,7 @@ const ListItem = observer((props) => {
 
 	return (
 		<div
+			key={id}
 			className={
 				"row-item px-3 d-flex flex-row justify-content-between align-items-center" +
 				(props.choiced === true ? " bg-dark text-white" : "")
@@ -54,31 +64,45 @@ const ListItem = observer((props) => {
 					: null
 			}
 		>
-			<div className="form-check">
-				{props.selection && (
+			{props.selectable ? (
+				<div key={"item-description-" + id} className="form-check">
 					<input
 						className="form-check-input"
 						type="checkbox"
 						name="selectedItems"
 						onChange={handleChange}
 					/>
-				)}
-				<div className="ml-3">
+					<div className="ml-3">
+						<div key="item-name">{name}</div>
+						{description ? (
+							<div key="item-descriptio" className="small text-muted">
+								{description}
+							</div>
+						) : null}
+					</div>
+				</div>
+			) : (
+				<div key={"item-description-" + id}>
 					<div>{name}</div>
 					{description ? (
 						<div className="small text-muted">{description}</div>
 					) : null}
 				</div>
-			</div>
-			<div className="d-flex flex-row justify-content-end ml-auto"></div>
+			)}
+
 			{props.badge ? (
 				props.badge > 0 ? (
-					<Badge variant="info">{parseInt(props.badge).toString()}</Badge>
+					<Badge key={"item-badge-" + id} variant="info">
+						{parseInt(props.badge).toString()}
+					</Badge>
 				) : (
-					<Badge variant="warning">Brak badań</Badge>
+					<Badge key={"item-badge-" + id} variant="warning">
+						Brak badań
+					</Badge>
 				)
 			) : null}
-			<nav>
+
+			<nav key={"item-nav-" + id}>
 				{props.onClickEdit && (
 					<Button
 						variant="light"
