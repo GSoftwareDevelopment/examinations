@@ -7,17 +7,21 @@ const ROUTES = {
 	API_URL,
 	authenticate: AUTH_URL + "/login",
 	registerUser: AUTH_URL + "/register",
-	userData: API_URL + "/user",
+	userGet: API_URL + "/user",
 
 	examinationsCreate: API_URL + "/examinations/create",
 	examinationsGet: API_URL + "/examinations",
-	examinationsUpdate: API_URL + "/examinations/",
-	examinationsDelete: API_URL + "/examinations",
-	groups: API_URL + "/groups",
+	examinationsUpdate: API_URL + "/examinations/", // /examination/:id
+	examinationsDelete: API_URL + "/examinations", //
+
+	groupsCreate: API_URL + "/groups",
+	groupsGet: API_URL + "/groups",
+	groupsUpdate: API_URL + "/groups/", // /groups/:id
+	groupsDelete: API_URL + "/groups", //
 	measurementList: API_URL + "/measurements",
 	measurementLatest: API_URL + "/measurements/latest",
 	valuesList: API_URL + "/values",
 
-	confExaminations: API_URL + '/examinations/configuration',
-}
-export default ROUTES
+	confExaminations: API_URL + "/examinations/configuration",
+};
+export default ROUTES;
