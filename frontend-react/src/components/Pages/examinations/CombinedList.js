@@ -122,8 +122,8 @@ class CombinedList extends Component {
 							return (
 								<ListItem
 									key={itemWOGroup._id}
-									inGroup={this.props.inGroup}
 									item={itemWOGroup}
+									selectable={true}
 									onSelect={this.props.onSelect}
 									onClickDelete={this.props.onItemDelete}
 									onClickEdit={this.props.onItemEdit}
@@ -139,8 +139,8 @@ class CombinedList extends Component {
 							return (
 								<ListItem
 									key={itemInGroup._id}
-									inGroup={this.props.inGroup}
 									item={itemInGroup}
+									selectable={true}
 									onSelect={this.props.onSelect}
 									onClickDelete={this.props.onItemDelete}
 									onClickEdit={this.props.onItemEdit}
