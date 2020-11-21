@@ -7,7 +7,7 @@ import ExaminationsStore from "../../../stores/examinations";
 import GroupsStore from "../../../stores/groups";
 import ValidationStore from "../../../stores/validation";
 
-import AddGroup from "../AddGroup";
+import ModalGroupAdd from "../GroupAdd";
 
 class TabGeneral extends Component {
 	constructor(props) {
@@ -18,7 +18,7 @@ class TabGeneral extends Component {
 				name: "",
 				group: null,
 				description: "",
-				modalAddGroup: false,
+				modalGroupAdd: false,
 			};
 		else
 			this.state = {
@@ -26,6 +26,7 @@ class TabGeneral extends Component {
 				name: props.setTo.name,
 				group: props.setTo.group || null,
 				description: props.setTo.description,
+				modalGroupAdd: false,
 			};
 		this.innerRef = React.createRef();
 	}
@@ -91,7 +92,7 @@ class TabGeneral extends Component {
 							variant="light"
 							size="sm"
 							onClick={() => {
-								this.setState({ modalAddGroup: true });
+								this.setState({ modalGroupAdd: true });
 							}}
 						>
 							Utwórz grupę
@@ -141,11 +142,11 @@ class TabGeneral extends Component {
 						}}
 					/>
 				</Form.Group>
-				{this.state.modalAddGroup && (
-					<AddGroup
-						show={this.state.modalAddGroup}
+				{this.state.modalGroupAdd && (
+					<ModalGroupAdd
+						show={this.state.modalGroupAdd}
 						onHide={() => {
-							this.setState({ modalAddGroup: false });
+							this.setState({ modalGroupAdd: false });
 						}}
 						isCreated={(group) => {
 							this.setState({ group: group._id });

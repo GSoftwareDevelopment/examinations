@@ -36,7 +36,7 @@ class ExaminationsList extends Component {
 					<ListItem
 						key={item._id}
 						item={item}
-						selection={true}
+						selectable={true}
 						onSelect={this.props.onSelect}
 						onClickDelete={this.props.onItemDelete}
 						onClickEdit={this.props.onItemEdit}

@@ -34,7 +34,7 @@ class GroupsList extends Component {
 						choiced={item._id === this.props.group}
 						key={item._id}
 						item={item}
-						selection={false}
+						selectable={false}
 						onClickDelete={this.props.onItemDelete}
 						onClickEdit={this.props.onItemEdit}
 						onChoiceItem={this.props.onItemChoice}
@@ -53,7 +53,7 @@ class GroupsList extends Component {
 								name: "Bez grupy",
 								description: "Badania nieprzypisane do grup",
 							}}
-							selection={false}
+							selectable={false}
 							onChoiceItem={this.props.onItemChoice}
 						/>
 						{groups.length === 1 && (
