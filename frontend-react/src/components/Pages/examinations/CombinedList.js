@@ -16,7 +16,7 @@ import ListItem from "./ListItem";
 
 function ListHeader() {
 	return (
-		<div className="d-flex flex-row justify-content-between align-items-center bg-primary text-white p-0">
+		<div className="d-flex flex-row justify-content-between align-items-center bg-dark text-white p-0">
 			<button
 				type="button"
 				className="btn btn-flat shadow-none px-1 py-1 ml-0 text-white"
@@ -98,6 +98,11 @@ function GroupHeader(props) {
 }
 
 class CombinedList extends Component {
+	state = {
+		choicedItem: null,
+		choicedGroups: null,
+	};
+
 	render() {
 		const examinations = ExaminationsStore.items;
 		const groups = [null, ...GroupsStore.items];
@@ -118,15 +123,45 @@ class CombinedList extends Component {
 				if (currentGroup === null) {
 					groupItems = examinations
 						.filter((item) => item.group === null)
-						.map((itemWOGroup) => {
+						.map((item) => {
 							return (
 								<ListItem
-									key={itemWOGroup._id}
-									item={itemWOGroup}
+									key={item._id}
+									item={item}
+									choiced={this.state.choicedItem === item._id}
+									onChoiceItem={(examinationId) => {
+										this.setState({ choicedItem: examinationId });
+									}}
 									selectable={true}
 									onSelect={this.props.onSelect}
-									onClickDelete={this.props.onItemDelete}
-									onClickEdit={this.props.onItemEdit}
+									actions={[
+										{
+											content: (
+												<>
+													<Icon.PencilSquare size="20" /> Edytuj badanie...
+												</>
+											),
+											default: "onClick",
+											on: {
+												onClick: () => {
+													this.props.onItemEdit(item._id);
+												},
+											},
+										},
+										{},
+										{
+											content: (
+												<>
+													<Icon.Trash size="20" /> Usuń badanie
+												</>
+											),
+											on: {
+												onClick: () => {
+													this.props.onItemDelete(item._id);
+												},
+											},
+										},
+									]}
 								/>
 							);
 						});
@@ -135,25 +170,87 @@ class CombinedList extends Component {
 				} else {
 					groupItems = examinations
 						.filter((item) => item.group === currentGroup._id)
-						.map((itemInGroup) => {
+						.map((item) => {
 							return (
 								<ListItem
-									key={itemInGroup._id}
-									item={itemInGroup}
+									key={item._id}
+									item={item}
+									choiced={this.state.choicedItem === item._id}
+									onChoiceItem={(examinationId) => {
+										this.setState({ choicedItem: examinationId });
+									}}
 									selectable={true}
 									onSelect={this.props.onSelect}
-									onClickDelete={this.props.onItemDelete}
-									onClickEdit={this.props.onItemEdit}
+									actions={[
+										{
+											content: (
+												<>
+													<Icon.PencilSquare size="20" /> Edytuj badanie...
+												</>
+											),
+											default: "onClick",
+											on: {
+												onClick: () => {
+													this.props.onItemEdit(item._id);
+												},
+											},
+										},
+										{},
+										{
+											content: (
+												<>
+													<Icon.Trash size="20" /> Usuń badanie
+												</>
+											),
+											on: {
+												onClick: () => {
+													this.props.onItemDelete(item._id);
+												},
+											},
+										},
+									]}
 								/>
 							);
 						});
 
 					return (
-						<React.Fragment key={currentGroup._id}>
-							<GroupHeader
-								group={currentGroup}
-								onDelete={this.props.onGroupDelete}
-								onClickEdit={this.props.onGroupEdit}
+						<React.Fragment>
+							<ListItem
+								key={currentGroup._id}
+								item={currentGroup}
+								choiced={this.state.choicedItem === currentGroup._id}
+								onChoiceItem={(examinationId) => {
+									this.setState({ choicedItem: examinationId });
+								}}
+								selectable={false}
+								actions={[
+									{
+										content: (
+											<>
+												<Icon.PencilSquare size="20" /> Edytuj grupę...
+											</>
+										),
+										default: "onClick",
+										on: {
+											onClick: () => {
+												this.props.onGroupEdit(currentGroup._id);
+											},
+										},
+									},
+									{},
+									{
+										content: (
+											<>
+												<Icon.Trash size="20" /> Usuń grupę
+											</>
+										),
+										on: {
+											onClick: () => {
+												this.props.onGroupDelete(currentGroup._id);
+											},
+										},
+									},
+								]}
 							/>
 							{groupItems.length === 0 ? (
 								<div className="alert alert-info my-2">

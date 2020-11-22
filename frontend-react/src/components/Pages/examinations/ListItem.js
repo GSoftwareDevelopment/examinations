@@ -1,138 +1,98 @@
-import { observer } from "mobx-react";
+import React, { Component } from "react";
+import "./list-items.scss";
 
 import * as Icon from "react-bootstrap-icons";
-import { Badge, Button, OverlayTrigger, Popover } from "react-bootstrap";
+import { Badge, Dropdown } from "react-bootstrap";
 
-/**
- * @typedef propsListItem
- * @property {Object} props.item Item object definition
- * @property {string} props.item._id Unique item identificator
- * @property {string} props.item.name item name
- * @property {string} props.item.description Description to item
- * @property {boolean} props.selected
- * @property {boolean} props.selectable
- * @property {string} props.badge
- * @property {function} props.onSelect event for selecting item
- * @property {function} props.onItemDelete
- * @property {function} props.onItemEdit
- * @property {function} props.onItemChoice
- */
-/**
- * Single list item
- * @param {zpropsListItem} props Component properties
- */
-const ListItem = observer((props) => {
-	const { _id: id, name, description } = props.item;
+class ListItem extends Component {
+	render() {
+		const { _id: id, name, description } = this.props.item;
 
-	const handleChange = (e) => {
-		props.onSelect({ id, state: e.target.checked });
-	};
+		const handleChange = (e) => {
+			this.props.onSelect({ id, state: e.target.checked });
+		};
 
-	const ConfirmDelete = (onConfirm) => {
-		return (
-			<Popover id="popover-basic">
-				<Popover.Title as="h3">Potwierdź operację</Popover.Title>
-				<Popover.Content>
-					<Button
-						block
-						variant="danger"
-						size="sm"
-						onClick={() => {
-							onConfirm();
-						}}
-					>
-						USUŃ
-					</Button>
-				</Popover.Content>
-			</Popover>
+		const ItemContent = (props) => (
+			<div key={"item-description-" + this.props.item.id}>
+				<div className="d-flex flex-row align-items-center">
+					{this.props.item.name}
+					{this.props.badge !== null && (
+						<Badge className="ml-2" key={"item-badge-" + id} variant="info">
+							{this.props.badge}
+						</Badge>
+					)}
+				</div>
+				{this.props.item.description && (
+					<div className="small text-dark">{this.props.item.description}</div>
+				)}
+			</div>
 		);
-	};
 
-	return (
-		<div
-			key={id}
-			className={
-				"row-item px-3 d-flex flex-row justify-content-between align-items-center" +
-				(props.choiced === true ? " bg-dark text-white" : "")
-			}
-			style={{ cursor: props.onChoiceItem ? "pointer" : "default" }}
-			onClick={
-				props.onChoiceItem
-					? () => {
-							props.onChoiceItem(id);
-					  }
-					: null
-			}
-		>
-			{props.selectable ? (
-				<div key={"item-description-" + id} className="form-check">
-					<input
-						className="form-check-input"
-						type="checkbox"
-						name="selectedItems"
-						onChange={handleChange}
-					/>
-					<div className="ml-3">
-						<div key="item-name">{name}</div>
-						{description ? (
-							<div key="item-descriptio" className="small text-muted">
-								{description}
-							</div>
-						) : null}
+		return (
+			<div
+				className={
+					"row-item" +
+					(this.props.choiced === true ? " bg-warning" : " bg-white")
+				}
+				style={{ cursor: this.props.onChoiceItem ? "pointer" : "default" }}
+				onClick={(e) => {
+					if (this.props.onChoiceItem) this.props.onChoiceItem(id);
+				}}
+				onDoubleClick={(e) => {
+					if (this.props.actions) {
+						const action = this.props.actions.find((action) => action.default);
+						if (action) action.on[action.default]();
+					}
+				}}
+			>
+				{this.props.selectable ? (
+					<div key={"item-description-" + id} className="form-check">
+						<input
+							className="form-check-input"
+							type="checkbox"
+							name="selectedItems"
+							onChange={handleChange}
+						/>
+						<ItemContent
+							badge={this.props.badge}
+							item={{ name, description }}
+						/>
 					</div>
-				</div>
-			) : (
-				<div key={"item-description-" + id}>
-					<div>{name}</div>
-					{description ? (
-						<div className="small text-muted">{description}</div>
-					) : null}
-				</div>
-			)}
-
-			{props.badge ? (
-				props.badge > 0 ? (
-					<Badge key={"item-badge-" + id} variant="info">
-						{parseInt(props.badge).toString()}
-					</Badge>
 				) : (
-					<Badge key={"item-badge-" + id} variant="warning">
-						Brak badań
-					</Badge>
-				)
-			) : null}
+					<ItemContent badge={this.props.badge} item={{ name, description }} />
+				)}
 
-			<nav key={"item-nav-" + id}>
-				{props.onClickEdit && (
-					<Button
-						variant="light"
-						size="sm"
-						className="p-2"
-						onClick={(e) => {
-							e.stopPropagation();
-							props.onClickEdit(id);
-						}}
+				{this.props.actions && (
+					<Dropdown
+						drop="left"
+						className={"fade " + (this.props.choiced ? "show" : "hide")}
 					>
-						<Icon.PencilSquare size="20" />
-					</Button>
+						<Dropdown.Toggle
+							className="noCaret m-1 p-1 shadow-none"
+							variant="flat"
+							id="dropdown-basic"
+						>
+							<Icon.ThreeDotsVertical size="20" />
+						</Dropdown.Toggle>
+
+						<Dropdown.Menu>
+							<Dropdown.Header>Akcje</Dropdown.Header>
+							{this.props.actions.map((action, index) => {
+								const { content, on } = action;
+								if (content)
+									return (
+										<Dropdown.Item key={index} {...on}>
+											{action.default ? <strong>{content}</strong> : content}
+										</Dropdown.Item>
+									);
+								else return <Dropdown.Divider />;
+							})}
+						</Dropdown.Menu>
+					</Dropdown>
 				)}
-				{props.onClickDelete && (
-					<OverlayTrigger
-						trigger="click"
-						overlay={ConfirmDelete(() => {
-							props.onClickDelete(id);
-						})}
-						placement="left"
-						rootClose
-					>
-						<Button variant="light" size="sm" className="p-2">
-							<Icon.Trash size="20" />
-						</Button>
-					</OverlayTrigger>
-				)}
-			</nav>
-		</div>
-	);
-});
+			</div>
+		);
+	}
+}
 
 export default ListItem;

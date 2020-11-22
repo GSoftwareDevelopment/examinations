@@ -4,12 +4,13 @@ import { observer } from "mobx-react";
 import ExaminationsStore from "../../../stores/examinations";
 import GroupsStore from "../../../stores/groups";
 
-import { Alert, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
 import ListItem from "./ListItem";
 
 function ListHeader() {
 	return (
-		<div className="d-flex flex-row justify-content-between align-items-center bg-primary text-white p-0">
+		<div className="d-flex flex-row justify-content-between align-items-center bg-dark text-white p-0">
 			<button
 				type="button"
 				className="btn btn-flat shadow-none px-1 py-1 ml-0 text-white"
@@ -26,59 +27,78 @@ class GroupsList extends Component {
 		let list;
 
 		list = groups.map((item) => {
+			let totalItems;
 			if (item) {
-				const totalItems = ExaminationsStore.getItemsByGroupId(item._id).length;
-				return (
-					<ListItem
-						badge={totalItems}
-						choiced={item._id === this.props.group}
-						key={item._id}
-						item={item}
-						selectable={false}
-						onClickDelete={this.props.onItemDelete}
-						onClickEdit={this.props.onItemEdit}
-						onChoiceItem={this.props.onItemChoice}
-					/>
-				);
+				totalItems = ExaminationsStore.getItemsByGroupId(item._id).length;
 			} else {
-				const totalItems = ExaminationsStore.getItemsByGroupId(null).length;
-				return (
-					<React.Fragment>
-						<ListItem
-							choiced={this.props.group === null}
-							key={"null"}
-							badge={totalItems}
-							item={{
-								_id: null,
-								name: "Bez grupy",
-								description: "Badania nieprzypisane do grup",
-							}}
-							selectable={false}
-							onChoiceItem={this.props.onItemChoice}
-						/>
-						{groups.length === 1 && (
-							<Alert key="info" variant="info" className="m-3 text-center">
-								Brak zdefiniowanych grup.
-							</Alert>
-						)}
-					</React.Fragment>
-				);
+				totalItems = ExaminationsStore.getItemsByGroupId(null).length;
+				item = {
+					_id: null,
+					name: "Bez grupy",
+					description: "Badania nieprzypisane do grup",
+				};
 			}
+
+			return (
+				<ListItem
+					key={"group-item-" + item._id}
+					badge={totalItems}
+					choiced={item._id === this.props.group}
+					item={item}
+					selectable={false}
+					actions={
+						item._id === null
+							? null
+							: [
+									{
+										content: (
+											<>
+												<Icon.PencilSquare size="20" /> Edytuj grupę...
+											</>
+										),
+										default: "onClick",
+										on: {
+											onClick: () => {
+												this.props.onItemEdit(item._id);
+											},
+										},
+									},
+									{},
+									{
+										content: (
+											<>
+												<Icon.Trash size="20" /> Usuń grupę
+											</>
+										),
+										on: {
+											onClick: () => {
+												this.props.onItemDelete(item._id);
+											},
+										},
+									},
+							  ]
+					}
+					onChoiceItem={this.props.onItemChoice}
+				/>
+			);
 		});
 
 		if (this.props.silentFetch) {
 			return (
 				<React.Fragment>
-					<ListHeader />
+					<ListHeader key="group-list-header" />
 					{list}
 				</React.Fragment>
 			);
 		} else {
 			return (
 				<React.Fragment>
-					<ListHeader />
+					<ListHeader key="group-list-header" />
 					{GroupsStore.state === "pending" ? (
-						<div className="d-flex flex-row justify-content-center align-items-center p-3">
+						<div
+							key="group-loader"
+							className="d-flex flex-row justify-content-center align-items-center p-3"
+						>
 							<Spinner animation="border" role="status" />
 							<div className="ml-3"> Wczytywanie danych </div>
 						</div>
