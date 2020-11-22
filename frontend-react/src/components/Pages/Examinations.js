@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 
 import "./progressbar.scss";
-import "./examinations/list-items.scss";
 
 import ExaminationsStore from "../../stores/examinations";
 import GroupsStore from "../../stores/groups";
@@ -104,7 +103,6 @@ class Examinations extends Component {
 	}
 
 	doGroupChoiced(groupId) {
-		console.log("Group choiced #" + groupId);
 		this.setState({ choicedGroup: groupId });
 	}
 
@@ -135,10 +133,10 @@ class Examinations extends Component {
 				<SilentFetchBar />
 
 				<Media
-					query="(min-width:768px)"
+					query="(min-width:640px)"
 					render={() => (
 						<div className="d-flex flex-row">
-							<div className="col-4">
+							<div className="col-5">
 								<GroupsList
 									silentFetch={this.state.silentFetch}
 									group={this.state.choicedGroup}
@@ -153,7 +151,7 @@ class Examinations extends Component {
 									}}
 								/>
 							</div>
-							<div className="col-8">
+							<div className="col-7">
 								<ExaminationsList
 									silentFetch={this.state.silentFetch}
 									group={this.state.choicedGroup}
@@ -172,7 +170,7 @@ class Examinations extends Component {
 					)}
 				/>
 				<Media
-					query="(max-width:768px)"
+					query="(max-width:640px)"
 					render={() => (
 						<div className="d-flex flex-column d-md-none">
 							<CombinedList
@@ -197,19 +195,22 @@ class Examinations extends Component {
 					)}
 				/>
 
-				<nav className="d-flex flex-row justify-content-end align-items-center m-3 fixed-bottom">
+				<nav className="cornerButton">
 					<Button
 						className="rounded-circle p-2 m-0"
 						style={{ transform: "translateX(+5em)", zIndex: 2 }}
 						variant="primary"
 						onClick={() => {
-							this.setState({ examinationData: null, modalExamination: true });
+							this.setState({
+								examinationData: null,
+								modalExamination: true,
+							});
 						}}
 					>
 						<Icon.Plus size="48" />
 					</Button>
 
-					<Dropdown>
+					<Dropdown drop="up">
 						<Dropdown.Toggle
 							variant="light"
 							id="dropdown-basic"
