@@ -23,7 +23,7 @@ class GroupsStore extends Fetcher {
 	getItems() {
 		return this.items;
 	}
-	getByID(groupId) {
+	getById(groupId) {
 		return this.items.find((item) => item._id === groupId);
 	}
 	async fetchGet() {
@@ -37,11 +37,7 @@ class GroupsStore extends Fetcher {
 	}
 
 	async fetchAdd(newGroup) {
-		const result = await this.fetch(
-			API.groupsCreate,
-			"POST",
-			JSON.stringify(newGroup)
-		);
+		const result = await this.fetch(API.groupsCreate, "POST", JSON.stringify(newGroup));
 		runInAction(() => {
 			if (result.OK) {
 				this.insert(result.created);
@@ -53,16 +49,12 @@ class GroupsStore extends Fetcher {
 	}
 
 	async fetchUpdate(groupId, groupData) {
-		const result = await this.fetch(
-			API.groupsUpdate + groupId,
-			"POST",
-			JSON.stringify(groupData)
-		);
+		const result = await this.fetch(API.groupsUpdate + groupId, "POST", JSON.stringify(groupData));
 
 		runInAction(() => {
 			if (result.OK) {
-				this.state = "done";
 				this.update(groupId, groupData);
+				this.state = "ready";
 			}
 		});
 
@@ -70,18 +62,14 @@ class GroupsStore extends Fetcher {
 	}
 
 	async fetchDelete(groupsIDsList) {
-		const result = await this.fetch(
-			API.groupsDelete,
-			"DELETE",
-			JSON.stringify(groupsIDsList)
-		);
+		const result = await this.fetch(API.groupsDelete, "DELETE", JSON.stringify(groupsIDsList));
 
 		runInAction(() => {
 			if (result.OK) {
-				this.state = "done";
 				groupsIDsList.forEach((groupId) => {
 					this.remove(groupId);
 				});
+				this.state = "ready";
 			}
 		});
 

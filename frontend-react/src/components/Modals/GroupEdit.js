@@ -8,7 +8,7 @@ import ValidationStore from "../../stores/validation";
 class ModalGroupEdit extends Component {
 	constructor(props) {
 		super(props);
-		const groupData = GroupsStore.getByID(props.groupId);
+		const groupData = GroupsStore.getById(props.groupId);
 		console.log(groupData);
 		this.state = {
 			name: groupData.name,
@@ -51,22 +51,14 @@ class ModalGroupEdit extends Component {
 				(group) => group._id !== this.props.groupId && group.name === groupName
 			);
 			if (exist && exist.length !== 0)
-				ValidationStore.setField(
-					"edit-group",
-					"name",
-					"Podana nazwa grupy jest już w użyciu"
-				);
+				ValidationStore.setField("edit-group", "name", "Podana nazwa grupy jest już w użyciu");
 			else ValidationStore.setField("edit-group", "name", true);
 		}
 	}
 
 	render() {
 		return (
-			<Modal
-				show={this.props.show}
-				onHide={this.props.onHide}
-				backdrop="static"
-			>
+			<Modal show={this.props.show} onHide={this.props.onHide} backdrop="static">
 				<Form
 					onSubmit={(e) => {
 						this.onSubmit(e);
@@ -110,8 +102,7 @@ class ModalGroupEdit extends Component {
 							type="submit"
 							variant="primary"
 							disabled={
-								!ValidationStore.check("edit-group") ||
-								GroupsStore.getState() === "pending"
+								!ValidationStore.check("edit-group") || GroupsStore.getState() === "pending"
 							}
 						>
 							{GroupsStore.getState() === "pending" ? (
