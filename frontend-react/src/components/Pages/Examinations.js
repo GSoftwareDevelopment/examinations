@@ -8,6 +8,7 @@ import ValuesStore from "../../stores/values";
 import * as Icon from "react-bootstrap-icons";
 import { Alert, Badge, Button, Dropdown } from "react-bootstrap";
 import Media from "react-media";
+import FloatingActionButton from "./examinations/FloatingActionButton";
 import ListWithActions from "./examinations/ListWithActions";
 
 import CombinedList from "./examinations/CombinedList";
@@ -116,6 +117,75 @@ class Examinations extends Component {
 			this.setState({ modalGroupEdit: false });
 		};
 
+		const FAB = {
+			trigger: {
+				className: "m-0 rounded-circle noCaret badge-overlay",
+				style: { paddingLeft: "5em", paddingRight: ".5em", zIndex: 0 },
+				content: (
+					<React.Fragment>
+						<Icon.ThreeDotsVertical size="24" />
+						{this.state.selected.length > 0 && (
+							<Badge pill variant="danger">
+								{this.state.selected.length}
+							</Badge>
+						)}
+					</React.Fragment>
+				),
+			},
+			header: "Akcje",
+			items: [
+				{
+					text: "Odśwież widok",
+					icon: <Icon.ArrowRepeat size="16" />,
+					onClick: () => {
+						this.doRefreshList();
+					},
+				},
+				{},
+				{
+					text: "Zaznacz wszystkie",
+					icon: <Icon.SquareFill size="16" />,
+					onClick: null,
+				},
+				{
+					text: "Odzaznacz wszystkie",
+					icon: <Icon.Square size="16" />,
+					onClick: null,
+				},
+				{
+					text: "Odwróć zaznaczenie",
+					icon: <Icon.SquareHalf size="16" />,
+					onClick: null,
+				},
+				{},
+				{
+					className: "d-flex flex-row justify-content-between align-items-center",
+					disabled: this.state.selected.length === 0,
+					text: (
+						<React.Fragment>
+							<span>
+								<Icon.Trash size="16" /> Usuń zaznaczone
+							</span>
+							{this.state.selected.length > 0 && (
+								<Badge pill variant="danger">
+									{this.state.selected.length}
+								</Badge>
+							)}
+						</React.Fragment>
+					),
+					onClick: this.doDeleteSelected,
+				},
+				{},
+				{
+					text: "Ustawienia widoku...",
+					icon: <Icon.Sliders size="16" />,
+					onClick: () => {
+						this.setState({ modalViewOption: true });
+					},
+				},
+			],
+		};
+
 		const groupActions = [
 			{
 				content: (
@@ -181,164 +251,91 @@ class Examinations extends Component {
 					<h4 className="">Lista badań</h4>
 				</div>
 
-				<Media
-					query="(min-width:641px)"
-					render={() => (
-						<div className="d-flex flex-row">
-							<div className="col-5">
-								<ListWithActions
-									header="Lista grup"
-									itemClass="row-group"
-									items={groupsItems}
-									selectable={false}
-									choiced={this.state.choicedGroup}
-									onChoice={(id) => {
-										this.setState({ choicedGroup: id, choicedItem: id });
+				<Media queries={{ small: { maxWidth: 640 } }}>
+					{(matches) =>
+						matches.small ? (
+							<div className="d-flex flex-column d-md-none">
+								<CombinedList
+									groups={groupsItems}
+									items={ExaminationsStore.getItems()}
+									groupsActions={groupActions}
+									itemsActions={examinationActions}
+									choiced={this.state.choicedItem}
+									onChoiceGroup={(itemId) => {
+										this.setState({ choicedGroup: itemId, choicedItem: itemId });
 									}}
-									actions={groupActions}
+									onChoiceItem={(itemId) => {
+										this.setState({ choicedExamination: itemId, choicedItem: itemId });
+									}}
+									onSelect={(itemId) => {
+										this.handleSelectItem(itemId);
+									}}
 								/>
 							</div>
-							<div className="col-7">
-								{this.state.choicedGroup === null &&
-								ExaminationsStore.getItemsByGroupId(null).length === 0 ? (
-									<div className="text-center">
-										<Icon.InfoSquare size="64" />
-										<div className="mt-4">
-											Wybierz element z <strong>Listy grup</strong>, aby zobaczyć badania przypisane
-											do tej grupy.
-										</div>
-									</div>
-								) : (
+						) : (
+							<div className="d-flex flex-row">
+								<div className="col-5">
 									<ListWithActions
-										header={
-											<span>
-												Lista badań
-												{this.state.choicedGroup !== null
-													? " w grupie " + GroupsStore.getById(this.state.choicedGroup).name
-													: " nieprzypisanych do żadnej grupy"}
-											</span>
-										}
-										itemClass="row-item"
-										items={ExaminationsStore.getItemsByGroupId(this.state.choicedGroup)}
-										selectable={true}
-										onSelect={(select) => {
-											this.doSelectExamination(select);
-										}}
-										choiced={this.state.choicedExamination}
+										header="Lista grup"
+										itemClass="row-group"
+										items={groupsItems}
+										selectable={false}
+										choiced={this.state.choicedGroup}
 										onChoice={(id) => {
-											this.setState({ choicedExamination: id, choicedItem: id });
+											this.setState({ choicedGroup: id, choicedItem: id });
 										}}
-										actions={examinationActions}
+										actions={groupActions}
 									/>
-								)}
+								</div>
+								<div className="col-7">
+									{this.state.choicedGroup === null &&
+									ExaminationsStore.getItemsByGroupId(null).length === 0 ? (
+										<div className="text-center">
+											<Icon.InfoSquare size="64" />
+											<div className="mt-4">
+												Wybierz element z <strong>Listy grup</strong>, aby zobaczyć badania
+												przypisane do tej grupy.
+											</div>
+										</div>
+									) : (
+										<ListWithActions
+											header={
+												<span>
+													Lista badań
+													{this.state.choicedGroup !== null
+														? " w grupie " + GroupsStore.getById(this.state.choicedGroup).name
+														: " nieprzypisanych do żadnej grupy"}
+												</span>
+											}
+											itemClass="row-item"
+											items={ExaminationsStore.getItemsByGroupId(this.state.choicedGroup)}
+											selectable={true}
+											onSelect={(select) => {
+												this.doSelectExamination(select);
+											}}
+											choiced={this.state.choicedExamination}
+											onChoice={(id) => {
+												this.setState({ choicedExamination: id, choicedItem: id });
+											}}
+											actions={examinationActions}
+										/>
+									)}
+								</div>
 							</div>
-						</div>
-					)}
+						)
+					}
+				</Media>
+
+				<FloatingActionButton
+					mainActionContent={<Icon.Plus size="48" />}
+					onClick={() => {
+						this.setState({
+							examinationData: null,
+							modalExamination: true,
+						});
+					}}
+					dropdown={FAB}
 				/>
-				<Media
-					query="(max-width:640px)"
-					render={() => (
-						<div className="d-flex flex-column d-md-none">
-							<CombinedList
-								groups={groupsItems}
-								items={ExaminationsStore.getItems()}
-								groupsActions={groupActions}
-								itemsActions={examinationActions}
-								choiced={this.state.choicedItem}
-								onChoiceGroup={(itemId) => {
-									this.setState({ choicedGroup: itemId, choicedItem: itemId });
-								}}
-								onChoiceItem={(itemId) => {
-									this.setState({ choicedExamination: itemId, choicedItem: itemId });
-								}}
-								onSelect={(itemId) => {
-									this.handleSelectItem(itemId);
-								}}
-							/>
-						</div>
-					)}
-				/>
-
-				<nav className="cornerButton">
-					<Button
-						className="rounded-circle p-2 m-0"
-						style={{ transform: "translateX(+5em)", zIndex: 2 }}
-						variant="primary"
-						onClick={() => {
-							this.setState({
-								examinationData: null,
-								modalExamination: true,
-							});
-						}}
-					>
-						<Icon.Plus size="48" />
-					</Button>
-
-					<Dropdown drop="up">
-						<Dropdown.Toggle
-							variant="light"
-							id="dropdown-basic"
-							className="m-0 rounded-circle noCaret badge-overlay"
-							style={{ paddingLeft: "5em", paddingRight: ".5em", zIndex: 0 }}
-						>
-							<Icon.ThreeDotsVertical size="24" />
-							{this.state.selected.length > 0 && (
-								<Badge pill variant="danger">
-									{this.state.selected.length}
-								</Badge>
-							)}
-						</Dropdown.Toggle>
-
-						<Dropdown.Menu>
-							<Dropdown.Header>Akcje</Dropdown.Header>
-							<Dropdown.Item
-								onClick={() => {
-									this.doRefreshList();
-								}}
-							>
-								<Icon.ArrowRepeat size="16" /> Odśwież widok
-							</Dropdown.Item>
-							<Dropdown.Divider />
-							<Dropdown.Item eventKey="1">
-								<Icon.SquareFill className="mr-2" />
-								Zaznacz wszystkie
-							</Dropdown.Item>
-							<Dropdown.Item eventKey="2">
-								<Icon.Square className="mr-2" />
-								Odznacz wszystkie
-							</Dropdown.Item>
-							<Dropdown.Item eventKey="3">
-								<Icon.SquareHalf className="mr-2" />
-								Odwróć zaznaczenie
-							</Dropdown.Item>
-							<Dropdown.Divider />
-							<Dropdown.Item
-								className="d-flex flex-row justify-content-between align-items-center"
-								disabled={this.state.selected.length === 0}
-								onClick={() => {
-									this.doDeleteSelected();
-								}}
-							>
-								<span>
-									<Icon.Check2Square size="20" /> Usuń wybrane
-								</span>
-								{this.state.selected.length > 0 && (
-									<Badge pill variant="danger">
-										{this.state.selected.length}
-									</Badge>
-								)}
-							</Dropdown.Item>
-							<Dropdown.Divider />
-							<Dropdown.Item
-								onClick={() => {
-									this.setState({ modalViewOption: true });
-								}}
-							>
-								<Icon.Sliders size="20" /> Ustawienia widoku...
-							</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
-				</nav>
 
 				{this.state.modalExamination && (
 					<ModalExamination
