@@ -1,8 +1,29 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import "./list-items.scss";
 
 import * as Icon from "react-bootstrap-icons";
 import { Badge, Dropdown } from "react-bootstrap";
+
+/**
+ * @typedef ListItemActions Właściwości akcji dla komponentu ListItem
+ * @property {string|object} content - treść dla elementu akcji
+ * @property {string} [default] - określa domyślną akcję dla podwójnego kliknięcia w komponent ListItem
+ * @property {function} onClick - funkcja zdarzenia dla kliknięcia w akcję.
+ */
+
+/**
+ * @typedef ListItemProps Właściwości komponentu ListItem
+ * @property {Object} item - objekt z informacjami dla komponentu
+ * @property {string} item._id - unikalny identyfikator
+ * @property {string} item.name - nazwa
+ * @property {string} item.description - opis
+ * @property {boolean} choiced - określa, czy komponent jest w stanie wybranym
+ * @property {function} onChoiceItem - funkcja zdarzenia dla wybrania elementu
+ * @property {boolean} selectable - określa, czy komponent ma dodać element wyboru (checkbox)
+ * @property {function} onSelect - funkcja zdarzenia dla zaznaczenia elementu (checkbox)
+ * @property {Array} actions - definiuje akcje dostępne dla komponentu. Dodaje do komponentu element dropdown z listą akcji zdefiniowaną w tej tablicy.
+ */
 
 class ListItem extends Component {
 	render() {
@@ -13,57 +34,57 @@ class ListItem extends Component {
 		};
 
 		const ItemContent = (props) => (
-			<div key={"item-description-" + this.props.item.id}>
-				<div className="d-flex flex-row align-items-center">
-					{this.props.item.name}
-					{this.props.badge !== null && (
-						<Badge className="ml-2" key={"item-badge-" + id} variant="info">
-							{this.props.badge}
-						</Badge>
-					)}
-				</div>
+			<div>
+				<span className="item-name">{this.props.item.name}</span>
+				{this.props.badge !== null && (
+					<Badge key="badge" className="item-badge ml-2" variant="info">
+						{this.props.badge}
+					</Badge>
+				)}
 				{this.props.item.description && (
-					<div className="small text-dark">{this.props.item.description}</div>
+					<div key="desc" className="item-description">
+						{this.props.item.description}
+					</div>
 				)}
 			</div>
 		);
 
 		return (
 			<div
-				className={
-					"row-item" +
-					(this.props.choiced === true ? " bg-warning" : " bg-white")
-				}
-				style={{ cursor: this.props.onChoiceItem ? "pointer" : "default" }}
+				className={this.props.itemClass + (this.props.choiced === true ? " selected" : "")}
+				style={{ cursor: this.props.onChoice ? "pointer" : "default" }}
 				onClick={(e) => {
-					if (this.props.onChoiceItem) this.props.onChoiceItem(id);
+					if (this.props.onChoice) this.props.onChoice(id);
 				}}
 				onDoubleClick={(e) => {
 					if (this.props.actions) {
 						const action = this.props.actions.find((action) => action.default);
-						if (action) action.on[action.default]();
+						if (action) action.onClick(id);
 					}
 				}}
 			>
 				{this.props.selectable ? (
-					<div key={"item-description-" + id} className="form-check">
+					<div key={"item-selectable"} className="form-check">
 						<input
+							key="item-checkbox"
 							className="form-check-input"
 							type="checkbox"
 							name="selectedItems"
 							onChange={handleChange}
 						/>
-						<ItemContent
-							badge={this.props.badge}
-							item={{ name, description }}
-						/>
+						<ItemContent key="item-data" badge={this.props.badge} item={{ name, description }} />
 					</div>
 				) : (
-					<ItemContent badge={this.props.badge} item={{ name, description }} />
+					<ItemContent
+						key="item-noselectable"
+						badge={this.props.badge}
+						item={{ name, description }}
+					/>
 				)}
 
 				{this.props.actions && (
 					<Dropdown
+						key="item-actions"
 						drop="left"
 						className={"fade " + (this.props.choiced ? "show" : "hide")}
 					>
@@ -78,10 +99,15 @@ class ListItem extends Component {
 						<Dropdown.Menu>
 							<Dropdown.Header>Akcje</Dropdown.Header>
 							{this.props.actions.map((action, index) => {
-								const { content, on } = action;
+								const { content, onClick } = action;
 								if (content)
 									return (
-										<Dropdown.Item key={index} {...on}>
+										<Dropdown.Item
+											key={index}
+											onClick={() => {
+												onClick(id);
+											}}
+										>
 											{action.default ? <strong>{content}</strong> : content}
 										</Dropdown.Item>
 									);
@@ -95,4 +121,4 @@ class ListItem extends Component {
 	}
 }
 
-export default ListItem;
+export default observer(ListItem);

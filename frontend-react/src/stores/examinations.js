@@ -1,11 +1,5 @@
 import API from "../api-routes";
-import {
-	makeObservable,
-	observable,
-	computed,
-	action,
-	runInAction,
-} from "mobx";
+import { makeObservable, observable, computed, action, runInAction } from "mobx";
 import Fetcher from "./Fetcher";
 
 class ExaminationsStore extends Fetcher {
@@ -49,14 +43,11 @@ class ExaminationsStore extends Fetcher {
 	}
 
 	async fetchAdd(newExamination) {
-		const result = await this.fetch(
-			API.examinationsCreate,
-			"POST",
-			JSON.stringify(newExamination)
-		);
+		const result = await this.fetch(API.examinationsCreate, "POST", JSON.stringify(newExamination));
 		runInAction(() => {
 			if (result.OK) {
 				this.insert(result.created);
+				this.state = "ready";
 			}
 		});
 		return result;
@@ -76,6 +67,7 @@ class ExaminationsStore extends Fetcher {
 					description: updatedExamination.description,
 				};
 				this.update(examinationId, body);
+				this.state = "ready";
 			}
 		});
 
@@ -83,11 +75,7 @@ class ExaminationsStore extends Fetcher {
 	}
 
 	async fetchDelete(items) {
-		const result = await this.fetch(
-			API.examinationsDelete,
-			"DELETE",
-			JSON.stringify(items)
-		);
+		const result = await this.fetch(API.examinationsDelete, "DELETE", JSON.stringify(items));
 
 		runInAction(() => {
 			if (!result.error) {
@@ -95,6 +83,7 @@ class ExaminationsStore extends Fetcher {
 				items.forEach((itemId) => {
 					this.remove(itemId);
 				});
+				this.state = "ready";
 			}
 		});
 
