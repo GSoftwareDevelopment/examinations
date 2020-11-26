@@ -36,11 +36,9 @@ export default class FloatingActionButton extends Component {
 											key={index}
 											className={item.className}
 											disabled={item.disabled}
-											onClick={() => {
-												item.onClick();
-											}}
+											onClick={item.onClick}
 										>
-											{item.icon} {item.text}
+											{item.text}
 										</Dropdown.Item>
 									);
 								} else {

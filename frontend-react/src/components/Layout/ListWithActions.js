@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 
 import ListItem from "./ListItem";
-import { Alert } from "react-bootstrap";
+import InfoBox from "./InfoBox";
+import { messagesNoElements } from "../Messages";
 
 class ListWithActions extends Component {
 	updateSelectedItems(itemState) {
@@ -45,7 +46,7 @@ class ListWithActions extends Component {
 				) : this.props.onEmpty ? (
 					this.props.onEmpty
 				) : (
-					<Alert variant="info">Brak elementów</Alert>
+					<InfoBox content={messagesNoElements} />
 				)}
 			</React.Fragment>
 		);
