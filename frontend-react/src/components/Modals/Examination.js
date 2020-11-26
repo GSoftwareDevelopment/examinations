@@ -80,27 +80,21 @@ class ModalExamination extends Component {
 	}
 
 	render() {
+		const validationGeneral = ValidationStore.check("modal-examination", "name") === false;
+		const validationValues = ValidationStore.check("modal-examination", "values") === false;
 		const tabs = [
 			{
 				key: "general",
 				name: "Ogólne",
-				afterName: (
-					<React.Fragment>
-						{ValidationStore.check("modal-examination", "name") === false && (
-							<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />
-						)}
-					</React.Fragment>
+				afterName: validationGeneral && (
+					<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />
 				),
 			},
 			{
 				key: "values",
 				name: "Wartości",
-				afterName: (
-					<React.Fragment>
-						{ValidationStore.check("modal-examination", "values") === false && (
-							<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />
-						)}
-					</React.Fragment>
+				afterName: validationValues && (
+					<Icon.ExclamationDiamond size="16" className="ml-1 text-danger" />
 				),
 			},
 			{

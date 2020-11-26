@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 
 import { Form, Button } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
 
 import ExaminationsStore from "../../../stores/examinations";
 import GroupsStore from "../../../stores/groups";
 import ValidationStore from "../../../stores/validation";
 
 import ModalGroupAdd from "../GroupAdd";
+import InfoBox from "../../Layout/InfoBox";
 
 class TabGeneral extends Component {
 	constructor(props) {
@@ -42,11 +44,7 @@ class TabGeneral extends Component {
 		name = name.trim();
 
 		if (name === "") {
-			ValidationStore.setField(
-				"modal-examination",
-				"name",
-				"Wprowadź Nazwę badania"
-			);
+			ValidationStore.setField("modal-examination", "name", "Wprowadź Nazwę badania");
 		} else if (
 			ExaminationsStore.getItems().find(
 				(item) => item._id !== _id && item.group === group && item.name === name
@@ -83,7 +81,11 @@ class TabGeneral extends Component {
 							this.validate();
 						}}
 					/>
-					{ValidationStore.formMessage("modal-examination", "name")}
+					<InfoBox
+						className="valid-error"
+						icon={<Icon.ExclamationDiamond size="16" />}
+						content={ValidationStore.formMessage("modal-examination", "name")}
+					/>
 				</Form.Group>
 				<Form.Group>
 					<div className="d-flex flex-row justify-content-between align-items-center">
