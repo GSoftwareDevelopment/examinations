@@ -13,7 +13,7 @@ export const IconTextBadge = (props) => {
 		<React.Fragment>
 			<IconText icon={props.icon} text={props.text} />
 			{isBadge && (
-				<Badge pill variant="danger">
+				<Badge pill variant="danger" className="px-2 mx-2">
 					{props.badge}
 				</Badge>
 			)}

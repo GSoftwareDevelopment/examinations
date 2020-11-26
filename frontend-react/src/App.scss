@@ -69,8 +69,12 @@ nav.fixed-bottom {
 
 	// border:lightgray solid 1px;
 	background-color:white;
-	padding:5px;
-	box-shadow:2px 2px 5px rgba(0,0,0,.5);
+	padding:.5em 1em;
+	box-shadow:0px 5px 5px rgba(0,0,0,.35);
+	border-bottom-left-radius:.5em;
+	border-bottom-right-radius:.5em;
+
+	transform:translate(0px,-1px);
 
 	display:flex;
 	flex-direction: row;

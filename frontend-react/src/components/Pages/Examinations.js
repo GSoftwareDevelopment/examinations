@@ -180,7 +180,6 @@ class Examinations extends Component {
 				},
 				{},
 				{
-					className: "d-flex flex-row justify-content-between align-items-center",
 					disabled: this.state.selected.length === 0,
 					text: (
 						<IconTextBadge

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown, Button } from "react-bootstrap";
+import "./fab.scss";
 
 export default class FloatingActionButton extends Component {
 	render() {
@@ -25,12 +26,12 @@ export default class FloatingActionButton extends Component {
 							{this.props.dropdown.trigger.content}
 						</Dropdown.Toggle>
 
-						<Dropdown.Menu>
+						<Dropdown.Menu bsPrefix="fab-dropdown">
 							{this.props.dropdown.header && (
 								<Dropdown.Header>{this.props.dropdown.header}</Dropdown.Header>
 							)}
 							{this.props.dropdown.items.map((item, index) => {
-								if (item) {
+								if (item.text) {
 									return (
 										<Dropdown.Item
 											key={index}
