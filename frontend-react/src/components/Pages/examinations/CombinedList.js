@@ -16,6 +16,15 @@ function ListHeader() {
 }
 
 class CombinedList extends Component {
+	updateSelectedItems(itemState) {
+		let items = this.props.selectedItems;
+		if (!items) items = [];
+		let newItems = [];
+		if (itemState.state) newItems = [...items, itemState.id];
+		else newItems = items.filter((id) => id !== itemState.id);
+		this.props.onSelect(newItems);
+	}
+
 	render() {
 		const examinations = this.props.items;
 		const groups = this.props.groups;
@@ -36,6 +45,9 @@ class CombinedList extends Component {
 				groupItems = examinations
 					.filter((item) => item.group === currentGroup._id)
 					.map((item) => {
+						const selected = this.props.selectedItems;
+						let isSelected = false;
+						if (selected) isSelected = item._id === selected.find((id) => item._id === id);
 						return (
 							<ListItem
 								key={item._id}
@@ -47,7 +59,10 @@ class CombinedList extends Component {
 									this.props.onChoiceItem(itemId);
 								}}
 								selectable={true}
-								onSelect={this.props.onSelect}
+								selected={isSelected}
+								onSelect={(itemState) => {
+									this.updateSelectedItems(itemState);
+								}}
 								actions={this.props.itemsActions}
 							/>
 						);
@@ -81,7 +96,7 @@ class CombinedList extends Component {
 
 		return (
 			<React.Fragment>
-				<ListHeader />
+				<ListHeader key="header" />
 				{list}
 			</React.Fragment>
 		);

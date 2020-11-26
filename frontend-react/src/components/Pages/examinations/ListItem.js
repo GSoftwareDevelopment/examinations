@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { observer } from "mobx-react";
+import classnames from "classnames";
 import "./list-items.scss";
 
 import * as Icon from "react-bootstrap-icons";
@@ -29,12 +29,8 @@ class ListItem extends Component {
 	render() {
 		const { _id: id, name, description } = this.props.item;
 
-		const handleChange = (e) => {
-			this.props.onSelect({ id, state: e.target.checked });
-		};
-
 		const ItemContent = (props) => (
-			<div>
+			<div className="user-select-none">
 				<span className="item-name">{this.props.item.name}</span>
 				{this.props.badge !== null && (
 					<Badge key="badge" className="item-badge ml-2" variant="info">
@@ -51,8 +47,7 @@ class ListItem extends Component {
 
 		return (
 			<div
-				className={this.props.itemClass + (this.props.choiced === true ? " selected" : "")}
-				style={{ cursor: this.props.onChoice ? "pointer" : "default" }}
+				className={classnames(this.props.itemClass, { selected: this.props.choiced })}
 				onClick={(e) => {
 					if (this.props.onChoice) this.props.onChoice(id);
 				}}
@@ -70,7 +65,11 @@ class ListItem extends Component {
 							className="form-check-input"
 							type="checkbox"
 							name="selectedItems"
-							onChange={handleChange}
+							checked={this.props.selected}
+							onChange={(e) => {
+								// this.setState({ selected: e.target.checked });
+								if (this.props.onSelect) this.props.onSelect({ id, state: e.target.checked });
+							}}
 						/>
 						<ItemContent key="item-data" badge={this.props.badge} item={{ name, description }} />
 					</div>
@@ -86,7 +85,7 @@ class ListItem extends Component {
 					<Dropdown
 						key="item-actions"
 						drop="left"
-						className={"fade " + (this.props.choiced ? "show" : "hide")}
+						className={classnames("fade", { show: this.props.choiced })}
 					>
 						<Dropdown.Toggle
 							className="noCaret m-1 p-1 shadow-none"
@@ -111,7 +110,7 @@ class ListItem extends Component {
 											{action.default ? <strong>{content}</strong> : content}
 										</Dropdown.Item>
 									);
-								else return <Dropdown.Divider />;
+								else return <Dropdown.Divider key={index} />;
 							})}
 						</Dropdown.Menu>
 					</Dropdown>
@@ -121,4 +120,4 @@ class ListItem extends Component {
 	}
 }
 
-export default observer(ListItem);
+export default ListItem;
