@@ -6,7 +6,7 @@ import GroupsStore from "../../stores/groups";
 import ValuesStore from "../../stores/values";
 
 import * as Icon from "react-bootstrap-icons";
-import { Alert, Badge, Button, Dropdown } from "react-bootstrap";
+import { Badge } from "react-bootstrap";
 import Media from "react-media";
 import FloatingActionButton from "./examinations/FloatingActionButton";
 import ListWithActions from "./examinations/ListWithActions";
@@ -18,43 +18,69 @@ import ModalGroupEdit from "../Modals/GroupEdit";
 import ModalExaminationViewOptions from "../Modals/Examination-ViewOptions";
 
 class Examinations extends Component {
-	constructor() {
-		super();
+	state = {
+		modalViewOption: false,
+		modalExamination: false,
+		modalGroupEdit: false,
+		examinationData: null,
+		selected: [],
+		choicedItem: null,
+		choicedGroup: null,
+		choicedExamination: null,
+	};
 
-		this.state = {
-			modalViewOption: false,
-			modalExamination: false,
-			modalGroupEdit: false,
-			examinationData: null,
-			silentFetch: false,
-			selected: [],
-			choicedItem: null,
-			choicedGroup: null,
-			choicedExamination: null,
-		};
-	}
+	groupActions = [
+		{
+			content: (
+				<span>
+					<Icon.PencilSquare size="20" /> Edytuj grupę...
+				</span>
+			),
+			default: true,
+			onClick: (itemId) => {
+				this.doEditGroup(itemId);
+			},
+		},
+		{},
+		{
+			content: (
+				<span>
+					<Icon.Trash size="20" /> Usuń grupę
+				</span>
+			),
+			onClick: (itemId) => {
+				this.doDeleteGroup(itemId);
+			},
+		},
+	];
 
-	/**
-	 * Handle for item checkbox
-	 * @param {Object} item - Object with item data
-	 * @param {string} item.id - Unique item identificator
-	 * @param {boolean} item.state - Item state (checked `true` or not `false`)
-	 */
-	doSelectExamination(item) {
-		let list = this.state.selected;
-		if (item.state) {
-			list.push(item.id);
-			this.setState({ selected: list });
-		} else {
-			list = list.filter((id) => id !== item.id);
-			this.setState({ selected: list });
-		}
-	}
+	examinationActions = [
+		{
+			content: (
+				<span>
+					<Icon.PencilSquare size="20" /> Edytuj badanie...
+				</span>
+			),
+			default: true,
+			onClick: (itemId) => {
+				this.doEditExamination(itemId);
+			},
+		},
+		{},
+		{
+			content: (
+				<span>
+					<Icon.Trash size="20" /> Usuń badanie
+				</span>
+			),
+			onClick: (itemId) => {
+				this.doDeleteExamination(itemId);
+			},
+		},
+	];
 
 	componentDidMount() {
-		this.doRefreshList().finally(() => {
-			this.setState({ silentFetch: true });
-		});
+		this.doRefreshList();
 	}
 
 	async doRefreshList() {
@@ -173,7 +199,9 @@ class Examinations extends Component {
 							)}
 						</React.Fragment>
 					),
-					onClick: this.doDeleteSelected,
+					onClick: () => {
+						this.doDeleteSelected();
+					},
 				},
 				{},
 				{
@@ -185,56 +213,6 @@ class Examinations extends Component {
 				},
 			],
 		};
-
-		const groupActions = [
-			{
-				content: (
-					<span>
-						<Icon.PencilSquare size="20" /> Edytuj grupę...
-					</span>
-				),
-				default: true,
-				onClick: (itemId) => {
-					this.doEditGroup(itemId);
-				},
-			},
-			{},
-			{
-				content: (
-					<span>
-						<Icon.Trash size="20" /> Usuń grupę
-					</span>
-				),
-				onClick: (itemId) => {
-					this.doDeleteGroup(itemId);
-				},
-			},
-		];
-
-		const examinationActions = [
-			{
-				content: (
-					<span>
-						<Icon.PencilSquare size="20" /> Edytuj badanie...
-					</span>
-				),
-				default: true,
-				onClick: (itemId) => {
-					this.doEditExamination(itemId);
-				},
-			},
-			{},
-			{
-				content: (
-					<span>
-						<Icon.Trash size="20" /> Usuń badanie
-					</span>
-				),
-				onClick: (itemId) => {
-					this.doDeleteExamination(itemId);
-				},
-			},
-		];
 
 		const groupsItems = [...GroupsStore.getItems()];
 
@@ -258,8 +236,8 @@ class Examinations extends Component {
 								<CombinedList
 									groups={groupsItems}
 									items={ExaminationsStore.getItems()}
-									groupsActions={groupActions}
-									itemsActions={examinationActions}
+									groupsActions={this.groupActions}
+									itemsActions={this.examinationActions}
 									choiced={this.state.choicedItem}
 									onChoiceGroup={(itemId) => {
 										this.setState({ choicedGroup: itemId, choicedItem: itemId });
@@ -267,8 +245,9 @@ class Examinations extends Component {
 									onChoiceItem={(itemId) => {
 										this.setState({ choicedExamination: itemId, choicedItem: itemId });
 									}}
-									onSelect={(itemId) => {
-										this.handleSelectItem(itemId);
+									selectedItems={this.state.selected}
+									onSelect={(itemsList) => {
+										this.setState({ selected: itemsList });
 									}}
 								/>
 							</div>
@@ -284,7 +263,7 @@ class Examinations extends Component {
 										onChoice={(id) => {
 											this.setState({ choicedGroup: id, choicedItem: id });
 										}}
-										actions={groupActions}
+										actions={this.groupActions}
 									/>
 								</div>
 								<div className="col-7">
@@ -310,14 +289,15 @@ class Examinations extends Component {
 											itemClass="row-item"
 											items={ExaminationsStore.getItemsByGroupId(this.state.choicedGroup)}
 											selectable={true}
-											onSelect={(select) => {
-												this.doSelectExamination(select);
+											selectedItems={this.state.selected}
+											onSelect={(itemsList) => {
+												this.setState({ selected: itemsList });
 											}}
 											choiced={this.state.choicedExamination}
 											onChoice={(id) => {
 												this.setState({ choicedExamination: id, choicedItem: id });
 											}}
-											actions={examinationActions}
+											actions={this.examinationActions}
 										/>
 									)}
 								</div>
