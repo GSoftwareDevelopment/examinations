@@ -63,17 +63,11 @@ class ModalExamination extends Component {
 			name: this.state.name,
 			group: this.state.group || null,
 			description: this.state.description,
-			// TODO: Po stronie backendu, przy tworzeniu badania, wyrzucić ID z listy wartości przed ich utworzeniem
 			values: ValuesStore.getItems(),
 		};
 
-		if (!this.props.setTo)
-			result = await ExaminationsStore.fetchAdd(examinationData);
-		else
-			result = await ExaminationsStore.fetchUpdate(
-				this.state._id,
-				examinationData
-			);
+		if (!this.props.setTo) result = await ExaminationsStore.fetchAdd(examinationData);
+		else result = await ExaminationsStore.fetchUpdate(this.state._id, examinationData);
 
 		if (result.OK) {
 			this.props.onHide();
@@ -116,12 +110,7 @@ class ModalExamination extends Component {
 		];
 
 		return (
-			<Modal
-				show={this.props.show}
-				onHide={this.props.onHide}
-				backdrop="static"
-				autoFocus={false}
-			>
+			<Modal show={this.props.show} onHide={this.props.onHide} backdrop="static" autoFocus={false}>
 				<Form
 					autoComplete="off"
 					onSubmit={(e) => {
@@ -162,9 +151,7 @@ class ModalExamination extends Component {
 					</Modal.Body>
 					<Modal.Footer>
 						<Button
-							disabled={
-								!this.isValid() || !ExaminationsStore.getState() === "pending"
-							}
+							disabled={!this.isValid() || !ExaminationsStore.getState() === "pending"}
 							type="submit"
 						>
 							{ExaminationsStore.getState() === "pending" ? (
