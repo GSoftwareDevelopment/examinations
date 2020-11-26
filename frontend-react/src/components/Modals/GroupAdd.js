@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { Button, Modal, Form, Spinner } from "react-bootstrap";
 
+import * as Icon from "react-bootstrap-icons";
+import InfoBox from "../Layout/InfoBox";
+
 import GroupsStore from "../../stores/groups";
 import ValidationStore from "../../stores/validation";
 
@@ -11,7 +14,6 @@ class ModalGroupAdd extends Component {
 		this.state = {
 			name: "",
 			description: "",
-			uniqueName: true,
 		};
 
 		ValidationStore.setField("add-group", "name", false);
@@ -39,15 +41,6 @@ class ModalGroupAdd extends Component {
 			this.props.onHide();
 		}
 
-		if (result.error && result.error.name === "ValidatorError") {
-			switch (result.error.kind) {
-				case "unique":
-					this.setState({ uniqueName: false });
-					return;
-				default:
-					console.error(result);
-			}
-		}
 		return;
 	}
 
@@ -56,26 +49,16 @@ class ModalGroupAdd extends Component {
 		if (groupName.length === 0) {
 			ValidationStore.setField("add-group", "name", "Wprowadź nazwę grupy");
 		} else {
-			const exist = GroupsStore.getItems().find(
-				(group) => group.name === groupName
-			);
+			const exist = GroupsStore.getItems().find((group) => group.name === groupName);
 			if (exist && exist.length !== 0)
-				ValidationStore.setField(
-					"add-group",
-					"name",
-					"Podana nazwa grupy jest już w użyciu"
-				);
+				ValidationStore.setField("add-group", "name", "Podana nazwa grupy jest już w użyciu");
 			else ValidationStore.setField("add-group", "name", true);
 		}
 	}
 
 	render() {
 		return (
-			<Modal
-				show={this.props.show}
-				onHide={this.props.onHide}
-				backdrop="static"
-			>
+			<Modal show={this.props.show} onHide={this.props.onHide} backdrop="static">
 				<Form
 					onSubmit={(e) => {
 						this.onSubmit(e);
@@ -96,7 +79,11 @@ class ModalGroupAdd extends Component {
 									this.validate();
 								}}
 							/>
-							{ValidationStore.formMessage("add-group", "name")}
+							<InfoBox
+								className="valid-error"
+								icon={<Icon.ExclamationDiamond size="16" />}
+								content={ValidationStore.formMessage("add-group", "name")}
+							/>
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Opis</Form.Label>
@@ -113,10 +100,7 @@ class ModalGroupAdd extends Component {
 						<Button
 							type="submit"
 							variant="primary"
-							disabled={
-								!ValidationStore.check("add-group") ||
-								GroupsStore.getState() === "pending"
-							}
+							disabled={!ValidationStore.check("add-group") || GroupsStore.getState() === "pending"}
 						>
 							{GroupsStore.getState() === "pending" ? (
 								<div className="d-flex felx-row align-items-center">
