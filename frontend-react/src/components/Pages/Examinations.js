@@ -6,16 +6,30 @@ import GroupsStore from "../../stores/groups";
 import ValuesStore from "../../stores/values";
 
 import * as Icon from "react-bootstrap-icons";
-import { Badge } from "react-bootstrap";
 import Media from "react-media";
-import FloatingActionButton from "./examinations/FloatingActionButton";
-import ListWithActions from "./examinations/ListWithActions";
+
+import InfoBox from "../Layout/InfoBox";
+import { messageChoiceGroup } from "../Messages";
+import { IconText, IconTextBadge } from "../Layout/IconText";
+
+import FloatingActionButton from "../Layout/FloatingActionButton";
+import { SelectionBadge } from "./examinations/FAB-components";
+import ListWithActions from "../Layout/ListWithActions";
 
 import CombinedList from "./examinations/CombinedList";
 
 import ModalExamination from "../Modals/Examination";
 import ModalGroupEdit from "../Modals/GroupEdit";
 import ModalExaminationViewOptions from "../Modals/Examination-ViewOptions";
+
+const HeaderExaminationsList = (props) => (
+	<span>
+		Lista badań
+		{props.groupId !== null
+			? " w grupie " + GroupsStore.getById(props.groupId).name
+			: " nieprzypisanych do żadnej grupy"}
+	</span>
+);
 
 class Examinations extends Component {
 	state = {
@@ -31,51 +45,27 @@ class Examinations extends Component {
 
 	groupActions = [
 		{
-			content: (
-				<span>
-					<Icon.PencilSquare size="20" /> Edytuj grupę...
-				</span>
-			),
+			content: <IconText icon={<Icon.PencilSquare size="20" />} text="Edytuj grupę..." />,
 			default: true,
-			onClick: (itemId) => {
-				this.doEditGroup(itemId);
-			},
+			onClick: this.doEditGroup.bind(this),
 		},
 		{},
 		{
-			content: (
-				<span>
-					<Icon.Trash size="20" /> Usuń grupę
-				</span>
-			),
-			onClick: (itemId) => {
-				this.doDeleteGroup(itemId);
-			},
+			content: <IconText icon={<Icon.Trash size="20" />} text="Usuń grupę..." />,
+			onClick: this.doDeleteGroup.bind(this),
 		},
 	];
 
 	examinationActions = [
 		{
-			content: (
-				<span>
-					<Icon.PencilSquare size="20" /> Edytuj badanie...
-				</span>
-			),
+			content: <IconText icon={<Icon.PencilSquare size="20" />} text="Edytuj badanie..." />,
 			default: true,
-			onClick: (itemId) => {
-				this.doEditExamination(itemId);
-			},
+			onClick: this.doEditExamination.bind(this),
 		},
 		{},
 		{
-			content: (
-				<span>
-					<Icon.Trash size="20" /> Usuń badanie
-				</span>
-			),
-			onClick: (itemId) => {
-				this.doDeleteExamination(itemId);
-			},
+			content: <IconText icon={<Icon.Trash size="20" />} text="Usuń badanie..." />,
+			onClick: this.doDeleteExamination.bind(this),
 		},
 	];
 
@@ -116,11 +106,14 @@ class Examinations extends Component {
 
 	async doEditExamination(itemId) {
 		console.log("Item edit #" + itemId);
-		await ValuesStore.fetchGet(itemId);
-		const examinationData = ExaminationsStore.getItemById(itemId);
-		this.setState({
-			examinationData,
-			modalExamination: true,
+		await ValuesStore.fetchGet(itemId).finally(() => {
+			if (ValuesStore.getState() === "done") {
+				const examinationData = ExaminationsStore.getItemById(itemId);
+				this.setState({
+					examinationData,
+					modalExamination: true,
+				});
+			}
 		});
 	}
 
@@ -133,7 +126,10 @@ class Examinations extends Component {
 	}
 
 	render() {
-		const closeViewOptionsModal = () => {
+		const showModalViewOptions = () => {
+			this.setState({ modalViewOption: true });
+		};
+		const closeModalViewOptions = () => {
 			this.setState({ modalViewOption: false });
 		};
 		const closeModalExamination = () => {
@@ -141,6 +137,15 @@ class Examinations extends Component {
 		};
 		const closeModalGroupEdit = () => {
 			this.setState({ modalGroupEdit: false });
+		};
+		const handleSelect = (itemsList) => {
+			this.setState({ selected: itemsList });
+		};
+		const handleChoiceGroup = (itemId) => {
+			this.setState({ choicedGroup: itemId, choicedItem: itemId });
+		};
+		const handleChoiceItem = (itemId) => {
+			this.setState({ choicedExamination: itemId, choicedItem: itemId });
 		};
 
 		const FAB = {
@@ -150,37 +155,27 @@ class Examinations extends Component {
 				content: (
 					<React.Fragment>
 						<Icon.ThreeDotsVertical size="24" />
-						{this.state.selected.length > 0 && (
-							<Badge pill variant="danger">
-								{this.state.selected.length}
-							</Badge>
-						)}
+						<SelectionBadge value={this.state.selected.length} />
 					</React.Fragment>
 				),
 			},
 			header: "Akcje",
 			items: [
 				{
-					text: "Odśwież widok",
-					icon: <Icon.ArrowRepeat size="16" />,
-					onClick: () => {
-						this.doRefreshList();
-					},
+					text: <IconText icon={<Icon.ArrowRepeat size="16" />} text="Odśwież widok" />,
+					onClick: this.doRefreshList.bind(this),
 				},
 				{},
 				{
-					text: "Zaznacz wszystkie",
-					icon: <Icon.SquareFill size="16" />,
+					text: <IconText icon={<Icon.SquareFill size="16" />} text="Zaznacz wszystkie" />,
 					onClick: null,
 				},
 				{
-					text: "Odzaznacz wszystkie",
-					icon: <Icon.Square size="16" />,
+					text: <IconText icon={<Icon.Square size="16" />} text="Odzaznacz wszystkie" />,
 					onClick: null,
 				},
 				{
-					text: "Odwróć zaznaczenie",
-					icon: <Icon.SquareHalf size="16" />,
+					text: <IconText icon={<Icon.SquareHalf size="16" />} text="Odwróć zaznaczenie" />,
 					onClick: null,
 				},
 				{},
@@ -188,28 +183,18 @@ class Examinations extends Component {
 					className: "d-flex flex-row justify-content-between align-items-center",
 					disabled: this.state.selected.length === 0,
 					text: (
-						<React.Fragment>
-							<span>
-								<Icon.Trash size="16" /> Usuń zaznaczone
-							</span>
-							{this.state.selected.length > 0 && (
-								<Badge pill variant="danger">
-									{this.state.selected.length}
-								</Badge>
-							)}
-						</React.Fragment>
+						<IconTextBadge
+							icon={<Icon.Trash size="16" />}
+							text="Usuń zaznaczone"
+							badge={this.state.selected.length !== 0 ? this.state.selected.length : null}
+						/>
 					),
-					onClick: () => {
-						this.doDeleteSelected();
-					},
+					onClick: this.doDeleteSelected.bind(this),
 				},
 				{},
 				{
-					text: "Ustawienia widoku...",
-					icon: <Icon.Sliders size="16" />,
-					onClick: () => {
-						this.setState({ modalViewOption: true });
-					},
+					text: <IconText icon={<Icon.Sliders size="16" />} text="Ustawienia widoku..." />,
+					onClick: showModalViewOptions,
 				},
 			],
 		};
@@ -219,7 +204,7 @@ class Examinations extends Component {
 		if (ExaminationsStore.getItemsByGroupId(null).length > 0)
 			groupsItems.unshift({
 				_id: null,
-				name: "Bez grupy",
+				name: "[ Bez grupy ]",
 				description: "Badnia bez przydzielonej grupy",
 			});
 
@@ -239,16 +224,10 @@ class Examinations extends Component {
 									groupsActions={this.groupActions}
 									itemsActions={this.examinationActions}
 									choiced={this.state.choicedItem}
-									onChoiceGroup={(itemId) => {
-										this.setState({ choicedGroup: itemId, choicedItem: itemId });
-									}}
-									onChoiceItem={(itemId) => {
-										this.setState({ choicedExamination: itemId, choicedItem: itemId });
-									}}
+									onChoiceGroup={handleChoiceGroup}
+									onChoiceItem={handleChoiceItem}
 									selectedItems={this.state.selected}
-									onSelect={(itemsList) => {
-										this.setState({ selected: itemsList });
-									}}
+									onSelect={handleSelect}
 								/>
 							</div>
 						) : (
@@ -260,43 +239,24 @@ class Examinations extends Component {
 										items={groupsItems}
 										selectable={false}
 										choiced={this.state.choicedGroup}
-										onChoice={(id) => {
-											this.setState({ choicedGroup: id, choicedItem: id });
-										}}
+										onChoice={handleChoiceGroup}
 										actions={this.groupActions}
 									/>
 								</div>
 								<div className="col-7">
 									{this.state.choicedGroup === null &&
 									ExaminationsStore.getItemsByGroupId(null).length === 0 ? (
-										<div className="text-center">
-											<Icon.InfoSquare size="64" />
-											<div className="mt-4">
-												Wybierz element z <strong>Listy grup</strong>, aby zobaczyć badania
-												przypisane do tej grupy.
-											</div>
-										</div>
+										<InfoBox icon={<Icon.InfoSquare size="64" />} content={messageChoiceGroup} />
 									) : (
 										<ListWithActions
-											header={
-												<span>
-													Lista badań
-													{this.state.choicedGroup !== null
-														? " w grupie " + GroupsStore.getById(this.state.choicedGroup).name
-														: " nieprzypisanych do żadnej grupy"}
-												</span>
-											}
+											header={<HeaderExaminationsList groupId={this.state.choicedGroup} />}
 											itemClass="row-item"
 											items={ExaminationsStore.getItemsByGroupId(this.state.choicedGroup)}
 											selectable={true}
 											selectedItems={this.state.selected}
-											onSelect={(itemsList) => {
-												this.setState({ selected: itemsList });
-											}}
+											onSelect={handleSelect}
 											choiced={this.state.choicedExamination}
-											onChoice={(id) => {
-												this.setState({ choicedExamination: id, choicedItem: id });
-											}}
+											onChoice={handleChoiceItem}
 											actions={this.examinationActions}
 										/>
 									)}
@@ -334,7 +294,7 @@ class Examinations extends Component {
 				{this.state.modalViewOption && (
 					<ModalExaminationViewOptions
 						show={this.state.modalViewOption}
-						onHide={closeViewOptionsModal}
+						onHide={closeModalViewOptions}
 					/>
 				)}
 			</div>
