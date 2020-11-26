@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 
 import * as Icon from "react-bootstrap-icons";
-import { Alert } from "react-bootstrap";
-import ListItem from "./ListItem";
+import ListItem from "../../Layout/ListItem";
+import InfoBox from "../../Layout/InfoBox";
+import { messageNoExaminationsAndGroups, messageGroupHasntExaminations } from "../../Messages";
 
 function ListHeader() {
 	return (
@@ -32,11 +33,7 @@ class CombinedList extends Component {
 
 		if (examinations.length === 0 && groups.length === 1) {
 			list = (
-				<Alert variant="info" className="m-3 text-center">
-					<Icon.EmojiFrown size="64" />
-					<br />
-					Brak zdefiniowanych badań i grup.
-				</Alert>
+				<InfoBox icon={<Icon.EmojiFrown size="64" />} content={messageNoExaminationsAndGroups} />
 			);
 		} else {
 			list = groups.map((currentGroup) => {
@@ -83,9 +80,7 @@ class CombinedList extends Component {
 							actions={currentGroup._id !== null ? this.props.groupsActions : null}
 						/>
 						{groupItems.length === 0 ? (
-							<div className="alert alert-info my-2">
-								<p className="mb-0">Ta grupa nie posiada żadnych badań</p>
-							</div>
+							<InfoBox icon={null} content={messageGroupHasntExaminations} />
 						) : (
 							groupItems
 						)}
