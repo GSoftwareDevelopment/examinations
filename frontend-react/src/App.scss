@@ -61,3 +61,21 @@ nav.fixed-bottom {
 	bottom:1.5em;
 	right:1.5em;
 }
+
+.valid-error {
+	position:absolute;
+	&.no-float { position:relative; }
+	// width:100%;
+
+	// border:lightgray solid 1px;
+	background-color:white;
+	padding:5px;
+	box-shadow:2px 2px 5px rgba(0,0,0,.5);
+
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+
+	z-index:10;
+	svg { float:left; margin-right:.5em; }
+}
