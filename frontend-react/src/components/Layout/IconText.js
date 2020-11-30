@@ -3,7 +3,8 @@ import { Badge } from "react-bootstrap";
 
 export const IconText = (props) => (
 	<span>
-		{props.icon} <span>{props.text}</span>
+		<span className="mx-2">{props.icon}</span>
+		{props.text}
 	</span>
 );
 
