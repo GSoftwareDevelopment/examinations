@@ -1,5 +1,5 @@
 import API from "../api-routes";
-import { makeObservable, observable, computed, action, runInAction } from "mobx";
+import { makeObservable, observable, action, runInAction } from "mobx";
 import Fetcher from "./Fetcher";
 
 class ExaminationsStore extends Fetcher {
