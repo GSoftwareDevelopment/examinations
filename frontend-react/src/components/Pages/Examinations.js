@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Media from "react-media";
 import { observer } from "mobx-react";
 
 import ExaminationsStore from "../../stores/examinations";
@@ -6,7 +7,7 @@ import GroupsStore from "../../stores/groups";
 import ValuesStore from "../../stores/values";
 
 import * as Icon from "react-bootstrap-icons";
-import Media from "react-media";
+
 
 import { IconText, IconTextBadge } from "../Layout/IconText";
 
@@ -208,7 +209,7 @@ class Examinations extends Component {
 			<div style={{ paddingBottom: "5em" }}>
 				<PageHeader name="Administrowanie badaniami" />
 
-				<Media queries={{ small: { maxWidth: 640 } }}>
+				<Media queries={{ small: { maxWidth: 575 } }}>
 					{(matches) =>
 						matches.small ? (
 							<CombinedList
