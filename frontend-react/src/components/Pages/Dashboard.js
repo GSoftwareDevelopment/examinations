@@ -9,10 +9,10 @@ export default class Dashboard extends Component {
 	render() {
 		const time = new Date().getHours();
 		return (
-			<div className="mx-3">
+			<div>
 				<PageHeader name="Pulpit" />
 
-				<Jumbotron>
+				<Jumbotron className="mx-3">
 					<h1>
 						{time >= 6 && time < 12
 							? "Dzień dobry"
