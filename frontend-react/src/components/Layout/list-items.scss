@@ -1,14 +1,10 @@
 $selection-color: rgb(255,188,0);
 
 div.row-item {
-	display:flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	padding-left:1em;
 
 	padding-top:.5em !important;
 	padding-bottom:.5em !important;
+	padding-left:1em;
 
 	border-bottom:rgba(0,0,0,.2) solid 1px;
 	transition: .20s;
@@ -30,17 +26,13 @@ div.row-item {
 }
 
 div.row-group {
-	display:flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-
-	transition: .20s;
-	border-bottom:rgba(0,0,0,.2) solid 1px;
 
 	padding-top:.5em !important;
 	padding-bottom:.5em !important;
 	padding-left:.5em !important;
+
+	transition: .20s;
+	border-bottom:rgba(0,0,0,.2) solid 1px;
 
 	.item-name { font-weight: 800;}
 	// .item-badge {}
