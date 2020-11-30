@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import "./progressbar.scss";
 
-import ExaminationsStore from "./stores/examinations";
-import GroupsStore from "./stores/groups";
-import ValuesStore from "./stores/values";
+import ExaminationsStore from "../../stores/examinations";
+import GroupsStore from "../../stores/groups";
+import ValuesStore from "../../stores/values";
 
 const SilentFetchBar = observer(() => {
 	if ([ExaminationsStore, GroupsStore, ValuesStore].find((store) => store.state === "pending"))
