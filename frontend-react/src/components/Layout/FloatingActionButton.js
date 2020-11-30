@@ -4,6 +4,8 @@ import "./fab.scss";
 
 export default class FloatingActionButton extends Component {
 	render() {
+		let prevAction = null;
+
 		return (
 			<nav className="cornerButton">
 				<Button
@@ -26,24 +28,23 @@ export default class FloatingActionButton extends Component {
 							{this.props.dropdown.trigger.content}
 						</Dropdown.Toggle>
 
-						<Dropdown.Menu bsPrefix="fab-dropdown">
+						<Dropdown.Menu bsPrefix="fab-dropdown bg-dark">
 							{this.props.dropdown.header && (
 								<Dropdown.Header>{this.props.dropdown.header}</Dropdown.Header>
 							)}
 							{this.props.dropdown.items.map((item, index) => {
+								if (item.disabled) return null;
 								if (item.text) {
+									prevAction = item.text;
 									return (
-										<Dropdown.Item
-											key={index}
-											className={item.className}
-											disabled={item.disabled}
-											onClick={item.onClick}
-										>
+										<Dropdown.Item key={index} className={item.className} onClick={item.onClick}>
 											{item.text}
 										</Dropdown.Item>
 									);
 								} else {
-									return <Dropdown.Divider />;
+									if (prevAction === null) return null;
+									prevAction = null;
+									return <Dropdown.Divider key={index} />;
 								}
 							})}
 						</Dropdown.Menu>
