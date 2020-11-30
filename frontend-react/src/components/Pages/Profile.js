@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import PageHeader from "../Layout/PageHeader";
 
 export default class Profile extends Component {
-	render () {
+	render() {
 		return (
 			<div>
-				<h4 className="mx-3">Twój Profil</h4>
+				<PageHeader name="Twój profil" />
 			</div>
-		)
+		);
 	}
 }

@@ -8,32 +8,22 @@ import ValuesStore from "../../stores/values";
 import * as Icon from "react-bootstrap-icons";
 import Media from "react-media";
 
-import InfoBox from "../Layout/InfoBox";
-import { messageChoiceGroup } from "../Messages";
 import { IconText, IconTextBadge } from "../Layout/IconText";
 
 import FloatingActionButton from "../Layout/FloatingActionButton";
 import { SelectionBadge } from "./examinations/FAB-components";
-import ListWithActions from "../Layout/ListWithActions";
 
+import PageHeader from "../Layout/PageHeader";
+import TwoColumnsList from "./examinations/TwoColumnsList";
 import CombinedList from "./examinations/CombinedList";
 
 import ModalExamination from "../Modals/Examination";
 import ModalGroupEdit from "../Modals/GroupEdit";
-import ModalExaminationViewOptions from "../Modals/Examination-ViewOptions";
-
-const HeaderExaminationsList = (props) => (
-	<span>
-		Lista badań
-		{props.groupId !== null
-			? " w grupie " + GroupsStore.getById(props.groupId).name
-			: " nieprzypisanych do żadnej grupy"}
-	</span>
-);
+import ModalGroupManage from "../Modals/GroupManage";
 
 class Examinations extends Component {
 	state = {
-		modalViewOption: false,
+		modalGroupManage: false,
 		modalExamination: false,
 		modalGroupEdit: false,
 		examinationData: null,
@@ -42,32 +32,6 @@ class Examinations extends Component {
 		choicedGroup: null,
 		choicedExamination: null,
 	};
-
-	groupActions = [
-		{
-			content: <IconText icon={<Icon.PencilSquare size="20" />} text="Edytuj grupę..." />,
-			default: true,
-			onClick: this.doEditGroup.bind(this),
-		},
-		{},
-		{
-			content: <IconText icon={<Icon.Trash size="20" />} text="Usuń grupę..." />,
-			onClick: this.doDeleteGroup.bind(this),
-		},
-	];
-
-	examinationActions = [
-		{
-			content: <IconText icon={<Icon.PencilSquare size="20" />} text="Edytuj badanie..." />,
-			default: true,
-			onClick: this.doEditExamination.bind(this),
-		},
-		{},
-		{
-			content: <IconText icon={<Icon.Trash size="20" />} text="Usuń badanie..." />,
-			onClick: this.doDeleteExamination.bind(this),
-		},
-	];
 
 	componentDidMount() {
 		this.doRefreshList();
@@ -79,7 +43,22 @@ class Examinations extends Component {
 		this.setState({ selected: [] });
 	}
 
-	async doDeleteExamination(itemId) {
+	async doEditExamination() {
+		const itemId = this.state.choicedExamination;
+		console.log("Item edit #" + itemId);
+		await ValuesStore.fetchGet(itemId).finally(() => {
+			if (ValuesStore.getState() === "done") {
+				const examinationData = ExaminationsStore.getItemById(itemId);
+				this.setState({
+					examinationData,
+					modalExamination: true,
+				});
+			}
+		});
+	}
+
+	async doDeleteExamination() {
+		const itemId = this.state.choicedExamination;
 		console.log("delete item #" + itemId + "...");
 		await ExaminationsStore.fetchDelete([itemId]);
 		this.setState({
@@ -94,7 +73,17 @@ class Examinations extends Component {
 		this.setState({ selected: [] });
 	}
 
-	async doDeleteGroup(groupId) {
+	doEditGroup() {
+		const groupId = this.state.choicedGroup;
+		console.log("Group edit #" + groupId);
+		this.setState({
+			choicedGroup: groupId,
+			modalGroupEdit: true,
+		});
+	}
+
+	async doDeleteGroup() {
+		const groupId = this.state.choicedGroup;
 		await GroupsStore.fetchDelete([groupId]);
 		this.setState({
 			selected: [],
@@ -104,33 +93,12 @@ class Examinations extends Component {
 		});
 	}
 
-	async doEditExamination(itemId) {
-		console.log("Item edit #" + itemId);
-		await ValuesStore.fetchGet(itemId).finally(() => {
-			if (ValuesStore.getState() === "done") {
-				const examinationData = ExaminationsStore.getItemById(itemId);
-				this.setState({
-					examinationData,
-					modalExamination: true,
-				});
-			}
-		});
-	}
-
-	doEditGroup(groupId) {
-		console.log("Group edit #" + groupId);
-		this.setState({
-			choicedGroup: groupId,
-			modalGroupEdit: true,
-		});
-	}
-
 	render() {
-		const showModalViewOptions = () => {
-			this.setState({ modalViewOption: true });
+		const showModalGroupManage = () => {
+			this.setState({ modalGroupManage: true });
 		};
-		const closeModalViewOptions = () => {
-			this.setState({ modalViewOption: false });
+		const closeModalGroupManage = () => {
+			this.setState({ modalGroupManage: false });
 		};
 		const closeModalExamination = () => {
 			this.setState({ modalExamination: false });
@@ -141,14 +109,34 @@ class Examinations extends Component {
 		const handleSelect = (itemsList) => {
 			this.setState({ selected: itemsList });
 		};
-		const handleChoiceGroup = (itemId) => {
-			this.setState({ choicedGroup: itemId, choicedItem: itemId });
-		};
 		const handleChoiceItem = (itemId) => {
-			this.setState({ choicedExamination: itemId, choicedItem: itemId });
+			this.setState({ choicedItem: itemId });
+
+			// check itemId is a Group
+			const isGroup = GroupsStore.getById(itemId);
+			if (isGroup) {
+				this.setState({ choicedGroup: itemId });
+			}
+
+			// check itemId is a Examination
+			const isExamination = ExaminationsStore.getItemById(itemId);
+			if (isExamination) {
+				this.setState({ choicedGroup: isExamination.group, choicedExamination: itemId });
+			} else {
+				this.setState({ choicedExamination: null });
+			}
 		};
 
-		const FAB = {
+		const isItemsSelected = this.state.selected.length > 0;
+
+		const disabledExaminationActions =
+			this.state.choicedExamination === null ||
+			this.state.choicedExamination !== this.state.choicedItem;
+
+		const disabledGroupActions =
+			this.state.choicedGroup === null || this.state.choicedGroup !== this.state.choicedItem;
+
+		const FABActions = {
 			trigger: {
 				className: "m-0 rounded-circle noCaret badge-overlay",
 				style: { paddingLeft: "5em", paddingRight: ".5em", zIndex: 0 },
@@ -167,33 +155,42 @@ class Examinations extends Component {
 				},
 				{},
 				{
-					text: <IconText icon={<Icon.SquareFill size="16" />} text="Zaznacz wszystkie" />,
-					onClick: null,
+					disabled: disabledGroupActions,
+					text: <IconText icon={<Icon.PencilSquare size="16" />} text="Edytuj grupę..." />,
+					onClick: this.doEditGroup.bind(this),
 				},
 				{
-					text: <IconText icon={<Icon.Square size="16" />} text="Odzaznacz wszystkie" />,
-					onClick: null,
-				},
-				{
-					text: <IconText icon={<Icon.SquareHalf size="16" />} text="Odwróć zaznaczenie" />,
-					onClick: null,
+					disabled: disabledGroupActions,
+					text: <IconText icon={<Icon.Trash size="16" />} text="Usuń grupę" />,
+					onClick: this.doDeleteGroup.bind(this),
 				},
 				{},
 				{
-					disabled: this.state.selected.length === 0,
+					disabled: disabledExaminationActions,
+					text: <IconText icon={<Icon.PencilSquare size="16" />} text="Edytuj badanie..." />,
+					onClick: this.doEditExamination.bind(this),
+				},
+				{
+					disabled: disabledExaminationActions || isItemsSelected,
+					text: <IconText icon={<Icon.Trash size="16" />} text="Usuń badanie" />,
+					onClick: this.doDeleteExamination.bind(this),
+				},
+				{},
+				{
+					disabled: !isItemsSelected,
 					text: (
 						<IconTextBadge
 							icon={<Icon.Trash size="16" />}
 							text="Usuń zaznaczone"
-							badge={this.state.selected.length !== 0 ? this.state.selected.length : null}
+							badge={isItemsSelected ? this.state.selected.length : null}
 						/>
 					),
 					onClick: this.doDeleteSelected.bind(this),
 				},
 				{},
 				{
-					text: <IconText icon={<Icon.Sliders size="16" />} text="Ustawienia widoku..." />,
-					onClick: showModalViewOptions,
+					text: <IconText icon={<Icon.Diagram3 size="16" />} text="Zarządzanie grupami..." />,
+					onClick: showModalGroupManage,
 				},
 			],
 		};
@@ -209,58 +206,29 @@ class Examinations extends Component {
 
 		return (
 			<div style={{ paddingBottom: "5em" }}>
-				<div className="mx-3 d-flex flex-row justify-content-between align-items-center border-bottom mb-2">
-					<h4 className="">Lista badań</h4>
-				</div>
+				<PageHeader name="Administrowanie badaniami" />
 
 				<Media queries={{ small: { maxWidth: 640 } }}>
 					{(matches) =>
 						matches.small ? (
-							<div className="d-flex flex-column d-md-none">
-								<CombinedList
-									groups={groupsItems}
-									items={ExaminationsStore.getItems()}
-									groupsActions={this.groupActions}
-									itemsActions={this.examinationActions}
-									choiced={this.state.choicedItem}
-									onChoiceGroup={handleChoiceGroup}
-									onChoiceItem={handleChoiceItem}
-									selectedItems={this.state.selected}
-									onSelect={handleSelect}
-								/>
-							</div>
+							<CombinedList
+								groups={groupsItems}
+								items={ExaminationsStore.getItems()}
+								choiced={this.state.choicedItem}
+								onChoiceItem={handleChoiceItem}
+								selectedItems={this.state.selected}
+								onSelect={handleSelect}
+							/>
 						) : (
-							<div className="d-flex flex-row">
-								<div className="col-5">
-									<ListWithActions
-										header="Lista grup"
-										itemClass="row-group"
-										items={groupsItems}
-										selectable={false}
-										choiced={this.state.choicedGroup}
-										onChoice={handleChoiceGroup}
-										actions={this.groupActions}
-									/>
-								</div>
-								<div className="col-7">
-									{this.state.choicedGroup === null &&
-									ExaminationsStore.getItemsByGroupId(null).length === 0 ? (
-										<InfoBox icon={<Icon.InfoSquare size="64" />} content={messageChoiceGroup} />
-									) : (
-										<ListWithActions
-											header={<HeaderExaminationsList groupId={this.state.choicedGroup} />}
-											itemClass="row-item"
-											items={ExaminationsStore.getItemsByGroupId(this.state.choicedGroup)}
-											selectable={true}
-											selectedItems={this.state.selected}
-											onSelect={handleSelect}
-											choiced={this.state.choicedExamination}
-											onChoice={handleChoiceItem}
-											actions={this.examinationActions}
-										/>
-									)}
-								</div>
-							</div>
+							<TwoColumnsList
+								groups={groupsItems}
+								items={ExaminationsStore.getItemsByGroupId(this.state.choicedGroup)}
+								choiced={this.state.choicedItem}
+								choicedGroup={this.state.choicedGroup}
+								onChoiceItem={handleChoiceItem}
+								selectedItems={this.state.selected}
+								onSelect={handleSelect}
+							/>
 						)
 					}
 				</Media>
@@ -273,7 +241,7 @@ class Examinations extends Component {
 							modalExamination: true,
 						});
 					}}
-					dropdown={FAB}
+					dropdown={FABActions}
 				/>
 
 				{this.state.modalExamination && (
@@ -290,11 +258,8 @@ class Examinations extends Component {
 						onHide={closeModalGroupEdit}
 					/>
 				)}
-				{this.state.modalViewOption && (
-					<ModalExaminationViewOptions
-						show={this.state.modalViewOption}
-						onHide={closeModalViewOptions}
-					/>
+				{this.state.modalGroupManage && (
+					<ModalGroupManage show={this.state.modalGroupManage} onHide={closeModalGroupManage} />
 				)}
 			</div>
 		);

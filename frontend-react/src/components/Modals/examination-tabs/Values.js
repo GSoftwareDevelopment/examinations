@@ -3,22 +3,45 @@ import { observer } from "mobx-react";
 
 import { Button } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
+import ListWithActions from "../../Layout/ListWithActions";
 import InfoBox from "../../Layout/InfoBox";
+import { IconText } from "../../Layout/IconText";
+import { messageNoValuesDefinitions } from "../../Messages";
 
 import ValuesStore from "../../../stores/values";
 import ValidationStore from "../../../stores/validation";
 
-import ValuesList from "./ValuesList";
+import { valueSymbolize } from "../value/ValuesTypesDef";
+
 import AddValue from "../AddValue";
 import EditValue from "../EditValue";
 
 class TabValues extends Component {
 	state = {
+		choicedValue: null,
 		modalAddValue: false,
-		editedValueId: false,
+		modalEditValue: false,
 	};
 
-	deleteItem(itemId) {
+	valueActions = [
+		{
+			content: <IconText icon={<Icon.PencilSquare size="20" />} text="Edytuj definicje..." />,
+			default: true,
+			onClick: this.doEditValue.bind(this),
+		},
+		{},
+		{
+			content: <IconText icon={<Icon.Trash size="20" />} text="Usuń definicje..." />,
+			onClick: this.doDeleteValue.bind(this),
+		},
+	];
+
+	doEditValue() {
+		this.setState({ modalEditValue: true });
+	}
+
+	doDeleteValue() {
+		const itemId = this.state.choicedValue;
 		ValuesStore.remove(itemId);
 		this.validation();
 	}
@@ -37,39 +60,49 @@ class TabValues extends Component {
 	}
 
 	render() {
+		const handleChoiceValue = (itemId) => {
+			this.setState({ choicedValue: itemId });
+		};
+
+		const items = ValuesStore.getItems()
+			.filter((item) => item.action !== "delete")
+			.map((value) => ({
+				_id: value.id,
+				name: valueSymbolize(value),
+				description: value.description,
+			}));
+
 		return (
 			<React.Fragment>
-				<div className="d-flex flex-row align-items-center bg-dark text-white p-2 mt-3">
-					<div>Definicje</div>
-				</div>
-
-				<ValuesList
-					items={ValuesStore.getItems()}
-					onClickEdit={(id) => {
-						this.setState({ editedValueId: id });
-					}}
-					onClickDelete={(id) => {
-						this.deleteItem(id);
-					}}
+				<ListWithActions
+					header={[
+						"Definicje",
+						<Button
+							className="m-0"
+							onClick={() => {
+								this.setState({ modalAddValue: true });
+							}}
+							variant="light"
+							size="sm"
+						>
+							<Icon.PlusCircle size="16" className="mr-1" />
+							Dodaj definicje...
+						</Button>,
+					]}
+					itemClass="row-item"
+					items={items}
+					selectable={false}
+					choiced={this.state.choicedValue}
+					onChoice={handleChoiceValue}
+					actions={this.valueActions}
+					onEmpty={messageNoValuesDefinitions}
 				/>
+
 				<InfoBox
 					className="valid-error no-float justify-content-center"
 					icon={<Icon.ExclamationDiamond size="16" />}
 					content={ValidationStore.formMessage("modal-examination", "values")}
 				/>
-
-				<div className="d-flex flex-column justify-content-start align-items-end border-top py-2">
-					<Button
-						onClick={() => {
-							this.setState({ modalAddValue: true });
-						}}
-						variant="light"
-						size="sm"
-					>
-						<Icon.PlusCircle size="16" className="mr-1" />
-						Dodaj definicje...
-					</Button>
-				</div>
 
 				{this.state.modalAddValue && (
 					<AddValue
@@ -80,16 +113,12 @@ class TabValues extends Component {
 						}}
 					/>
 				)}
-				{this.state.editedValueId !== false && (
+				{this.state.modalEditValue !== false && (
 					<EditValue
-						show={this.state.editedValueId !== false}
-						valueData={
-							this.state.editedValueId !== false
-								? ValuesStore.items.find((value) => value.id === this.state.editedValueId)
-								: null
-						}
+						show={this.state.modalEditValue !== false}
+						valueData={ValuesStore.items.find((value) => value.id === this.state.choicedValue)}
 						onHide={() => {
-							this.setState({ editedValueId: false });
+							this.setState({ modalEditValue: false });
 							this.validation();
 						}}
 					/>

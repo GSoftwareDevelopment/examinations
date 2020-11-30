@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import PageHeader from "../Layout/PageHeader";
 
 export default class Measurements extends Component {
-	render () {
+	render() {
 		return (
 			<div>
-				<h4 className="mx-3">Pomiary</h4>
+				<PageHeader name="Pomiary" />
 			</div>
-		)
+		);
 	}
 }
