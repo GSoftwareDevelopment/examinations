@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
-import { Scrollbars } from 'react-custom-scrollbars';
-import AppNavbar from './components/Layout/AppNavbar';
-import Dashboard from './components/Pages/Dashboard';
-import Profile from './components/Pages/Profile';
-import Examinations from './components/Pages/Examinations';
-import Measurements from './components/Pages/Measurements';
+import { Scrollbars } from "react-custom-scrollbars";
+import AppNavbar from "./components/Layout/AppNavbar";
+import Dashboard from "./components/Pages/Dashboard";
+import Profile from "./components/Pages/Profile";
+import Examinations from "./components/Pages/Examinations";
+import Measurements from "./components/Pages/Measurements";
 
 export default class Main extends Component {
 	render() {
@@ -14,7 +14,7 @@ export default class Main extends Component {
 			<React.Fragment>
 				<AppNavbar />
 				<Scrollbars autohide="true">
-					<main role="main" style={{ paddingTop: '4.5em' }}>
+					<main role="main" className="mediaPagePadding">
 						<Switch>
 							<Route exact path="/dashboard" component={Dashboard} />
 							<Route exact path="/profile" component={Profile} />
@@ -24,6 +24,7 @@ export default class Main extends Component {
 						</Switch>
 					</main>
 				</Scrollbars>
-			</React.Fragment>		)
+			</React.Fragment>
+		);
 	}
 }
