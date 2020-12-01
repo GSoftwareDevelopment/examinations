@@ -8,7 +8,7 @@ import ValidationStore from "../../stores/validation";
 
 import { Form, Button, Modal, Tabs, Tab, Spinner } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
-import { ModalTabsButtons } from "../ModalTabsButtons";
+import { ModalTabsButtons } from "../Layout/ModalTabsButtons";
 
 import TabGeneral from "./examination-tabs/General";
 import TabValues from "./examination-tabs/Values";

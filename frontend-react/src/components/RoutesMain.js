@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 import { Scrollbars } from "react-custom-scrollbars";
-import AppNavbar from "./components/Layout/AppNavbar";
-import Dashboard from "./components/Pages/Dashboard";
-import Profile from "./components/Pages/Profile";
-import Examinations from "./components/Pages/Examinations";
-import Measurements from "./components/Pages/Measurements";
+import AppNavbar from "./Layout/AppNavbar";
+import Dashboard from "./Pages/Dashboard";
+import Profile from "./Pages/Profile";
+import Examinations from "./Pages/Examinations";
+import Measurements from "./Pages/Measurements";
 
 export default class Main extends Component {
 	render() {

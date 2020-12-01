@@ -6,10 +6,10 @@ import { observer } from "mobx-react";
 import UserStore from "./stores/user";
 import "./App.scss";
 
-import Main from "./Main";
-import Authenticate from "./Authenticate";
+import Main from "./components/RoutesMain";
+import Authenticate from "./components/RoutesAuthenticate";
 
-import Errors from "./Errors";
+import Errors from "./components/Layout/Errors";
 
 class App extends Component {
 	async componentDidMount() {
