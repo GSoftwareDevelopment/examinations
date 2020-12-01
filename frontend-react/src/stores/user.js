@@ -13,6 +13,11 @@ class UserStore {
 		makeAutoObservable(this);
 	}
 
+	clearMessage() {
+		this.message = "";
+		this.state = "done";
+	}
+
 	getToken() {
 		return localStorage.getItem("token");
 	}
@@ -77,8 +82,7 @@ class UserStore {
 				runInAction(() => {
 					console.log("Fetch error", error, res);
 					this.state = "error";
-					this.message =
-						"The authorization token cannot be verified. You have been logged out.";
+					this.message = "The authorization token cannot be verified. You have been logged out.";
 					this.removeToken();
 					this.data = null;
 				});
@@ -229,8 +233,7 @@ export class AuthorizeMessage extends Component {
 			return (
 				<div className="d-flex flex-row justify-content-center align-items-center w-100 h-100">
 					<div>
-						<Spinner animation="border" role="status" /> Checking
-						Authentication...
+						<Spinner animation="border" role="status" /> Checking Authentication...
 					</div>
 				</div>
 			);
