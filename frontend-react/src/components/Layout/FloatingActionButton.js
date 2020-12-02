@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Dropdown, Button } from "react-bootstrap";
-import { classnames } from "classnames";
+import { Dropdown, Button, Badge } from "react-bootstrap";
 import "./fab.scss";
 
 export default class FloatingActionButton extends Component {
@@ -45,3 +44,15 @@ export default class FloatingActionButton extends Component {
 		);
 	}
 }
+
+const SelectionBadge = (props) => (
+	<React.Fragment>
+		{props.value > 0 && (
+			<Badge pill variant="danger">
+				{props.value}
+			</Badge>
+		)}
+	</React.Fragment>
+);
+
+export { SelectionBadge };
