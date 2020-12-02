@@ -87,15 +87,18 @@ class RegisterForm extends Component {
 			<React.Fragment>
 				{!this.state.redirect ? (
 					<Form className="h-100 d-flex flex-column justify-content-center align-items-center">
-						<Card style={{ width: "360px", maxWidth: "100vw" }}>
+						{UserStore.message !== "" && <Alert variant="info">{UserStore.message}</Alert>}
+						<Card className="auth-card shadow-lg">
 							<Card.Body>
-								<Card.Title className="text-center">Rejestracja</Card.Title>
+								<Card.Title className="text-center">
+									<strong>Rejestracja</strong>
+								</Card.Title>
 								<Card.Text as="div">
-									{UserStore.message !== "" && <Alert variant="info">{UserStore.message}</Alert>}
 									<Form.Group>
 										<Form.Label>Adres e-mail</Form.Label>
 										<Form.Control
 											type="email"
+											autoFocus
 											value={this.state.email}
 											onChange={(e) => {
 												this.setInputValue("email", e.target.value);
@@ -111,7 +114,6 @@ class RegisterForm extends Component {
 												this.setInputValue("displayName", e.target.value);
 											}}
 										/>
-										<Form.Text>{this.state.displayName}</Form.Text>
 									</Form.Group>
 									<Form.Group>
 										<Form.Label>Twoje hasło</Form.Label>
@@ -122,7 +124,6 @@ class RegisterForm extends Component {
 												this.setInputValue("password", e.target.value);
 											}}
 										/>
-										<Form.Text>{this.state.password}</Form.Text>
 									</Form.Group>
 									<Form.Group>
 										<Form.Label>Potwierdź hasło</Form.Label>
@@ -133,10 +134,9 @@ class RegisterForm extends Component {
 												this.setInputValue("password2", e.target.value);
 											}}
 										/>
-										<Form.Text>{this.state.password2}</Form.Text>
 									</Form.Group>
 								</Card.Text>
-								<div className="d-flex flex-row justify-content-between align-items-center">
+								<div className="card-footer">
 									<Link to="/login">&lt; Wróć</Link>
 									<Button
 										type="submit"

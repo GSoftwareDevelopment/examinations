@@ -39,19 +39,22 @@ class LoginForm extends Component {
 	render() {
 		return (
 			<Form className="h-100 d-flex flex-column justify-content-center align-items-center">
-				<Card style={{ width: "360px", maxWidth: "100vw" }}>
+				{UserStore.message !== "" && (
+					<Alert variant="info" className="text-center">
+						{UserStore.message}
+					</Alert>
+				)}
+				<Card className="auth-card shadow-lg">
 					<Card.Body>
-						<Card.Title className="text-center">Logowanie</Card.Title>
+						<Card.Title className="text-center">
+							<strong>Logowanie</strong>
+						</Card.Title>
 						<Card.Text as="div">
-							{UserStore.message !== "" && (
-								<Alert variant="info" className="text-center">
-									{UserStore.message}
-								</Alert>
-							)}
 							<Form.Group>
 								<Form.Label>Adres e-mail</Form.Label>
 								<Form.Control
 									type="email"
+									autoFocus
 									value={this.state.username}
 									onChange={(e) => {
 										this.setInputValue("username", e.target.value);
@@ -69,7 +72,7 @@ class LoginForm extends Component {
 								/>
 							</Form.Group>
 						</Card.Text>
-						<div className="d-flex flex-row justify-content-between align-items-center">
+						<div className="card-footer">
 							<Button
 								type="submit"
 								disabled={this.state.buttonDisabled}
