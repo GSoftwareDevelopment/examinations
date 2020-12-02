@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import GroupsStore from "../../../stores/groups";
 import ExaminationsStore from "../../../stores/examinations";
 
-import { messageChoiceGroup, messageGroupHasntExaminations } from "../../Messages";
+import { messageChoiceGroup, messageGroupHasntExaminations } from "../../Layout/Messages";
 import ListWithActions from "../../Layout/ListWithActions";
 
 const examinationsHeader = (groupId) => {

@@ -5,7 +5,7 @@ import "./list-items.scss";
 import * as Icon from "react-bootstrap-icons";
 import { Badge, Dropdown } from "react-bootstrap";
 
-import { messagesNoElements } from "../Messages";
+import { messagesNoElements } from "./Messages";
 
 function ListHeader(props) {
 	return (

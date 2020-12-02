@@ -6,7 +6,7 @@ import * as Icon from "react-bootstrap-icons";
 import ListWithActions from "../../Layout/ListWithActions";
 import InfoBox from "../../Layout/InfoBox";
 import { IconText } from "../../Layout/IconText";
-import { messageNoValuesDefinitions } from "../../Messages";
+import { messageNoValuesDefinitions } from "../../Layout/Messages";
 
 import ValuesStore from "../../../stores/values";
 import ValidationStore from "../../../stores/validation";

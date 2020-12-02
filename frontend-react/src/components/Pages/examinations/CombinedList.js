@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 
 import { ListHeader, ListItem } from "../../Layout/ListWithActions";
-import { messageNoExaminationsAndGroups, messageGroupHasntExaminations } from "../../Messages";
+import {
+	messageNoExaminationsAndGroups,
+	messageGroupHasntExaminations,
+} from "../../Layout/Messages";
 
 class CombinedList extends Component {
 	updateSelectedItems(itemState) {

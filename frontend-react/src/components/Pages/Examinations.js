@@ -10,8 +10,7 @@ import * as Icon from "react-bootstrap-icons";
 
 import { IconText, IconTextBadge } from "../Layout/IconText";
 
-import FloatingActionButton from "../Layout/FloatingActionButton";
-import { SelectionBadge } from "./examinations/FAB-components";
+import FloatingActionButton, { SelectionBadge } from "../Layout/FloatingActionButton";
 
 import PageHeader from "../Layout/PageHeader";
 import TwoColumnsList from "./examinations/TwoColumnsList";
