@@ -1,5 +1,5 @@
 import * as Icon from "react-bootstrap-icons";
-import InfoBox from "./Layout/InfoBox";
+import InfoBox from "./InfoBox";
 
 export const messagesNoElements = <InfoBox content={<div>Brak elementów</div>} />;
 
