@@ -1,5 +1,19 @@
 $selection-color: rgb(255,188,0);
 
+div.list-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: .5em;
+	background-color: var(--dark);
+	color: var(--white);
+	border-radius: 5px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
 div.row-item {
 
 	padding-top:.5em !important;
@@ -9,20 +23,25 @@ div.row-item {
 	border-bottom:rgba(0,0,0,.2) solid 1px;
 	transition: .20s;
 
-	.item-name { font-weight: 100;}
-	// .item-badge {}
-	.item-description { font-size: .8em;}
+	.item {
+		.item-name { font-weight: 300;}
+		// .item-badge {}
+		.item-description {
+			font-weight:100;
+			font-size: .8em;
+		}
+	}
 
-  &:hover{
-		transition: .20s;
-    background-color: rgba(124, 94, 94, 0.1);
-  }
-	&.selected {
-		background-color: $selection-color;
-	}
-	&.selected:hover {
-		background-color: darken($selection-color,5);
-	}
+		&:hover{
+			transition: .20s;
+			background-color: rgba(124, 94, 94, 0.1);
+		}
+		&.selected {
+			background-color: $selection-color;
+		}
+		&.selected:hover {
+			background-color: darken($selection-color,5);
+		}
 }
 
 div.row-group {
@@ -34,9 +53,14 @@ div.row-group {
 	transition: .20s;
 	border-bottom:rgba(0,0,0,.2) solid 1px;
 
-	.item-name { font-weight: 800;}
-	// .item-badge {}
-	.item-description { font-size: .8em;}
+	.item{
+		.item-name { font-weight: 800;}
+		// .item-badge {}
+		.item-description {
+			font-weight:100;
+			font-size: .8em;
+		}
+	}
 
   &:hover{
 		transition: .20s;

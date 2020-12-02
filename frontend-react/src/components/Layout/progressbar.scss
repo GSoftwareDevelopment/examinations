@@ -6,10 +6,11 @@
   &.custom-progress {
     display:block;
 		position:relative;
-    height:.3em;
+    height:5px;
     margin:0;
 		padding:0;
 		z-index:1031;
+		background-color:#000;
   }
 }
 

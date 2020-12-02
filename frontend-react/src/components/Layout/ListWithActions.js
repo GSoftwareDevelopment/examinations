@@ -9,14 +9,7 @@ import { messagesNoElements } from "./Messages";
 
 function ListHeader(props) {
 	return (
-		<div
-			className={classnames(
-				"d-flex flex-row justify-content-between align-items-center",
-				"bg-dark text-white",
-				"rounded-top",
-				"p-2"
-			)}
-		>
+		<div className="list-header">
 			{props.columns.map((column, index) => (
 				<span key={index}>{column}</span>
 			))}
@@ -25,7 +18,7 @@ function ListHeader(props) {
 }
 
 const ItemContent = (props) => (
-	<div className="user-select-none">
+	<div className="item">
 		<span className="item-name">{props.item.name}</span>
 		{props.badge !== null && (
 			<Badge key="badge" className="item-badge ml-2" variant="info">
