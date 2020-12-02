@@ -8,7 +8,6 @@ import ValuesStore from "../../stores/values";
 
 import * as Icon from "react-bootstrap-icons";
 
-
 import { IconText, IconTextBadge } from "../Layout/IconText";
 
 import FloatingActionButton from "../Layout/FloatingActionButton";
@@ -139,8 +138,7 @@ class Examinations extends Component {
 
 		const FABActions = {
 			trigger: {
-				className: "m-0 rounded-circle noCaret badge-overlay",
-				style: { paddingLeft: "5em", paddingRight: ".5em", zIndex: 0 },
+				className: "badge-overlay",
 				content: (
 					<React.Fragment>
 						<Icon.ThreeDotsVertical size="24" />

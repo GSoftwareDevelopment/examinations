@@ -1,4 +1,27 @@
-$font-family-base: Roboto, sans-serif;
+//- Override font system
+$font-family-sans-serif: Roboto, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-serif: Roboto, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-base: $font-family-serif;
+$headings-font-family: $font-family-sans-serif;
+
+// Material colors
+$primary:        #4285f4 !default;
+$secondary:      #a6c !default;
+$default:        #2bbbad !default;
+$info:           #33b5e5 !default;
+$success:        #00c851 !default;
+$warning:        #fb3 !default;
+$danger:         #ff3547 !default;
+$elegant:        #2e2e2e !default;
+$stylish:        #4b515d !default;
+$unique:         #3f729b !default;
+$special:        #37474f !default;
+$white:          #fff;
+$light:          #ddd !default;
+$dark:           #444 !default;
+$black:          #000;
 
 @for $i from 1 through 6 {
   $zIndexBackdrop:  #{1040 + (5 * $i)};
@@ -13,6 +36,7 @@ $font-family-base: Roboto, sans-serif;
 
 @import "bootstrap/scss/bootstrap.scss";
 
+*, *:active *:focus { outline: 0; }
 .custom-control {
 	z-index:0;
 }

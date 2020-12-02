@@ -33,26 +33,6 @@ nav.fixed-bottom {
   }
 }
 
-.badge-overlay {
-  position: relative;
-
-  span.badge {
-    position:absolute;
-    transform: translate(-0%,240%);
-    font-size:.8em;
-  }
-}
-
-.cornerButton {
-	display:flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
-	position:fixed;
-	bottom:1.5em;
-	right:1.5em;
-}
-
 .valid-error {
 	position:absolute;
 	&.no-float { position:relative; }

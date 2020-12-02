@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown, Button } from "react-bootstrap";
+import { classnames } from "classnames";
 import "./fab.scss";
 
 export default class FloatingActionButton extends Component {
@@ -7,24 +8,14 @@ export default class FloatingActionButton extends Component {
 		let prevAction = null;
 
 		return (
-			<nav className="cornerButton">
-				<Button
-					className="rounded-circle p-2 m-0"
-					style={{ transform: "translateX(+5em)", zIndex: 2 }}
-					variant="primary"
-					onClick={this.props.onClick}
-				>
+			<nav className="fab">
+				<Button variant="primary" onClick={this.props.onClick}>
 					{this.props.mainActionContent}
 				</Button>
 
 				{this.props.dropdown && (
 					<Dropdown drop="up">
-						<Dropdown.Toggle
-							variant="light"
-							id="dropdown-basic"
-							className={this.props.dropdown.trigger.className}
-							style={this.props.dropdown.trigger.style}
-						>
+						<Dropdown.Toggle variant="white" id="dropdown-basic" className="noCaret badge-overlay">
 							{this.props.dropdown.trigger.content}
 						</Dropdown.Toggle>
 

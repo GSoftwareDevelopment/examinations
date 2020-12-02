@@ -17,10 +17,13 @@ export const messageGroupHasntExaminations = (
 
 export const messageChoiceGroup = (
 	<InfoBox
-		icon={<Icon.InfoSquare size="64" />}
 		content={
-			<div className="mt-4">
-				Wybierz element z <strong>Listy grup</strong>, aby zobaczyć badania przypisane do tej grupy.
+			<div className="mt-4 jumbotron d-flex flex-column align-items-center">
+				<Icon.InfoSquare size="64" className="mb-3" />
+				<p>
+					Wybierz element z <strong>Listy grup</strong>, aby zobaczyć badania przypisane do tej
+					grupy.
+				</p>
 			</div>
 		}
 	/>
@@ -28,7 +31,11 @@ export const messageChoiceGroup = (
 
 export const messageNoValuesDefinitions = (
 	<InfoBox
-		icon={<Icon.EmojiDizzy size="64" />}
-		content={<div>Brak definicji wartości określających badanie.</div>}
+		content={
+			<div className="jumbotron d-flex flex-column align-items-center mb-0">
+				<Icon.EmojiDizzy size="64" className="mb-3" />
+				<p>Brak definicji wartości określających badanie.</p>
+			</div>
+		}
 	/>
 );
