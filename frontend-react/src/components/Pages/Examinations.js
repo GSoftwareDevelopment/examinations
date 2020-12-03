@@ -19,6 +19,7 @@ import CombinedList from "./examinations/CombinedList";
 import ModalExamination from "../Modals/Examination";
 import ModalGroupEdit from "../Modals/GroupEdit";
 import ModalGroupManage from "../Modals/GroupManage";
+import { messageFAB } from "../Layout/Messages";
 
 class Examinations extends Component {
 	state = {
@@ -148,29 +149,29 @@ class Examinations extends Component {
 			header: "Akcje",
 			items: [
 				{
-					text: <IconText icon={<Icon.ArrowRepeat size="16" />} text="Odśwież widok" />,
+					text: <IconText icon={<Icon.ArrowRepeat size="24" />} text="Odśwież widok" />,
 					onClick: this.doRefreshList.bind(this),
 				},
 				{},
 				{
 					disabled: disabledGroupActions,
-					text: <IconText icon={<Icon.PencilSquare size="16" />} text="Edytuj grupę..." />,
+					text: <IconText icon={<Icon.PencilSquare size="24" />} text="Edytuj grupę..." />,
 					onClick: this.doEditGroup.bind(this),
 				},
 				{
 					disabled: disabledGroupActions,
-					text: <IconText icon={<Icon.Trash size="16" />} text="Usuń grupę" />,
+					text: <IconText icon={<Icon.Trash size="24" />} text="Usuń grupę" />,
 					onClick: this.doDeleteGroup.bind(this),
 				},
 				{},
 				{
 					disabled: disabledExaminationActions,
-					text: <IconText icon={<Icon.PencilSquare size="16" />} text="Edytuj badanie..." />,
+					text: <IconText icon={<Icon.PencilSquare size="24" />} text="Edytuj badanie..." />,
 					onClick: this.doEditExamination.bind(this),
 				},
 				{
 					disabled: disabledExaminationActions || isItemsSelected,
-					text: <IconText icon={<Icon.Trash size="16" />} text="Usuń badanie" />,
+					text: <IconText icon={<Icon.Trash size="24" />} text="Usuń badanie" />,
 					onClick: this.doDeleteExamination.bind(this),
 				},
 				{},
@@ -178,7 +179,7 @@ class Examinations extends Component {
 					disabled: !isItemsSelected,
 					text: (
 						<IconTextBadge
-							icon={<Icon.Trash size="16" />}
+							icon={<Icon.Trash size="24" />}
 							text="Usuń zaznaczone"
 							badge={isItemsSelected ? this.state.selected.length : null}
 						/>
@@ -187,8 +188,12 @@ class Examinations extends Component {
 				},
 				{},
 				{
-					text: <IconText icon={<Icon.Diagram3 size="16" />} text="Zarządzanie grupami..." />,
+					text: <IconText icon={<Icon.Diagram3 size="24" />} text="Zarządzanie grupami..." />,
 					onClick: showModalGroupManage,
+				},
+				{
+					disabled: !disabledGroupActions || !disabledExaminationActions,
+					text: messageFAB,
 				},
 			],
 		};

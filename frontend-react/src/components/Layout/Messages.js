@@ -1,18 +1,14 @@
 import * as Icon from "react-bootstrap-icons";
 import InfoBox from "./InfoBox";
 
+export const messagesFetchingData = <InfoBox content={<div>Pobieranie danych....</div>} />;
 export const messagesNoElements = <InfoBox content={<div>Brak elementów</div>} />;
 
-export const messageNoExaminationsAndGroups = (
+export const messageFAB = (
 	<InfoBox
-		key={`info-noItems`}
-		icon={null}
-		content={<div>Brak zdefiniowanych badań i grup.</div>}
+		className="small text-wrap"
+		content="Wybierz element z listy grup lub badań, aby zobaczyć więcej opcji"
 	/>
-);
-
-export const messageGroupHasntExaminations = (
-	<InfoBox key={`info-emptyGroup`} icon={null} content={<div>Ta grupa nie posiada badań</div>} />
 );
 
 export const messageChoiceGroup = (
@@ -27,6 +23,18 @@ export const messageChoiceGroup = (
 			</div>
 		}
 	/>
+);
+
+export const messageNoExaminationsAndGroups = (
+	<InfoBox
+		key={`info-noItems`}
+		icon={null}
+		content={<div>Brak zdefiniowanych badań i grup.</div>}
+	/>
+);
+
+export const messageGroupHasntExaminations = (
+	<InfoBox key={`info-emptyGroup`} icon={null} content={<div>Ta grupa nie posiada badań</div>} />
 );
 
 export const messageNoValuesDefinitions = (

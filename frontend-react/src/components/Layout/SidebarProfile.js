@@ -10,7 +10,7 @@ class SidebarProfile extends Component {
 	render() {
 		return (
 			<Dropdown alignRight as={NavItem} className="sidebar-profile">
-				<Dropdown.Toggle variant="dark" className="noCaret my-0 px-2 py-2 shadow-none">
+				<Dropdown.Toggle variant="dark" className="noCaret my-0 p-0 shadow-none">
 					{UserStore.data && UserStore.data.image ? (
 						<img
 							className="rounded-circle mr-2"
