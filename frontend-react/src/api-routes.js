@@ -8,6 +8,7 @@ const ROUTES = {
 	authenticate: AUTH_URL + "/login",
 	registerUser: AUTH_URL + "/register",
 	userGet: API_URL + "/user",
+	userUpdate: API_URL + "/user",
 
 	examinationsCreate: API_URL + "/examinations/create",
 	examinationsGet: API_URL + "/examinations",
