@@ -54,3 +54,15 @@ nav.fixed-bottom {
 	z-index:10;
 	svg { float:left; margin-right:.5em; }
 }
+
+.avatar-image {
+	margin: .5rem;
+	border-radius: 50%;
+	border:#fff solid 5px;
+	background-color:#fff;
+	box-shadow:0 0 10px rgba(0,0,0,.5);
+
+	img {
+		border-radius: 50%;
+	}
+}
