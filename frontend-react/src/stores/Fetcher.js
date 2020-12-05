@@ -1,5 +1,5 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
-import UserStore from "../stores/user";
+import AuthenticateStore from "./authenticate";
 
 class Fetcher {
 	state = "done"; // "pending" / "done" / "error"
@@ -34,20 +34,25 @@ class Fetcher {
 	async fetch(uri, method, body) {
 		this.state = "pending";
 
-		if (UserStore.state !== "logged") {
+		if (AuthenticateStore.state !== "logged") {
 			console.log(`Can't fetch data when user is not logged`);
 			return { OK: 0 };
 		}
-		const token = UserStore.getToken();
+		const token = AuthenticateStore.getToken();
 		let result;
+		let headers = {
+			"Content-Type": "application/json",
+			Authorization: "Bearer " + token,
+		};
+
+		if (body instanceof FormData) {
+			delete headers["Content-Type"];
+		}
 
 		try {
 			const res = await fetch(uri, {
 				method,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: "Bearer " + token,
-				},
+				headers,
 				body,
 			});
 

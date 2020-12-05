@@ -3,10 +3,11 @@ import React, { Component } from "react";
 import { Spinner } from "react-bootstrap";
 
 import API from "../api-routes";
+import ProfileStore from "./profile";
 
-class UserStore {
+class AuthenticateStore {
 	state = "pending"; // "pending" / "logged" / "nologged" / "error"
-	data = null;
+	// data = null;
 	message = "";
 
 	constructor() {
@@ -29,12 +30,12 @@ class UserStore {
 	}
 
 	/**
-	 * Chect Authentication method
+	 * Check Authentication method
 	 */
 	async checkAuthenticate() {
 		const token = this.getToken();
 		this.state = "pending";
-		this.data = null;
+		// this.data = null;
 
 		let result, res;
 
@@ -64,7 +65,8 @@ class UserStore {
 						runInAction(() => {
 							console.log("Authentication successfull");
 							this.state = "logged";
-							this.data = { ...result };
+							// this.data = { ...result };
+							ProfileStore.update({ ...result });
 						});
 					}
 				} else {
@@ -84,7 +86,7 @@ class UserStore {
 					this.state = "error";
 					this.message = "The authorization token cannot be verified. You have been logged out.";
 					this.removeToken();
-					this.data = null;
+					// this.data = null;
 				});
 			}
 		} else {
@@ -104,7 +106,7 @@ class UserStore {
 	async login(username, password) {
 		console.log("Logging user...");
 		this.state = "pending";
-		this.data = null;
+		// this.data = null;
 		this.message = "";
 
 		try {
@@ -130,7 +132,8 @@ class UserStore {
 					console.log("User sucessfull logged");
 					this.state = "logged";
 					this.setToken(result.token);
-					this.data = result.user;
+					// this.data = result.user;
+					ProfileStore.update(result.user);
 					this.message = "";
 				});
 				return true;
@@ -160,7 +163,7 @@ class UserStore {
 		this.state = "nologged";
 		this.message = "";
 		this.removeToken();
-		this.data = null;
+		// this.data = null;
 	}
 
 	/**
@@ -241,5 +244,5 @@ export class AuthorizeMessage extends Component {
 	}
 }
 
-let userStore = (window.userStore = new UserStore());
-export default userStore;
+let authStore = (window.authStore = new AuthenticateStore());
+export default authStore;
