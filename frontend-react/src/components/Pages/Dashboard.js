@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Jumbotron } from "react-bootstrap";
 
-import UserStore from "../../stores/user";
+import ProfileStore from "../../stores/profile";
 import PageHeader from "../Layout/PageHeader";
 
 export default class Dashboard extends Component {
@@ -20,7 +20,7 @@ export default class Dashboard extends Component {
 							? "Witaj"
 							: "Dobry wieczór"}
 						<span className="ml-3">
-							{UserStore.data.firstName ? UserStore.data.firstName : UserStore.data.displayName}
+							{ProfileStore.firstName ? ProfileStore.firstName : ProfileStore.displayName}
 						</span>
 					</h1>
 				</Jumbotron>
