@@ -3,7 +3,7 @@ import { HashRouter } from "react-router-dom";
 
 import { observer } from "mobx-react";
 
-import UserStore from "./stores/user";
+import AuthenticateStore from "./stores/authenticate";
 import "./App.scss";
 
 import Main from "./components/RoutesMain";
@@ -13,13 +13,13 @@ import Errors from "./components/Layout/Errors";
 
 class App extends Component {
 	async componentDidMount() {
-		await UserStore.checkAuthenticate();
+		await AuthenticateStore.checkAuthenticate();
 	}
 
 	render() {
 		return (
 			<HashRouter>
-				{UserStore.state === "logged" ? <Main /> : <Authenticate />}
+				{AuthenticateStore.state === "logged" ? <Main /> : <Authenticate />}
 				<Errors />
 			</HashRouter>
 		);

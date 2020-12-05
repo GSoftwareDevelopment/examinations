@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UserStore from "../../../stores/user";
+import AuthenticateStore from "../../../stores/authenticate";
 
 import { Alert, Card, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -33,15 +33,15 @@ class LoginForm extends Component {
 		const { username, password } = this.state;
 
 		this.setState({ buttonDisabled: true });
-		await UserStore.login(username, password);
+		await AuthenticateStore.login(username, password);
 	}
 
 	render() {
 		return (
 			<Form className="h-100 d-flex flex-column justify-content-center align-items-center">
-				{UserStore.message !== "" && (
+				{AuthenticateStore.message !== "" && (
 					<Alert variant="info" className="text-center">
-						{UserStore.message}
+						{AuthenticateStore.message}
 					</Alert>
 				)}
 				<Card className="auth-card shadow-lg">

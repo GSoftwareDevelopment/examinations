@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import "./authenticate.scss";
 
-import UserStore, { AuthorizeMessage } from "../stores/user";
+import AuthenticateStore, { AuthorizeMessage } from "../stores/authenticate";
 
 import LoginForm from "./Pages/authenticate/LoginForm";
 import RegisterForm from "./Pages/authenticate/RegisterForm";
 
 export default class Authenticate extends Component {
 	render() {
-		return UserStore.state === "pending" ? (
+		return AuthenticateStore.state === "pending" ? (
 			<AuthorizeMessage />
 		) : (
 			<Switch>

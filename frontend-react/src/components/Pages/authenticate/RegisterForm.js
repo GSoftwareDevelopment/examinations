@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UserStore from "../../../stores/user";
+import AuthenticateStore from "../../../stores/authenticate";
 
 import { Alert, Card, Button, Form } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
@@ -18,7 +18,7 @@ class RegisterForm extends Component {
 	}
 
 	componentDidMount() {
-		UserStore.clearMessage();
+		AuthenticateStore.clearMessage();
 	}
 
 	setInputValue(property, val) {
@@ -75,7 +75,7 @@ class RegisterForm extends Component {
 		const { displayName, email, password } = this.state;
 
 		this.setState({ buttonDisabled: true });
-		const result = await UserStore.register({ displayName, email, password });
+		const result = await AuthenticateStore.register({ displayName, email, password });
 		console.log("# Registration result:", result);
 		if (result) {
 			this.setState({ redirect: true });
@@ -87,7 +87,9 @@ class RegisterForm extends Component {
 			<React.Fragment>
 				{!this.state.redirect ? (
 					<Form className="h-100 d-flex flex-column justify-content-center align-items-center">
-						{UserStore.message !== "" && <Alert variant="info">{UserStore.message}</Alert>}
+						{AuthenticateStore.message !== "" && (
+							<Alert variant="info">{AuthenticateStore.message}</Alert>
+						)}
 						<Card className="auth-card shadow-lg">
 							<Card.Body>
 								<Card.Title className="text-center">
